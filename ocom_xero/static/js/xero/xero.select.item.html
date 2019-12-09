@@ -1,0 +1,27 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="input-group">
+    <ui-select class="form-control" ng-model="value" theme="bootstrap" title="Choose item..."
+               ng-show="items_loaded" on-select="selectChanged($select.selected)" ng-disabled="ngDisabled">
+        <ui-select-match placeholder="Choose item...">{{ $select.selected.codeName }}</ui-select-match>
+        <ui-select-choices refresh="get_data($select)" refresh-delay="300" minimum-input-length="2" repeat="o in searchResults | filter: $select.search | orderBy:'codeName'" position="down"
+                           length="8">
+            <div ng-bind-html="o.codeName | highlight: $select.search"></div>
+        </ui-select-choices>
+    </ui-select>
+
+    <select disabled="disable" class="form-control" ng-if="!items_loaded">
+        <option>Loading Items....</option>
+    </select>
+
+    <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-click="reload(true)"><i
+                  class="glyphicon glyphicon-refresh"></i></button>
+      </span>
+</div>

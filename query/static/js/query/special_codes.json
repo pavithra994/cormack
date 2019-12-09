@@ -1,0 +1,27 @@
+{"DateTime":[
+  {"name": "Now", "code": "date-now", "param_count":1},
+  {"name": "Today", "code": "date-today", "param_count":1},
+  {"name": "Tomorrow", "code": "date-tomorrow", "param_count":1},
+  {"name": "Yesterday", "code": "date-yesterday", "param_count":1},
+
+  {"name": "This Week", "code": "this-week", "param_count":2},
+  {"name": "Last Week", "code": "last-week", "param_count":2},
+  {"name": "Next Week", "code": "next-week", "param_count":2},
+
+  {"name": "This Month", "code": "this-month", "param_count":2},
+  {"name": "Last Month", "code": "last-month", "param_count":2},
+  {"name": "Next Month", "code": "next-month", "param_count":2},
+
+  {"name": "This Quarter", "code": "this-quarter", "param_count":2},
+  {"name": "Last Quarter", "code": "last-quarter", "param_count":2},
+  {"name": "Next Quarter", "code": "next-quarter", "param_count":2},
+
+  {"name": "This Year", "code": "this-year", "param_count":2},
+  {"name": "Last Year", "code": "last-year", "param_count":2},
+  {"name": "Next Year", "code": "next-year", "param_count":2},
+
+
+  {"name": "This Financial Year", "code": "this-financial-year", "param_count":2},
+  {"name": "Last Financial Year", "code": "last-financial-year", "param_count":2},
+  {"name": "Next Financial Year", "code": "next-financial-year", "param_count":2}
+]}

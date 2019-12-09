@@ -1,0 +1,382 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<!-- date_received = DateField-->
+<div class="form-group required" ng-if="viewable('date_received')">
+    <label class="col-sm-2 control-label" for="date_received">Date Received</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.date_received"
+                          name="date_received"
+                          required="true"
+                          placeholder="Date Received" form="form"
+                          max_date="{{ item.accepted_date | dateGreater:item.rejected_date | dateGreater:item.completed_date }}"
+                          disabled="viewOnly('date_received')">
+        </ocom-date-picker>
+        <div ng-messages="form.date_received.$error" role="alert" ng-show="form.date_received.$touched">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value
+                for Date Received.</p>
+            <p class="error margin-top-5px" ng-message="max">Maximum date for Date Received
+                should not be what is greater between Accepted Date, Rejected Date, and Completed Date.</p>
+        </div>
+    </div>
+</div>
+
+<!-- repair_type = ForeignKey-->
+<div class="form-group required" ng-if="viewable('repair_type')">
+    <label class="col-sm-2 control-label" for="repair_type">Repair Type</label>
+    <div class="col-sm-10">
+        <select class="form-control" id="repair_type" ng-model="item.repair_type" name="repair_type"
+                ng-options="o.id as o.description for o in repairTypes | activeOnly | orderBy:'description'"
+                ng-required="true" ng-disabled="viewOnly('repair_type')">
+            <option value="">-- SELECT AN OPTION --</option>
+        </select>
+        <div ng-messages="form.repair_type.$error" role="alert" ng-show="form.repair_type.$touched">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Repair Type.</p>
+        </div>
+    </div>
+</div>
+
+<div class="form-group" ng-if="viewable('job') && !item.no_job">
+    <label class="col-sm-2 control-label" for="job">Job</label>
+    <div class="col-sm-10">
+        <div job-select ng-model="item.job" on-change="onJobChanged(item)" on-new-job="noJob(searchText)"></div>
+    </div>
+</div>
+
+<span ng-if="item.job">
+
+    <!-- job.supervisor_name = CharField-->
+    <div class="form-group" ng-if="viewable('supervisor')">
+        <label class="col-sm-2 control-label" for="supervisor_name">Supervisor</label>
+        <div class="col-sm-10">
+            <input class="form-control" id="supervisor_name" ng-model="job.supervisor_name" readonly maxlength="255"
+                   placeholder="-">
+        </div>
+    </div>
+
+    <!-- job.supervisor_mobile_number = CharField-->
+    <div class="form-group" ng-if="viewable('supervisor')">
+        <label class="col-sm-2 control-label" for="supervisor_mobile_number">Supervisor Mobile No.</label>
+        <div class="col-sm-10">
+            <input class="form-control" id="supervisor_mobile_number" ng-model="job.supervisor_mobile_number" readonly
+                   placeholder="-">
+        </div>
+    </div>
+
+    <!-- job.supervisor_email = CharField-->
+    <div class="form-group" ng-if="viewable('supervisor')">
+        <label class="col-sm-2 control-label" for="supervisor_email">Supervisor Email</label>
+        <div class="col-sm-10">
+            <input class="form-control" id="supervisor_email" ng-model="job.supervisor_email" readonly placeholder="-">
+        </div>
+    </div>
+</span>
+
+<span ng-if="item.no_job">
+     <!-- address = CharField-->
+    <div class="form-group required" model="repair" perm-can-read="address" ng-if="viewable('address')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'address') }">
+        <label class="col-sm-2 control-label" for="address">Address</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input class="form-control" id="address" ng-model="item.address" name="address" ng-required="true"
+                       model="repair" perm-can-update="address" errors="item._errors" catch-server-errors="address"
+                       title="The site address" placeholder="Address" ng-disabled="viewOnly('address')">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-disabled="!canShowMap()" ng-click="openMap()">
+                        <i class="glyphicon glyphicon-map-marker"></i>
+                    </button>
+                </div>
+            </div>
+            <div ng-messages="form.address.$error" role="alert" ng-show="showOnError(form, 'address')">
+                <p class="error margin-top-5px" ng-message="required">Please provide a value for Address.</p>
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="address" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'address')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-55px" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- suburb = CharField-->
+    <div class="form-group required" model="repair" perm-can-read="suburb" ng-if="viewable('suburb')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'suburb') }">
+        <label class="col-sm-2 control-label" for="suburb">Suburb</label>
+        <div class="col-sm-10">
+            <input class="form-control" id="suburb" ng-model="item.suburb" name="suburb" ng-required="true" model="repair"
+                   perm-can-update="suburb" errors="item._errors" catch-server-errors="suburb" maxlength="255"
+                   title="The suburb where the site is located" placeholder="Suburb" ng-disabled="viewOnly('suburb')">
+            <div ng-messages="form.suburb.$error" role="alert" ng-show="showOnError(form, 'suburb')">
+                <p class="error margin-top-5px" ng-message="required">Please provide a value for Suburb.</p>
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="suburb" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'suburb')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- **supervisor = ForeignKey-->
+    <div class="form-group" model="repair" perm-can-read="supervisor" ng-if="viewable('supervisor')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'supervisor') }">
+
+        <label class="col-sm-2 control-label" for="supervisor">Supervisor</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="supervisor" ng-model="item.supervisor" name="supervisor"
+                    ng-options="o.id as o.name for o in supervisors | activeOnly:item.supervisor | orderBy:'o.name'"
+                    ng-required="false" model="repair" perm-can-update="supervisor" errors="item._errors"
+                    catch-server-errors="supervisor" ng-disabled="viewOnly('supervisor')"
+                    ng-change="changeSupervisor(item.supervisor)">
+                <option value="">-- None --</option>
+            </select>
+            <div ng-messages="form.supervisor.$error" role="alert" ng-show="showOnError(form, 'supervisor')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="supervisor" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'supervisor')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- supervisor_mobile_number = CharField-->
+    <div class="form-group" model="repair" perm-can-read="supervisor_mobile_number" ng-if="viewable('supervisor')">
+        <label class="col-sm-2 control-label" for="supervisor_mobile_number">Supervisor Mobile No.</label>
+        <div class="col-sm-10">
+            <input class="form-control" id="supervisor_mobile_number" ng-model="item.supervisor_mobile_number"
+                   name="supervisor_mobile_number" readonly placeholder="-">
+        </div>
+    </div>
+
+    <!-- supervisor_email = CharField-->
+    <div class="form-group" model="repair" perm-can-read="supervisor_email" ng-if="viewable('supervisor')">
+        <label class="col-sm-2 control-label" for="supervisor_email">Supervisor Email</label>
+        <div class="col-sm-10">
+            <input class="form-control" id="supervisor_email" ng-model="item.supervisor_email" name="supervisor_email"
+                   readonly placeholder="-">
+        </div>
+    </div>
+</span>
+
+<!-- description = TextField-->
+<div class="form-group required" ng-if="viewable('description')">
+    <label class="col-sm-2 control-label" for="description">Description</label>
+    <div class="col-sm-10">
+        <textarea id="description" name="description" class="form-control" ng-model="item.description"
+                  ng-required="true" placeholder="Description" ng-disabled="viewOnly('description')"></textarea>
+        <div ng-messages="form.description.$error" role="alert" ng-show="form.description.$touched">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Description.</p>
+        </div>
+    </div>
+</div>
+
+<!-- comments = TextField-->
+<!--div class="form-group">
+    <label class="col-sm-2 control-label" for="comments">Comments</label>
+    <div class="col-sm-10">
+        <textarea id="comments" name="comments" class="form-control" ng-model="item.comments"
+                  ng-required="true" placeholder="Comments"></textarea>
+    </div>
+</div-->
+
+<!-- po_number = CharField-->
+<div class="form-group" ng-if="viewable('po_number')">
+    <label class="col-sm-2 control-label" for="po_number">Purchase Order No.</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="po_number" ng-model="item.po_number" name="po_number"
+               maxlength="255" placeholder="Purchase Order No." ng-disabled="viewOnly('po_number')">
+        <div ng-messages="form.po_number.$error" role="alert" ng-show="form.po_number.$touched">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Purchase Order No..</p>
+        </div>
+    </div>
+</div>
+
+<!-- repair_subbie = ForeignKey-->
+<div class="form-group required" ng-if="viewable('repair_subbie')">
+    <label class="col-sm-2 control-label" for="repair_subbie">Repair Subbie</label>
+    <div class="col-sm-10">
+        <select class="form-control" id="repair_subbie" ng-model="item.repair_subbie" name="repair_subbie"
+                ng-options="o.id as o.name for o in repairSubbies | activeOnly | orderBy:'name'" ng-required="true"
+                ng-disabled="viewOnly('repair_subbie')">
+            <option value="">-- SELECT AN OPTION --</option>
+        </select>
+        <div ng-messages="form.repair_subbie.$error" role="alert" ng-show="form.repair_subbie.$touched">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Repair Subbie.</p>
+        </div>
+    </div>
+</div>
+
+<!-- accepted_date = DateField-->
+<div class="form-group" ng-if="viewable('accepted_date')">
+    <label class="col-sm-2 control-label" for="accepted_date">Accepted Date</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.accepted_date"
+                          name="accepted_date"
+                          required="false"
+                          placeholder="Accepted Date" form="form"
+                          min_date="{{ item.date_received | previousDate }}"
+                          max_date="{{ item.start_by | dateLesser:item.completed_date }}"
+                          disabled="viewOnly('accepted_date') || item.rejected_date">
+        </ocom-date-picker>
+        <div ng-messages="form.accepted_date.$error" role="alert" ng-show="form.accepted_date.$touched">
+            <p class="error margin-top-5px" ng-message="min">Minimum date for Accepted Date
+                must not be before Date Received.</p>
+            <p class="error margin-top-5px" ng-message="max">Maximum date for Accepted Date
+                must not be after what is lesser between Start By and Completed Date.</p>
+        </div>
+    </div>
+</div>
+
+<!-- rejected_date = DateField-->
+<div class="form-group" ng-if="viewable('rejected_date')">
+    <label class="col-sm-2 control-label" for="rejected_date">Rejected Date</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.rejected_date"
+                          name="rejected_date"
+                          required="false"
+                          placeholder="Rejected Date" form="form"
+                          min_date="{{ item.date_received | previousDate }}"
+                          max_date="{{ item.start_by | dateLesser:item.completed_date }}"
+                          disabled="viewOnly('rejected_date') || item.accepted_date">
+        </ocom-date-picker>
+        <div ng-messages="form.rejected_date.$error" role="alert" ng-show="form.rejected_date.$touched">
+            <p class="error margin-top-5px" ng-message="min">Minimum date for Rejected Date
+                must not be before Date Received.</p>
+            <p class="error margin-top-5px" ng-message="max">Maximum date for Rejected Date
+                must not be after what is lesser between Start By and Completed Date.</p>
+        </div>
+    </div>
+</div>
+
+<!-- back_charge = BooleanField-->
+<div class="form-group" ng-model="item.repair_type" ng-if="viewable('back_charge')" ng-show="item.repair_type == 13">
+    <label class="col-sm-2 control-label" for="back_charge">Back Charge</label>
+    <div class="col-sm-10">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="back_charge" ng-model="item.back_charge" name="back_charge"
+                       ng-required="false" ng-disabled="viewOnly('back_charge')">
+                <span class="ocom-checkbox" ng-class="{'disabled': viewOnly('back_charge')}">
+                    <i class="ocom-checkbox-icon fa fa-check"></i>
+                </span>
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group" ng-if="viewable('repair_amount')">
+    <label class="col-sm-2 control-label" for="repair_amount">Repair Cost</label>
+    <div class="col-sm-10">
+        <div class="input-group money">
+            <div class="input-group-addon">$</div>
+            <input class="form-control" ng-class="{'negative': form.repair_amount < 0}" id="repair_amount" ng-model="item.repair_amount"
+                   name="repair_amount" string-to-number type="number" placeholder="-">
+        </div>
+    </div>
+</div>
+
+
+<!-- permit_number = CharField-->
+<div class="form-group" ng-if="viewable('permit_number')">
+    <label class="col-sm-2 control-label" for="permit_number">Permit Number</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="permit_number" ng-model="item.permit_number" name="permit_number"
+               maxlength="255" placeholder="Permit Number" ng-disabled="viewOnly('permit_number')">
+    </div>
+</div>
+
+<!-- due_date = DateField-->
+<div class="form-group required" ng-if="viewable('due_date')">
+    <label class="col-sm-2 control-label" for="due_date">Due Date</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.due_date"
+                          name="due_date"
+                          required="true"
+                          placeholder="Due Date" form="form"
+                          min_date="{{ item.date_received | previousDate }}"
+                          disabled="viewOnly('due_date') || item.rejected_date">
+        </ocom-date-picker>
+        <div ng-messages="form.due_date.$error" role="alert" ng-show="form.due_date.$touched">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value
+                for Due Date.</p>
+            <p class="error margin-top-5px" ng-message="min">Minimum date for Due Date
+                must not be before Date Received.</p>
+        </div>
+    </div>
+</div>
+
+<!-- start_by = DateField-->
+<div class="form-group" ng-if="viewable('start_by')">
+    <label class="col-sm-2 control-label" for="start_by">Start By</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.start_by"
+                          name="start_by"
+                          placeholder="Start By" form="form"
+                          min_date="{{ item.date_received | previousDate }}"
+                          disabled="viewOnly('start_by') || item.rejected_date">
+        </ocom-date-picker>
+        <div ng-messages="form.start_by.$error" role="alert" ng-show="form.start_by.$touched">
+            <p class="error margin-top-5px" ng-message="min">Minimum date for Start By
+                must not be before Date Received.</p>
+            <p class="error margin-top-5px" ng-message="max">Maximum date for Start By
+                should not be what is lesser between Accepted Date and Completed Date.</p>
+        </div>
+    </div>
+</div>
+
+<!-- amount = DecimalField-->
+<div class="form-group" ng-if="viewable('amount')">
+    <label class="col-sm-2 control-label" for="amount">Amount</label>
+    <div class="col-sm-10">
+        <div class="input-group money">
+            <div class="input-group-addon">$</div>
+            <input class="form-control" ng-class="{'negative': form.amount < 0}" id="amount" ng-model="item.amount"
+                   name="amount" string-to-number type="number" placeholder="-">
+        </div>
+    </div>
+</div>
+
+<!-- completed_date = DateField-->
+<div class="form-group" ng-if="viewable('completed_date')">
+    <label class="col-sm-2 control-label" for="completed_date">Completed Date</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.completed_date"
+                          name="completed_date"
+                          required="false"
+                          placeholder="Completed Date" form="form"
+                          min_date="{{ item.date_accepted | previousDate }}"
+                          disabled="viewOnly('completed_date') || item.rejected_date">
+        </ocom-date-picker>
+        <div ng-messages="form.completed_date.$error" role="alert" ng-show="form.completed_date.$touched">
+            <p class="error margin-top-5px" ng-message="min">Minimum date for Completed Date
+                must not be before Date Accepted.</p>
+        </div>
+    </div>
+</div>
+
+<div class="sub-header ">
+    <h3>Costs</h3>
+    <div ng-include="'js/repair/sections/cost.html'"></div>
+</div>
+
+<div class="sub-header" ng-if="viewable('repair_notes')">
+    <h3>Notes</h3>
+    <div ng-include="'js/repair/sections/note.html'"></div>
+</div>
+
+<div class="sub-header"
+     ng-if="(item.id || item.email) && (viewable('repair_files') || viewable('repair_files_limited'))">
+    <h3>Files</h3>
+    <div ng-include="'js/repair/sections/file.html'"></div>
+</div>
+
+<div class="sub-header ">
+    <h3>Accounting</h3>
+    <div ng-include="'js/repair/sections/accounting.html'"></div>
+</div>

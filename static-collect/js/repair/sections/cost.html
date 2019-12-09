@@ -1,0 +1,86 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="form-group">
+    <div class="col-sm-12">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center width-25pct">Item</th>
+                    <th class="text-center width-25pct">Details</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-center">Unit Price</th>
+                    <th class="text-center">Total Price</th>
+                    <th class="text-center">Invoiced</th>
+                    <th class="text-center width-1px">
+                        <button type="button" list-append list="item.repair_costs"
+                                ng-disabled="formState('saving') || formState('loading')"
+                                item="{unit_price:0, quantity:1, total_price:0,
+                                    editable:true, hidden_actual:false, active_end_date:null}"
+                                class="btn btn-default" title="Add New Cost">
+                           <i class="glyphicon glyphicon-plus-sign"></i>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="repair_cost in item.repair_costs | activeOnly | orderBy:'-when'
+                    track by $index" ng-hide="repair_cost.hide && !showCostStatus" ng-if="repair_cost.item !== null">
+                    <td>
+                        <div xero-select-item="" ng-model="repair_cost.xero_item_code" ng-required="true" on-change="costItemChanged(repair_cost, item)" ng-disabled="repair_cost.invoiced"></div>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" ng-model="repair_cost.details" ng-required="true" placeholder="Details" />
+                    </td>
+                    <td><input class="form-control" type="number" min="0" step="0.001" ng-model="repair_cost.quantity" string-to-number
+                               placeholder="Qty." ng-disabled="repair_cost.invoiced"
+                               ng-change="getTotal(repair_cost)">
+                    </td>
+                    <td>
+                        <input type="number" min="0" step="0.01" string-to-number id="unit_price"
+                               class="form-control text-right" ng-model="repair_cost.unit_price"
+                               placeholder="Unit Price" ng-disabled="repair_cost.invoiced"
+                               ng-change="getTotal(repair_cost)">
+                    </td>
+                    <td>
+                        <input id="total_price" class="form-control text-right"
+                               ng-model="repair_cost.total_price" placeholder="Total Price" ng-readonly="true">
+                    </td>
+                    <td class="text-center">
+                        <div class="col-sm-10 checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="repair_cost.invoiced" ng-disabled="repair_cost.id" >
+                                <span class="ocom-checkbox"><i class="ocom-checkbox-icon fa fa-check"></i></span>
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group-vertical">
+                            <button type="button" class="btn btn-danger top" list-remove list="item.repair_costs"
+                                    ng-if="!repair_cost.invoiced"
+                                    form="form" ng-disabled="formState('saving') || formState('loading')"
+                                    item="repair_cost" title="Remove this cost">
+                                <i class="glyphicon glyphicon-minus-sign"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <a class="btn btn-success" ng-if="canGenerateInvoice() && !form.$invalid" ng-click="createInvoices()">Generate Invoice</a>
+                        <a class="btn btn-success" ng-if="canGenerateInvoice() && !form.$invalid" ng-click="createPurchaseOrder()">Generate Purchase Order</a>
+                    </td>
+                    <td class="text-right">
+                        <p class="form-control-static"> ${{item.repair_costs | sumByKey:'total_price' | number:2}}</p>
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

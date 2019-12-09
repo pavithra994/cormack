@@ -1,0 +1,12 @@
+[
+  {
+    "model": "django_mailbox.mailbox",
+    "pk": 1,
+    "fields": {
+      "name": "Test Gmail",
+      "uri": "imap+ssl://test@ocomsoft.com:yTKP=5=X@imap.gmail.com?archive=Archived",
+      "from_email": "",
+      "active": true
+    }
+  }
+]

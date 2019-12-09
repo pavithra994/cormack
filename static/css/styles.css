@@ -1,0 +1,279 @@
+/*
+ * Copyright (C) 2019 Ocom Software- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Ocom Software <licence@ocom.com.au, 2019
+ *
+ */
+
+body {
+    margin:0;
+    padding:0;
+    height: 100%;
+    width: 100%;
+}
+
+.required label:after {
+    color: #e32;
+    content: ' *';
+    display: inline;
+}
+
+p.error, span.error {
+    color: #940823;
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 0;
+}
+
+error-messages {
+    float: left;
+    clear: both;
+}
+
+th.required:after {
+    color: #e32;
+    content: ' *';
+    display: inline;
+}
+
+.form-control:focus {
+    outline: 0 !important;
+    outline-offset: 0 !important;
+    border: 1px solid rgba(135, 206, 250 ,0.8) !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+ocom-input input.ng-dirty + .ocom-checkbox {
+    background-color: #FDFEF0;
+}
+
+input[type=checkbox], input[type=checkbox]:focus {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.checkbox label {
+    padding-left: 0;
+    /*cursor: not-allowed;*/
+}
+
+.checkbox label:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.checkbox .ocom-checkbox {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #a9a9a9;
+    border-radius: .25em;
+    width: 1.6em;
+    height: 1.6em;
+    float: left;
+    margin-right: .5em;
+}
+
+.checkbox .ocom-checkbox.disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+.checkbox .ocom-checkbox .ocom-checkbox-icon {
+    position: absolute;
+    font-size: .8em;
+    line-height: 0;
+    top: 50%;
+    left: 20%;
+}
+
+.checkbox label input[type="checkbox"] {
+    /*display: none;*/
+    opacity: 0;
+}
+
+.checkbox label input[type="checkbox"]:focus + span {
+    border-color: rgba(135, 206, 250 ,0.8);
+}
+
+.checkbox label input[type="checkbox"] + .ocom-checkbox > .ocom-checkbox-icon {
+    transform: scale(3) rotateZ(-20deg);
+    opacity: 0;
+    transition: all .3s ease-in;
+}
+
+.checkbox label input[type="checkbox"]:checked + .ocom-checkbox > .ocom-checkbox-icon {
+    transform: scale(1.6) rotateZ(0deg);
+    opacity: 0.8;
+}
+
+.checkbox label input[type="checkbox"]:disabled + .ocom-checkbox {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* x-editable */
+.editable-textarea > .editable-controls > textarea.editable-has-buttons {
+    width: 100%;
+}
+
+.editable-textarea .editable-buttons {
+    float: left;
+}
+
+/* Client */
+.client.container {
+    width: 100%;
+    margin-left: 20px;
+    padding-right: 60px;
+}
+
+.client .ng-scope > .form-group {
+    width: 60%;
+}
+
+td.strikethrough {
+    text-decoration: line-through;
+    color: red;
+}
+
+tr.strikethrough > td {
+    text-decoration: line-through;
+    color: red;
+}
+tr.strikethrough > td > a {
+    color: red;
+}
+
+/* For Slab Schedule (I think) */
+
+.cell-details {
+    font-size: 8pt;
+}
+
+table.opportunities {
+    font-size: 0.85em;
+}
+
+table.opportunities select, table.opportunities input {
+    font-size: 1em;
+}
+
+table.opportunities input[type=number] {
+    text-align: right;
+}
+
+table.opportunities ocom-date-picker input.ng-empty.ng-valid-required:enabled {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+/* Bootstrap Controls */
+.list-group-item {
+    padding: 10px 20px;
+}
+
+.dropdown-menu.datepicker {
+    min-width: 200px;
+}
+
+.dropdown-menu.datepicker .btn.btn-default {
+    padding: 2px;
+    border-radius: 1px;
+    -moz-border-radius: 1px;
+    -webkit-border-radius: 1px;
+}
+
+.form-horizontal .has-feedback .form-control-feedback.adjust-90px {
+    right: 90px;
+}
+
+.form-horizontal .has-feedback .form-control-feedback.adjust-55px {
+    right: 55px;
+}
+
+.form-horizontal .has-feedback .form-control-feedback.adjust-25px {
+    right: 25px;
+}
+
+/* Ocom controls */
+ocom-update {
+    width: 100%;
+}
+
+ocom-month-picker > div, ocom-date-picker > div {
+    width: 100%;
+}
+
+ocom-month-picker .disabled input.form-control, ocom-date-picker .disabled input.form-control,
+ocom-datetime-picker .disabled input.form-control, input.form-control.white-background[disabled] {
+    background-color: #eee;
+}
+
+ocom-month-picker .edit input.form-control, ocom-date-picker .edit input.form-control,
+ocom-datetime-picker .edit input.form-control, input.form-control.white-background {
+    background-color: #fff;
+}
+
+ocom-month-picker .edit input.form-control.ng-dirty, ocom-date-picker .edit input.form-control.ng-dirty,
+ocom-datetime-picker .edit input.form-control.ng-dirty {
+    background-color: #FDFEF0;
+}
+
+steps .btn.disabled, steps .btn[disabled] {
+    opacity: 0.85;
+}
+
+.date-range, .date-range > .controls {
+    display: inline;
+}
+
+.filter-box .date-range input {
+    width: 100px;
+}
+
+.cell-details.inactive {
+    text-decoration: line-through;
+}
+
+.form-control.disabled {
+    cursor: not-allowed;
+    background-color: #eee;
+    opacity: 1;
+}
+
+.piers.sltcolor{
+  background-color: #ffaf58 !important;
+}
+
+
+
+.linerow{
+    background-color: #c12e2a !important;
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 14px !important;
+    width: 98%;
+    position: absolute;
+    padding: 10px;
+    margin-top: -8px;
+    margin-left: -8px; 
+}
+
+/* .linespan{
+ display:none; 
+padding-top: 35px; 
+} */
+
+.fixed_header tbody{
+    overflow: scroll;
+    }
+.fixed_header thead tr th{
+    top:50px;
+    position:sticky;
+    z-index: 100;
+    vertical-align: top
+}
+
+.notes{white-space: pre-line;}

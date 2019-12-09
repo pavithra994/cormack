@@ -1,0 +1,14 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="btn-group" role="group" aria-label="Steps">
+    <button type="button" class="btn" ng-repeat="step in $ctrl.steps" ng-class="{'btn-default': !$ctrl.item[step.field], 'btn-success': $ctrl.item[step.field]}" ng-click="$ctrl.setStep(step)" ng-disabled="$ctrl.disabled">
+        <i class="glyphicon glyphicon-ok" ng-if="$ctrl.item[step.field]"></i>
+        {{step.label}}
+    </button>
+</div>

@@ -1,0 +1,27 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1 ng-show="editable('job', route)">Edit Job</h1>
+        <h1 ng-hide="editable('job', route)">View Job</h1>
+    </div>
+    <div class="job container" ng-if="accessible('job', 'job.edit')">
+        <form dirty-tracking name="form" class="form-horizontal" novalidate errors-context="item._errors" item="item">
+            <div ng-include="'js/job/form.html'"></div>
+            <ocom-form-buttons save-success-message="A job has been updated."
+                         hide-delete-button="!item.isActive || !allowDelete('job') || platform.isTablet()"
+                         show-restore-button="!item.isActive && allowRestore('job')"
+                         hide-update-button="!item.isActive || !editable('job', route)"
+                         delete-prompt="Are you sure you want to remove this job?"
+                         delete-success-message="A job has been removed.">
+                <a class="btn btn-default" ng-click="createEnumber()" ng-if="accessible('job', 'job.create')">Create ENumber</a>
+            </ocom-form-buttons>
+        </form>
+    </div>
+</div>

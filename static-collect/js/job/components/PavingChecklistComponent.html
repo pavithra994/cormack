@@ -1,0 +1,17 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="btn-group" role="group" aria-label="Steps">
+    <button type="button" class="btn" ng-repeat="field in $ctrl.fields" ng-class="{'btn-default': $ctrl.item[field.field] == null, 'btn-success': $ctrl.item[field.field] == true, 'btn-danger': $ctrl.item[field.field] == false}" ng-click="$ctrl.setStep(field)" ng-disabled="$ctrl.disabled"
+    ng-attr-title="{{ field.title }}">
+        <i class="glyphicon glyphicon-ok" ng-if="$ctrl.item[field.field] == true"></i>
+        <i class="glyphicon glyphicon-warning-sign" ng-if="$ctrl.item[field.field] == false"></i>
+        <i class="glyphicon glyphicon-unchecked" ng-if="$ctrl.item[field.field] == null"></i>
+        {{field.label}}
+    </button>
+</div>

@@ -1,0 +1,72 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1 class="capitalize">Paving Schedule</h1>
+    </div>
+    <ocom-table hide_new_button="!accessible('job', 'job.create')" ng-if="accessible('job', 'job.paving_list')" destination="job.paving_list">
+        <filter>
+                <input type="text" class="form-control"
+                      name="date" size="15"
+                      ng-model="listOptions.pour_date__ge"
+                      data-autoclose="1"
+                      placeholder="Pour Date"
+                      data-date-type="iso"
+                      data-date-format="dd/MM/yyyy"
+                      min-length="20"
+                       autocomplete="off"
+                      bs-datepicker />
+            <button ng-click="clearFilters()" class="btn btn-danger expandable" title="Clear Search Terms"
+                    type="button">Clear</button>
+        </filter>
+        <table class="table table-striped table-bordered list jobs">
+            <thead>
+                <tr>
+                    <th ordering="purchase_order_number" ng-model="listOptions" changed="refreshList()">Purchase Order Numbers</th>
+                    <th ordering="call_up_date" ng-model="listOptions" changed="refreshList()">Call Up Date</th>
+                    <th ordering="address" ng-model="listOptions" changed="refreshList()">Address</th>
+                    <th>Progress</th>
+                    <th>Checklist</th>
+                    <th ordering="paving_colour__description" ng-model="listOptions" changed="refreshList()">Colour</th>
+                    <th ordering="client__name" ng-model="listOptions" changed="refreshList()">Builder</th>
+                    <th ordering="supervisor__name" ng-model="listOptions" changed="refreshList()">Supervisor</th>
+                    <th ordering="comments" ng-model="listOptions" changed="refreshList()">Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in list" ng-class="{strikethrough: !item.is_active}"
+                    style="background-color: {{ options.job_types_List_by_id[item.job_type].background_colour }};
+                    color: {{ options.job_types_List_by_id[item.job_type].foreground_colour }};">
+                    <td>
+                        <a ui-sref="job.edit({id: {{ item.id }} })" ng-show="isAdmin || item.is_active">
+                            {{ item.purchase_order_number }}
+                        </a>
+                        <span ng-show="!isAdmin && !item.is_active">
+                            {{ item.purchase_order_number }}
+                        </span>
+                    </td>
+                    <td >{{ item.call_up_date | properDate : "ddd DD MMM"}}</td>
+                    <td >{{ item.address }}, {{item.suburb}}</td>
+                    <td><radio1-btn item="item" field="'approved_date'" disabled="!accessible('job', 'job.paving_list', 'update', 'approved_date')" on-change="patchItem(item, 'approved_date')"></radio1-btn>
+                        <steps item="item" steps="stepsConfig" on-change="patchItem(item, key)" disabled="!accessible('job', 'job.paving_list', 'update', 'steps')"></steps></td>
+                    <td><paving-checklist item="item" fields="checklistFields" on-change="patchItem(item, key)" disabled="!accessible('job', 'job.paving_list', 'update', 'checklists')"></paving-checklist></td>
+                    <td >{{ options.code_paving_colour_by_id[item.paving_colour].description}}</td>
+                    <td >{{ options.client_by_id[item.client].name}}</td>
+                    <td >{{ options.supervisor_by_id[item.supervisor].name}}</td>
+                    <td>
+                        <a href="#" editable-textarea="item.comments" onaftersave="patchItem(item, 'comments')"
+                           e-rows="7" e-cols="40">
+                            {{ item.comments || "[Set]" }}
+                        </a>
+                    </td>
+                </tr>
+            <tbody>
+        </table>
+    </ocom-table>
+</div>

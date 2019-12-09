@@ -1,0 +1,230 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<script type="text/ng-template" id="EditTaskModalContent.html">
+    <form class="modal-content" method="post" name="form" role="form" ng-submit="$ctrl.ok()">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Edit Task</h4>
+        </div>
+        <div class="modal-body pull-left width-100pct" focus-group focus-group-head="loop" focus-group-tail="loop"
+             focus-stacktabindex="-1" >
+                <div class="pull-left width-100pct">
+                    <label class="col-sm-3 margin-top-5px control-label" for="job">Job</label>
+                    <div class="col-sm-9"> {{$ctrl.dialogData.job | json}}
+                        <select id="job" class="form-control"
+                                   ng-model="$ctrl.dialogData.job_id" name="job"
+                                   title="Choose Job"
+                                   ng-required="true"
+                                   ng-options="job.id as job.job_number + ' ' + job.address for job in $ctrl.jobsList | orderBy:'address'"
+                                   ng-required="true" >
+                        </select>
+                        <div ng-messages="form.task_job.$error" role="alert" ng-if="form.task_job.$error">
+                          <p class="error margin-top-5px" ng-message="required">Please assign a job.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pull-left width-100pct margin-top-5px required">
+                    <label class="col-sm-3 margin-top-5px control-label" for="task_type">Task Type</label>
+                    <div class="col-sm-9">
+                        <select id="task_type" class="form-control"
+                            name="task_type"
+                            ng-change="validateTaskType(form, $ctrl.dialogData.task_type)"
+                            ng-options="task_type.id as task_type.description for task_type in $ctrl.task_types | orderBy:'job_date_order'"
+                            ng-model="$ctrl.dialogData.task_type" required>
+                            <option value="">-- None --</option>
+                        </select>
+                        <div ng-messages="form.task_type.$error" role="alert"
+                             ng-if="form.task_type.$dirty || form.task_type.$touched">
+                          <p class="error margin-top-5px" ng-message="required">Please select an item from the list.</p>
+                          <p class="error margin-top-5px" ng-message="duplicate">Task Type for the Job is already present in the Slab Schedule.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pull-left width-100pct margin-top-5px">
+                    <label class="col-sm-3 margin-top-5px control-label" for="task_description">Description</label>
+                    <div class="col-sm-9">
+                        <textarea id="task_description" class="form-control" ng-model="$ctrl.dialogData.description" rows="3">
+                        </textarea>
+                    </div>
+                </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" focus-element="autofocus"
+                    ng-click="$ctrl.ok(form)" ng-disabled="form.$invalid">
+                Save
+            </button>
+            <button type="button" class="btn btn-cancel" data-dismiss="modal"
+                    ng-click="$ctrl.cancel()">Cancel</button>
+        </div>
+    </form>
+</script>
+
+<div id="modal-location"></div>
+
+<div id="topnav">
+    <div class="form-inline">
+        <div class="form-group">
+            <div class="input-group">
+                <input class="form-control white-background"
+                       name="date"
+                       size=""
+                       ng-model="listOptions.wantedDateFilter"
+                       data-autoclose="1"
+                       placeholder="Enter a Date"
+                       data-date-format="dd/MM/yyyy"
+                       min-length="20"
+                       autocomplete="off"
+                       bs-datepicker
+                       ng-required="false"
+                       ng-disabled="clipboardBox !== null"
+                       ng-change="refreshList()">
+                <div class="input-group-addon no-padding">
+                    <button class="btn btn-sm" ng-click="setFromLastDate(-3, false)" type="button"
+                            ng-disabled="clipboardBox !== null"
+                            title="Set date as 3 days prior to what is shown">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                    <button class="btn btn-sm" ng-click="setToday()" type="button"
+                            ng-disabled="clipboardBox !== null" title="Set date as today">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </button>
+                    <button class="btn btn-sm" ng-click="setFromLastDate(3, false)" type="button"
+                            ng-disabled="clipboardBox !== null" title="Set date as 3 days after what is shown">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <label>Current: {{ currentClientJob.address}}</label>
+        <div class="pull-right">
+            <table class="legendTable">
+                <tr>
+                    <td ng-repeat="task_type in task_types | orderBy:'job_date_order'"
+                        ng-click="selectTaskType(task_type)"
+                        ng-style="cellCSS(task_type)"
+                        ng-class="{'currentClientJob': task_type == selectedTaskType}">
+
+                        {{task_type.description}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div id="content" class="slab-schedule">
+    <div id="table-header-content">
+        <table class="table table-condensed table-bordered table-header list width-100pct drag-box">
+            <thead>
+                <tr>
+                    <th class="leftColumn text-center" ></th>
+                    <th class="dateColumn text-center" ng-repeat="dateHeader in dateHeaders">
+                        <p>{{ dateHeader.dayOfWeekAbbr }}</p>
+                        <p>{{ " (" + dateHeader.date + "/" + dateHeader.month + ")" }}</p>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="top-content" scoll-sync="#bottom-content,#table-header-content" scroll-y="false">
+        <table class="table table-condensed table-bordered table-header list width-100pct drag-box">
+            <tbody>
+                <tr ng-repeat-start="slot in subbieSlots | toArray | orderBy:'display_order'"></tr>
+                <tr ng-repeat="channel in slot.channels">
+                    <th class="leftColumn" rowspan="{{ slot.capacity }}" ng-if="channel.index === 0">{{ slot.name }}</th>
+                    <td class="dateColumn date-box" id="click-box-{{ box.boxId }}"
+                        ng-repeat="box in channel.dateBox" ng-click="clickAtTaskBox(box)"
+                        ng-class="taskBoxClasses(box)">
+                        <div class="inner" ng-style="cellCSS(all_task_type[box.task.task_type])">
+                            <div class="details cell-details padding-5px{{ box.job.is_active ? ' active' : ' inactive' }}">
+                                <p ng-if="!isClickedAt(box, 'edit')">{{ box.job.address }} {{ box.job.suburb }}</p>
+                                <a ng-if="isClickedAt(box, 'edit')" ui-sref="job.edit({id:box.job.id})" target="jobwindow" style="cursor: pointer;">{{ box.job.address }} {{ box.job.suburb }}</a>
+                                <p ng-show="box.job">({{ box.job.client_name }})</p>
+                                <span ng-if="box.task">
+                                    <i class="glyphicon glyphicon-ok-circle" style="color:green;" ng-if="box.task.accepted_date != null"></i>
+                                    <i class="glyphicon glyphicon-ban-circle" style="color:red;" ng-if="box.task.rejected_date != null && box.task.accepted_date == null"></i>
+                                    <i class="glyphicon glyphicon-time" style="color:black;" ng-if="box.task.rejected_date == null && box.task.accepted_date == null"></i>
+                                </span>
+                            </div>
+                            <div class="btn-group btn-group-xs" ng-show="isClickedAt(box)">
+                                <button type="button" class="btn add" ng-show="isClickedAt(box, 'add')"
+                                    ng-click="btnAddTaskBoxItem (box)">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                                <button type="button" class="btn edit" ng-show="isClickedAt(box, 'edit')"
+                                    ng-click="btnEditTaskBoxItem(box)">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                                <button type="button" class="btn cut" ng-show="isClickedAt(box, 'cut')"
+                                        ng-click="btnCutTaskBoxItem(box)">
+                                    <span class="glyphicon glyphicon-scissors"></span>
+                                </button>
+                                <button type="button" class="btn paste" ng-show="isClickedAt(box, 'paste')"
+                                        ng-click="btnPasteTaskBoxItem(box)">
+                                    <span class="glyphicon glyphicon-paste"></span>
+                                </button>
+                                <button type="button" class="btn btn-danger cancel"
+                                        ng-show="isClickedAt(box, 'cancel')" ng-click="btnCancelCutTaskBoxItem(box)">
+                                    <span class="glyphicon glyphicon-stop"></span>
+                                </button>
+                                <button type="button" class="btn btn-danger remove"
+                                        ng-show="isClickedAt(box, 'remove')" ng-click="btnRemoveBoxItem(box)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-repeat-end></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="bottom-content" scoll-sync="#top-content,#table-header-content" scroll-y="false">
+        <table class="table table-condensed table-bordered table-header list width-100pct drag-box">
+            <thead>
+                <tr>
+                    <th class="leftColumn text-center" ></th>
+                    <th class="dateColumn text-center" ng-repeat="dateHeader in dateHeaders">
+                        <p>{{ dateHeader.dayOfWeekAbbr }}</p>
+                        <p>{{ " (" + dateHeader.date + "/" + dateHeader.month + ")" }}</p>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="customerRow in customerTable">
+                    <th class="leftColumn" rowspan="{{ customerRow[0].row_span }}" ng-if="customerRow[0].client_row === 0">{{ customerRow[0].text }}</th>
+                    <td class="dateColumn date-box" ng-repeat="box in customerRow |limitTo: (1 - customerRow.length)"
+                        ng-click="clickAtClientBox(box)"
+                        ng-class="clientBoxClasses(box)">
+
+                        <div class="innerClient" ng-style="cellCSS(box.task_type)" ng-if="box.job">
+                            <div class="details cell-details padding-5px{{ box.job.is_active ? ' active' : ' inactive' }}">
+                                <p ng-if="box.job.id != currentClientJob.id">{{ box.job.address }} {{ box.job.suburb }}</p>
+                                <a ng-if="box.job.id == currentClientJob.id" ui-sref="job.edit({id:box.job.id})" target="jobwindow" style="cursor: pointer;color: black;">{{ box.job.address }} {{ box.job.suburb }}</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="content-resizer"
+        resizer="horizontal"
+        resizer-height="6"
+        resizer-default="320"
+        resizer-key="resizer.slab.schedule"
+        resizer-top="#top-content"
+        resizer-bottom="#bottom-content">
+    </div>
+
+</div>

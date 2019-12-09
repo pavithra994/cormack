@@ -1,0 +1,82 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="form-group required">
+    <label class="col-sm-2 control-label">Purchase Orders</label>
+    <div class="col-sm-10">
+        <span validate-length="" ng-model="item.purchase_orders" />
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center width-25pct required">Purchase Order Number</th>
+                    <th class="text-center width-25pct required">Value</th>
+                    <th class="text-center width-25pct">Purchase Order Type</th>
+                    <th class="text-center width-25pct">Details (Optional)</th>
+                    <th ng-if="!viewOnly('purchase_orders')">
+                        <button type="button" list-append list="item.purchase_orders"
+                                ng-disabled="viewOnly('purchase_orders')" item="{value:0}"
+                                class="btn btn-default" title="Add Purchase Order">
+                           <i class="glyphicon glyphicon-plus-sign"></i>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="purchase_order in item.purchase_orders track by $index">
+                     <td>
+                        <input type="text" class="form-control" ng-model="purchase_order.number" ng-required="true"
+                               maxlength="50" ng-disabled="viewOnly('purchase_orders')"
+                               placeholder="Purchase Order Number" ng-change="updatePoNumbers()"/>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <div class="input-group-addon">$</div>
+                            <input type="number" min="0" step="0.01" string-to-number id="value"
+                                   class="form-control text-right" ng-model="purchase_order.value"
+                                   ng-disabled="viewOnly('purchase_orders')"
+                                   ng-required="true" ng-change="updateTotalValue()"
+                                   placeholder="Value" >
+                        </div>
+                    </td>
+                    <td>
+                        <select class="form-control" name="order_type"
+                                ng-options="order_type.id as order_type.description for order_type in orderTypes"
+                                ng-model="purchase_order.order_type"
+                                ng-disabled="!purchase_order.number || viewOnly('purchase_orders')"
+                                title="Purchase Order Type">
+                            <option value="">None</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" ng-model="purchase_order.details"
+                               maxlength="255" ng-disabled="viewOnly('purchase_orders')"
+                               ng-required="false" placeholder="Details" />
+                    </td>
+                    <td ng-if="!viewOnly('purchase_orders')">
+                        <div class="btn-group-vertical">
+                            <button type="button" class="btn btn-danger top" list-remove list="item.purchase_orders"
+                                    form="form" ng-disabled="viewOnly('purchase_orders')"
+                                    ng-if="item.purchase_orders.length > 1"
+                                    after-click="updateTotalValue()"
+                                    item="purchase_order" title="Remove this Purchase Order">
+                                <i class="glyphicon glyphicon-minus-sign"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="active">
+                    <td><strong>Total Value</strong></td>
+                    <td class="text-right">
+                        <p class="form-control-static">${{ item.purchase_order_value | number:2 }}</p>
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

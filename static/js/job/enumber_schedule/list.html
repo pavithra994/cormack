@@ -1,0 +1,140 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1 class="capitalize">ENumber Schedule</h1>
+    </div>
+    <ocom-table hide_new_button="!accessible('job', 'job.create')" ng-if="accessible('job', 'job.enumber_list')" destination="job.enumber_list">
+        <filter>
+                <input type="text" class="form-control"
+                      name="date" size="15"
+                      ng-model="listOptions.pour_date__ge"
+                      data-autoclose="1"
+                      placeholder="Pour Date"
+                      data-date-type="iso"
+                      data-date-format="dd/MM/yyyy"
+                      min-length="20"
+                       autocomplete="off"
+                      bs-datepicker />
+            <button ng-click="clearFilters()" class="btn btn-danger expandable" title="Clear Search Terms"
+                    type="button">Clear</button>
+        </filter>
+        <table class="table table-striped table-bordered list jobs">
+            <thead>
+                <tr>
+                    <th ordering="purchase_order_number" ng-model="listOptions" changed="refreshList()">Purchase Order Numbers</th>
+                    <th ordering="call_up_date" ng-model="listOptions" changed="refreshList()">Call Up Date</th>
+                    <th ordering="address" ng-model="listOptions" changed="refreshList()">Address</th>
+                    <th>Steps</th>
+                    <th ordering="sqm" ng-model="listOptions" changed="refreshList()">SQM</th>
+                    
+                    <th sortable="type_list" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Type</th>
+                    <th ordering="client__name" ng-model="listOptions" changed="refreshList()">Builder</th>
+                    <th ordering="supervisor__name" ng-model="listOptions" changed="refreshList()">Supervisor</th>
+                    <th ordering="comments" ng-model="listOptions" changed="refreshList()">Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in list" ng-class="{strikethrough: !item.is_active}"
+                    style="background-color: {{ options.job_types_List_by_id[item.job_type].background_colour }};
+                    color: {{ options.job_types_List_by_id[item.job_type].foreground_colour }};">
+                    <td>
+                        <a ui-sref="job.edit({id: {{ item.id }} })" ng-show="isAdmin || item.is_active">
+                            {{ item.purchase_order_number }}
+                        </a>
+                        <span ng-show="!isAdmin && !item.is_active">
+                            {{ item.purchase_order_number }}
+                        </span>
+                    </td>
+                    <td ng-click="setAllUpdate(item, 'call_up_date');setUpdate(item, 'call_up_date')">
+                        <span ng-show="!item.is_update.call_up_date">
+                            {{ item.call_up_date | properDate : "ddd DD MMM" }}
+                        </span><br>
+                        <span ng-show="!item.is_update.call_up_date">
+                            {{ item.call_up_date_notes}}
+                        </span>
+                        <form name="form1" ng-submit="patchItem(item, 'call_up_date')" ng-show="item.is_update.call_up_date" style="min-width: 170px;">
+                          <ocom-table-date-picker model="item.call_up_date"
+                            name="call_up_date"
+                            required="false"
+                            placeholder="Call Update"
+                            form="form4"
+                            disabled="viewOnly('call_up_date')"
+                            >
+                          </ocom-table-date-picker>
+                            <div ng-messages="form.call_up_date.$error" role="alert" ng-show="showOnError(form, 'call_up_date')">
+                                <p class="error margin-top-5px" ng-message="serverError">
+                                    <div show-server-errors="call_up_date" errors="item._errors"></div>
+                                </p>
+                                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                            </div>
+                            <span ng-if="showOnError(form, 'call_up_date')" class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                            <span class="editable-buttons">
+                                <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.call_up_date">Save</button>
+                            </span>
+                            <form name="form10" ng-submit="patchItem(item, 'call_up_date_notes')" ng-show="item.is_update.call_up_date_notes" style="min-width: 170px;">
+                                <textarea id="call_up_date_notes" name="call_up_date_notes" class="form-control" ng-model="item.call_up_date_notes"
+                                            ng-required="true" model="item.call_up_date_notes" perm-can-update="call_up_date_notes" errors="item._errors"
+                                            catch-server-errors="call_up_date_notes" placeholder="Description"
+                                            ng-disabled="viewOnly('call_up_date_notes')"
+                                            ng-change="patchItem(item, 'call_up_date_notes')">
+                                </textarea>
+                                <div ng-messages="form.call_up_date_notes.$error" role="alert" ng-show="showOnError(form, 'call_up_date_notes')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="call_up_date_notes" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'call_up_date_notes')"
+                                        class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.call_up_date_notes">Save</button>
+                                </span>
+                            </form>
+                        </form>
+                    </td>
+                    <td >{{ item.address }}, {{item.suburb}}</td>
+                    <td><steps item="item" steps="stepsConfig" on-change="patchItem(item, key)" disabled="!accessible('job', 'job.enumber_list', 'update', 'steps')"></steps></td>
+                    <td >{{ item.sqm | number:2}} {{ item.description }}</td>
+                    
+                    
+                    <td ng-click="setAllUpdate(item, 'type_list');setUpdate(item, 'type_list')">
+                            <span ng-show="!item.is_update.type_list" style="min-width: 100px;">
+                                    {{ item.type_list || "-" }}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'type_list')" ng-show="item.is_update.type_list" style="min-width: 150px;">
+                                <select id="all_type_lists" class="form-control" name="type_list"
+                                        ng-model="item.type_list" ng-disabled="viewOnly('type_list')"
+                                        ng-required="false" model="job" perm-can-update="type_list" errors="item._errors"
+                                        catch-server-errors="type_list" ng-disabled="viewOnly('type_list')"
+                                        ng-change="patchItem(item, 'type_list')"
+                                        >
+                                    <option value="">-- SELECT AN OPTION --</option>
+                                    <option value="Footpath">Footpath</option>
+                                    <option value="Patching">Patching</option>
+                                    <option value="Warranty">Warranty</option>
+
+                                </select>
+                            </form>
+                        </td>
+
+
+                    <td >{{ options.client_by_id[item.client].name}}</td>
+                    <td >{{ options.supervisor_by_id[item.supervisor].name}}</td>
+                    <td>
+                        <a class="notes" href="#" editable-textarea="item.comments" onaftersave="patchItem(item, 'comments')"
+                            e-rows="7" e-cols="40">
+                            {{item.comments}}
+                        </a>
+                    </td>
+                </tr>
+            <tbody>
+        </table>
+    </ocom-table>
+</div>

@@ -1,0 +1,26 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1 ng-show="editable('repair', route)">Edit Repair</h1>
+        <h1 ng-hide="editable('repair', route)">View Repair</h1>
+    </div>
+    <div class="repair container" ng-if="accessible('repair', 'repair.edit')">
+        <form dirty-tracking name="form" class="form-horizontal" novalidate errors-context="item._errors" item="item">
+            <div ng-include="'js/repair/form.html'"></div>
+            <ocom-form-buttons save-success-message="A repair has been updated."
+                         hide-delete-button="!item.isActive || !allowDelete('repair') || platform.isTablet()"
+                         show-restore-button="!item.isActive && allowRestore('repair')"
+                         hide-update-button="!editable('repair', route)"
+                         delete-prompt="Are you sure you want to remove this repair?"
+                         delete-success-message="A job repair been removed.">
+            </ocom-form-buttons>
+        </form>
+    </div>
+</div>

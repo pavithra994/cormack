@@ -1,0 +1,45 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="form-group">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-10">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center width-50pct">Type</th>
+                    <th class="text-center">Contact</th>
+                    <th class="text-center">Date</th>
+                    <th class="text-center">Number</th>
+                    <th class="text-center">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="xero_entity in xero_entities track by $index">
+                    <td>{{ {'Invoice':"Invoice", "PurchaseOrder":"Purchase Order"}[xero_entity.xero_type]}}</td>
+                    <td>{{xero_entity.xero_data.Contact.Name}}</td>
+                    <td>{{xero_entity.xero_data.Date | date :"dd/MM/yyyy"}}</td>
+                    <td>
+                        <span ng-if="xero_entity.xero_type == 'PurchaseOrder'">
+                            <a ng-href="/api/download_purchase_order/{{xero_entity.id}}//?jwt={{token()}}" target="xero">{{xero_entity.xero_code}}</a>
+
+                            <a ng-href="https://go.xero.com/Accounts/Payable/PurchaseOrders/View/{{xero_entity.xero_id}}" target="xero"><i class="icon-fa-xero"></i> </a>
+                        </span>
+                        <span ng-if="xero_entity.xero_type == 'Invoice'">
+                            <a ng-href="/api/download_invoice/{{xero_entity.id}}//?jwt={{token()}}" target="xero">{{xero_entity.xero_code}}</a>
+
+                            <a ng-href="https://go.xero.com/AccountsReceivable/Edit.aspx?InvoiceID={{xero_entity.xero_id}}" target="xero"><i class="icon-fa-xero"></i></a>
+                        </span>
+                    </td>
+                    <td class="text-right">${{xero_entity.xero_data.Total | number:2}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,296 @@
+/*
+ * Copyright (C) 2019 Ocom Software- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Ocom Software <licence@ocom.com.au, 2019
+ *
+ */
+
+
+/*** CSS Styles for bootstrap elements ***/
+button.btn-sm {
+    background: none;
+    color: #337ab7;
+}
+
+button.btn-sm[disabled] {
+    background: #eee;
+    color: #555;
+}
+
+.pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus,
+.pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
+    color: #ddd;
+}
+
+/*** CSS Styles for common controls ***/
+.money > input.negative {
+    color: #e32;
+}
+
+.side-form-group {
+    position: fixed;
+    top: 150px;
+    right: 20px;
+    z-index: 3;
+}
+
+.side-form-group button {
+    display: block;
+    min-width: 150px;
+}
+
+.clear-both {
+    clear: both;
+}
+
+.clear-none {
+    clear: none;
+}
+
+/* file upload */
+.file-upload input[type=file] {
+    z-index: -1;
+    position: absolute;
+    width: 100px;
+    opacity: 0;
+}
+
+.file-upload button {
+    z-index: 5;
+}
+
+/* width styling */
+.width-100pct {
+    width: 100%;
+}
+
+.width-75pct {
+    width: 75%;
+}
+
+.width-60pct {
+    width: 60%;
+}
+
+.width-50pct {
+    width: 50%;
+}
+
+.width-40pct {
+    width: 40%;
+}
+
+.width-25pct {
+    width: 25%;
+}
+
+.width-200px {
+    width: 200px;
+}
+
+.width-150px {
+    width: 150px;
+}
+
+.width-100px {
+    width: 100px;
+}
+
+.width-50px {
+    width: 50px;
+}
+
+.width-1px {
+    width: 1px;
+}
+
+/* Font styling */
+.font-bold {
+    font-weight: bold;
+}
+
+/* Padding */
+body .no-padding {
+    padding: 0;
+}
+body .no-padding-left {
+    padding-left: 0;
+}
+
+body .no-padding-right {
+    padding-right: 0;
+}
+
+body .padding-5px {
+    padding: 5px;
+}
+
+body .padding-20px {
+    padding: 20px;
+}
+
+body .padding-horizontal-20px {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+body .padding-top-0 {
+    padding-top: 0 !important;
+}
+
+body .padding-top-5px {
+    padding-top: 5px;
+}
+
+body .padding-top-20px {
+    padding-top: 20px;
+}
+
+body .padding-h-5px {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+body .padding-left-20px {
+    padding-left: 20px;
+}
+
+body .padding-left-40px {
+    padding-left: 40px;
+}
+
+body .padding-right-5px {
+    padding-right: 5px;
+}
+
+body .padding-right-20px {
+    padding-right: 20px;
+}
+
+body .padding-right-40px {
+    padding-right: 40px;
+}
+
+body .padding-button {
+    padding: 6px 12px;
+}
+
+/* Margins */
+body .no-margin {
+    margin: 0;
+}
+
+body .margin-10px {
+    margin: 10px;
+}
+
+body .margin-20px {
+    margin: 20px;
+}
+
+body .margin-top-5px {
+    margin-top: 5px;
+}
+
+body .margin-top-20px {
+    margin-top: 20px;
+}
+
+body .margin-top-50px {
+    margin-top: 50px;
+}
+
+body .margin-bottom-10px {
+    margin-bottom: 10px;
+}
+
+.required label:after {
+    color: #e32;
+    content: ' *';
+    display: inline;
+}
+
+/*
+ *Angular Form State Classes
+ */
+
+
+/* All Invalid form-controls */
+.form-control.ng-invalid {
+  border-color: #b94a48;
+
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+/* Once touched but not right change background */
+.form-control.ng-invalid.ng-touched {
+    background-color: #fff0f0 !important;
+}
+
+/* If invalid  and not changed by user, ie Empty but Required fields on Create */
+.form-control.ng-invalid.ng-pristine {
+	background-color: #FDFEF0;
+}
+
+/* formControl has been changed and is OK*/
+.form-control.ng-valid.ng-dirty{
+    background-color: #a2da8b2e;
+}
+
+
+.text-error {
+	color: red;
+}
+
+/*
+ * Form Classes
+ */
+span.form-control.disabled {
+    background-color: #eee;
+}
+
+a.disabled {
+    color: silver;
+    pointer-events:none;
+    cursor: not-allowed;
+}
+
+/*
+ * textAngular CSS classes
+ */
+.ta-editor {
+    min-height: 200px;
+    height: auto;
+    overflow: auto;
+    font-family: inherit;
+    font-size: 100%;
+    margin: 20px 0;
+}
+
+.border-around {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+/*
+ * Form Table Classes
+ */
+
+table.table-form>tbody>tr>td, table.table-form>tfoot>tr>td, table.table-form>tfoot>tr>th {
+    padding: 3px;
+}
+
+/*
+ * Table Classes
+ */
+
+table.list th {
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
+}
+

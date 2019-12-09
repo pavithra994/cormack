@@ -1,0 +1,94 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1><span>Cormack</span> - <span>Job Management System</span></h1>
+    </div>
+
+    <div ng-show="!isAuthenticated()" ng-cloak>
+        Your account currently has no access. Please inform the Administrator. <a ng-click="retryLogin()">Retry Login?</a>
+    </div>
+
+    <div class="row ng-cloak" ng-show="isAuthenticated()" ng-cloak>
+        <div class="col-md-6 dashboard-menu" ng-cloak>
+            <div class="list-group" ng-if="accessible('job')">
+                <label class="list-group-item active">Jobs</label>
+                <a ui-sref="job.list({limit: 10, offset: 0, sort: name, order: 'desc'})"
+                   class="list-group-item" ng-if="accessible('job', 'job.list')">
+                    <span><i class="glyphicon glyphicon-briefcase"></i></span>
+                    Manage Jobs
+                </a>
+                <a ui-sref="job.pour-schedule({limit: 20, offset: 0, sort: name, order: 'asc', filter: 'all'})"
+                   class="list-group-item" ng-if="accessible('job', 'job.pour-schedule')">
+                    <span><i class="glyphicon glyphicon-tasks"></i></span>
+                    Slab Schedule
+                </a>
+                <a ui-sref="job.paving_list({limit: 10, offset: 0, sort: name, order: 'desc'})"
+                   class="list-group-item" ng-if="accessible('job', 'job.paving_list')">
+                    <span><i class="glyphicon glyphicon-tasks"></i></span>
+                    Paving Schedule
+                </a>
+                <a ui-sref="job.enumber_list({limit: 10, offset: 0, sort: name, order: 'desc'})"
+                   class="list-group-item" ng-if="accessible('job', 'job.enumber_list')">
+                    <span><i class="glyphicon glyphicon-tasks"></i></span>
+                    ENumber Schedule
+                </a>
+                <a href="" ui-sref="job.create"
+                   class="list-group-item" ng-if="accessible('job', 'job.create')">
+                    <span><i class="glyphicon glyphicon-plus"></i></span>
+                    New Job
+                </a>
+            </div>
+
+            <div class="list-group" ng-if="accessible('mobile')">
+                <label class="list-group-item active">Subbie Views</label>
+                <a ui-sref="mobile.listtasks({sort: name, order: 'desc', filter: 'active'})"
+                   class="list-group-item" ng-if="accessible('mobile', 'mobile.listtasks')">
+                    <span><i class="glyphicon glyphicon-wrench"></i></span>
+                    Task List
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6 dashboard-menu" ng-cloak>
+            <div class="list-group" ng-if="accessible('repair')">
+                <label class="list-group-item active">Repairs</label>
+                <a ui-sref="repair.list({limit: 10, offset: 0, sort: name, order: 'desc', filter: 'active'})"
+                   class="list-group-item" ng-if="accessible('repair', 'repair.list')">
+                    <span><i class="glyphicon glyphicon-wrench"></i></span>
+                    Manage Repairs
+                </a>
+                <a href="" ui-sref="repair.create" class="list-group-item" ng-if="accessible('repair', 'repair.create')">
+                    <span><i class="glyphicon glyphicon-plus"></i></span>
+                    New Repair
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6" ng-if="accessible('email') && !platform.isTablet()">
+            <div class="list-group">
+                <label class="list-group-item active">Mail Messages</label>
+                <a ui-sref="email.list({limit: 10, offset: 0, sort: date_received})"
+                   class="list-group-item">
+                    <span class="pull-left padding-right-5px"><i class="glyphicon glyphicon-envelope"></i></span>
+                    Manage Emails
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6 dashboard-menu" ng-if="accessible('reports')" ng-cloak ng-hide="true">
+            <div class="list-group">
+                <label class="list-group-item active">Reports</label>
+                <a href="/reports/index" class="list-group-item">
+                    <span><i class="glyphicon glyphicon-book"></i></span> Reports Library
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

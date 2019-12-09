@@ -1,0 +1,1121 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+  <!-- display: inline-table;
+  white-space: nowrap;
+  background: indianred; -->
+  <style>
+        .col-sm-3.edit{
+            width: 100% !important;
+        }
+        .col-sm-3{
+            width: 96%
+        }
+    </style>
+    
+    <div class="content padding-top-20px">
+        <div class="page-header">
+            <h1 class="capitalize">Slab Schedule</h1>
+        </div>
+        <div class="scroll-t-div">
+        <ocom-table hide_new_button="true" destination="job.pour-schedule" limit="20">
+            <filter>
+                <input type="text" class="form-control"
+                   name="date" size="15"
+                   ng-model="listOptions.pour_date__ge"
+                   data-autoclose="1"
+                   placeholder="Pour Date"
+                   data-date-type="iso"
+                   data-date-format="dd/MM/yyyy"
+                   min-length="20"
+                   autocomplete="off"
+                   bs-datepicker>
+                <button ng-click="clearFilters()" class="btn btn-danger expandable" title="Clear Search Terms"
+                        type="button">Clear</button>
+            </filter>
+    
+            <table class="fixed_header table table-striped table-bordered list jobs scroll-t-div">
+                <thead>
+                    <tr>
+                        <th sortable="pour_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Pour Date</th>
+                        <th sortable="job_number" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Job #</th>
+                        <th sortable="client__name" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()" >Builder</th>
+                        <th sortable="address" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Address</th>
+                        <th sortable="sqm" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Sq.M</th>
+                        <th sortable="supervisor__name" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Super</th>
+                        <th sortable="wanted_pour_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Wanted Pour Date</th>
+                        <th sortable="building_inspector_supplier__description" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Inspect</th>
+                        <th sortable="piers" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Piers</th>
+                        <th sortable="piers_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Date</th>
+                        <th sortable="piers_inspection_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Pier Insp</th>
+                        <th sortable="piers_inspection_time_of_day" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Pier Insp Time</th>
+                        <th sortable="pier_inspection_done" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">OK</th>
+                        <th sortable="pier_concrete" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Pier Concrete</th>
+                        <th sortable="rock_booked_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Rock</th>
+                        <th sortable="part_a_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Part A</th>
+                        <th sortable="pod_delivery_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Pods</th>
+                        <th sortable="steel_delivery_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Steel</th>
+                        <th sortable="base_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Base</th>
+                        <th sortable="base_inspection_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Base Insp</th>
+                        <th sortable="base_inspection_done" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Ok</th>
+                        <th sortable="steel_inspection_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Steel Insp</th>
+                        <th sortable="steel_inspection_done" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Ok</th>
+                        <th sortable="sub_contractor" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Subbie</th>
+                        <th sortable="pump_inspector__description" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Pump</th>
+                        <th sortable="concrete_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Concrete</th>
+                        <th sortable="slab_schedule_notes" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr ng-repeat="item in list"
+                    ng-attr-data-id="{{item.id}}"
+                    ng-attr-data-date="{{item.pour_date}}"
+                    ng-class="{'select': item.pour_date != list[$index - 1].pour_date}"
+                    ng-style="{'background-color':(item.depot_type?'{{code_depot_List_by_id[item.depot_type].background_colour}}':''),
+                                'color':(item.depot_type?'{{code_depot_List_by_id[item.depot_type].foreground_colour}}':'')}">
+                  
+                        <td ng-click="setUpdate(item, 'pour_date')" ng-click="setAllUpdate(item, 'pour_date')" data-ng-init="dateHeader()">
+                                <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                     <div class="linerow"> {{ item.pour_date | properDate : "dddd DD MMM"  }} </div>
+                                    <br><br>
+                                </div>
+                            <span ng-show="!item.is_update.pour_date">
+                                {{ item.pour_date | properDate : "ddd DD MMM"  }}
+                            </span><br>
+                            <span ng-show="!item.is_update.pour_date_notes">
+                                {{item.pour_date_notes}}
+                            </span>
+                            <form name="form1" ng-submit="patchItem(item, 'pour_date')" ng-show="item.is_update.pour_date" style="min-width: 170px;">
+                                <ocom-table-date-picker
+                                  model="item.pour_date"
+                                  name="pour_date"
+                                  placeholder="Pour Date"
+                                  form="form1"
+                                  min_date="{{ item.date_received | previousDate }}"
+                                  max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}">
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.pour_date.$error" role="alert" ng-show="showOnError(form, 'pour_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="pour_date" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'pour_date')" class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.pour_date">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'pour_date_notes')" ng-show="item.is_update.pour_date_notes" style="min-width: 170px;">
+                                    <textarea id="pour_date_notes" name="pour_date_notes" class="form-control" ng-model="item.pour_date_notes"
+                                                ng-required="true" model="item.pour_date_notes" perm-can-update="pour_date_notes" errors="item._errors"
+                                                catch-server-errors="pour_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('pour_date_notes')"
+                                                ng-update="patchItem(item, 'pour_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.pour_date_notes.$error" role="alert" ng-show="showOnError(form, 'pour_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="pour_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'pour_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.pour_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+                        <td ng-dbclick="setAllUpdate(item, 'code')" style="min-width:70px;">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                           </div>
+                           <a ui-sref="job.edit({id: {{ item.id }} })">
+                                {{ item.code }}
+                            </a>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'client');setUpdate(item, 'client')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.client" style="min-width: 100px;">
+                                {{ options.client_List_by_id[item.client].name || "-" }}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'client')" ng-show="item.is_update.client" style="min-width: 150px;">
+                                <select class="form-control" id="client" ng-model="item.client" name="client"
+                                    ng-options="o.id as o.name for o in clients | activeOnly:item.client | orderBy:'o.name'"
+                                    ng-required="true" model="job" perm-can-update="client" errors="item._errors"
+                                    catch-server-errors="client" ng-disabled="viewOnly('client')" ng-change="selectClient(item.client);patchItem(item, 'client')"
+                                    >
+                                    <option value="">-- None --</option>
+                                </select>
+                                <div ng-messages="form.client.$error" role="alert" ng-show="showOnError(form, 'client')">
+                                    <p class="error margin-top-5px" ng-message="required">Please provide a value for Client.</p>
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="client" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'client')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'address');setUpdate(item, 'address')" style="min-width: 150px;">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span  ng-show="!item.is_update.address">
+                                {{ item.address || "-" }} - {{item.suburb}}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'address')"  ng-show="item.is_update.address" style="min-width: 200px;">
+                                <div class="input-group">
+                                    <input class="form-control" id="address"
+                                        ng-model="item.address" name="address" ng-required="true"
+                                        model="job" perm-can-update="address" errors="item._errors"
+                                        catch-server-errors="address"
+                                        title="The site address" placeholder="Address"
+                                        ng-disabled="viewOnly('address')"
+                                        ng-blur="patchItem(item, 'address')">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-disabled="!canShowMap()" ng-dblclick="openMap()">
+                                            <i class="glyphicon glyphicon-map-marker"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div ng-messages="form.address.$error" role="alert" ng-show="showOnError(form, 'address')">
+                                    <p class="error margin-top-5px" ng-message="required">Please provide a value for Address.</p>
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="address" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'address')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-55px" aria-hidden="true"></span>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'sqm');setUpdate(item, 'sqm')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.sqm">
+                                {{ item.sqm | number : 2 || "-" }}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'sqm')" ng-show="item.is_update.sqm" style="min-width: 100px;">
+                                <input class="form-control"
+                                    ng-class="{'negative': item.sqm < 0}" id="sqm"
+                                    ng-model="item.sqm" name="sqm"
+                                    string-to-number type="number"
+                                    ng-required="false" model="job" perm-can-update="sqm"
+                                    errors="item._errors" catch-server-errors="sqm"
+                                    min="0" max="100000" step="0.01" placeholder="-"
+                                    ng-disabled="viewOnly('sqm')"
+                                    ng-change="changeRockM3(item.sqm)"
+                                    ng-blur="patchItem(item, 'sqm')">
+                                <div ng-messages="form.sqm.$error" role="alert" ng-show="showOnError(form, 'sqm')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="sqm" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">SQM must have a value of 0 or higher.</p>
+                                    <p class="error margin-top-5px" ng-message="max">SQM must have a value not greater than 100000.</p>
+                                    <p class="error margin-top-5px" ng-message="number">SQM must be a number.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'sqm')" class="glyphicon glyphicon-remove form-control-feedback"
+                                      aria-hidden="true"></span>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'supervisor');setUpdate(item, 'supervisor')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.supervisor" style="min-width: 100px;">
+                                {{options.supervisor_List_by_id[item.supervisor].name || "-"}}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'supervisor')" ng-show="item.is_update.supervisor" style="min-width: 150px;">
+                               
+                                <ui-select ng-model="item.supervisor" id="supervisor" name="supervisor"
+                                    ng-change="changeSupervisor(item.supervisor);patchItem(item, 'supervisor')" ng-required="false"  model="job" perm-can-update="supervisor" ng-disabled="viewOnly('supervisor')">
+                                      <ui-select-match>
+                                          <span ng-bind="$select.selected.name"></span>
+                                      </ui-select-match>
+                                      <ui-select-choices repeat="supervisor.id as supervisor in (supervisors | filter: $select.search | orderBy:'name')">
+                                          <span ng-bind="supervisor.name"></span>
+                                      </ui-select-choices>
+                                </ui-select>
+    
+                                <div ng-messages="form.supervisor.$error" role="alert" ng-show="showOnError(form, 'supervisor')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="supervisor" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'supervisor')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+                            </form>
+                        </td>
+        
+                        <td ng-click="setAllUpdate(item, 'wanted_pour_date');setUpdate(item, 'wanted_pour_date')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.wanted_pour_date">
+                                {{item.wanted_pour_date | properDate : "ddd DD MMM"}}
+                            </span><br>
+                            <span ng-show="!item.is_update.wanted_pour_date_notes">
+                                {{item.wanted_pour_date_notes}}
+                            </span>
+                            <form name="form4" ng-submit="patchItem(item, 'wanted_pour_date')" ng-show="item.is_update.wanted_pour_date" style="min-width: 170px;">
+                                <ocom-table-date-picker model="item.wanted_pour_date"
+                                  name="wanted_pour_date"
+                                  required="false"
+                                  placeholder="Wanted Pour Date"
+                                  form="form4"
+                                  disabled="viewOnly('wanted_pour_date')"
+                                  >
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.wanted_pour_date.$error" role="alert" ng-show="showOnError(form, 'wanted_pour_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="wanted_pour_date" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'wanted_pour_date')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.wanted_pour_date">Save</button>
+                                </span>
+    
+    
+                                <form name="form10" ng-submit="patchItem(item, 'wanted_pour_date_notes')" ng-show="item.is_update.wanted_pour_date_notes" style="min-width: 170px;">
+                                    <textarea id="wanted_pour_date_notes" name="wanted_pour_date_notes" class="form-control" ng-model="item.wanted_pour_date_notes"
+                                                ng-required="true" model="item.wanted_pour_date_notes" perm-can-update="wanted_pour_date_notes" errors="item._errors"
+                                                catch-server-errors="wanted_pour_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('wanted_pour_date_notes')"
+                                                ng-change="patchItem(item, 'wanted_pour_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.wanted_pour_date_notes.$error" role="alert" ng-show="showOnError(form, 'wanted_pour_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="wanted_pour_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'wanted_pour_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.wanted_pour_date_notes">Save</button>
+                                    </span>
+                                </form>
+                             </form>
+                        </td>
+    
+
+
+
+                        
+                              
+
+                        <td ng-click="setAllUpdate(item, 'building_inspector_supplier');setUpdate(item, 'building_inspector_supplier')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.building_inspector_supplier" style="min-width: 100px;">
+                                <!-- {{ item.building_inspector_supplier || "-" }} -->
+                                {{ options.supplier_List_by_id[item.building_inspector_supplier].description || "-" }}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'building_inspector_supplier')" ng-show="item.is_update.building_inspector_supplier" style="min-width: 150px;">
+                                <select class="form-control" id="building_inspector_supplier"
+                                    ng-model="item.building_inspector_supplier"
+                                    name="building_inspector_supplier"
+                                    ng-options="o.id as o.description for o in supplier | filter:{supplier_type:{code:'building'}} | activeOnly | orderBy:'description'"
+                                    model="job" perm-can-update="building_inspector_supplier" errors="item._errors"
+                                    catch-server-errors="building_inspector_supplier" ng-disabled="viewOnly('building_inspector_supplier')"
+                                    ng-change="patchItem(item, 'building_inspector_supplier')">
+                                    <option value="">-- SELECT AN OPTION --</option>
+                                </select>
+                                <div ng-messages="form.building_inspector_supplier.$error" role="alert"
+                                     ng-show="showOnError(form, 'building_inspector_supplier')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="building_inspector_supplier" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'building_inspector_supplier')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+                            </form>
+                        </td>
+    
+                        <td class="piers" ng-class="{'sltcolor': item.piers}" ng-click="setAllUpdate(item, 'piers');setUpdate(item, 'piers')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.piers">
+                                {{item.piers || "-" }}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'piers')" ng-show="item.is_update.piers" style="min-width: 100px;">
+                                <input class="form-control" ng-class="{'negative': item.piers < 0}"   id="piers" ng-model="item.piers" name="piers"
+                                   string-to-number type="number" ng-required="false" model="job" perm-can-update="piers"
+                                   errors="item._errors" catch-server-errors="piers" min="0" max="100000" step="1" placeholder="-"
+                                   ng-disabled="viewOnly('piers')" ng-change="changeRockM3(item.piers)"
+                                   pattern="\d+"
+                                   ng-blur="patchItem(item, 'piers')">
+                                <div ng-messages="form.piers.$error" role="alert" ng-show="showOnError(form, 'piers')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="piers" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">piers must have a value of 0 or higher.</p>
+                                    <p class="error margin-top-5px" ng-message="max">piers must have a value not greater than 100000.</p>
+                                    <p class="error margin-top-5px" ng-message="number">piers must be a number.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'piers')" class="glyphicon glyphicon-remove form-control-feedback"
+                                      aria-hidden="true"></span>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'piers_date');setUpdate(item, 'piers_date')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.piers_date">
+                                {{item.piers_date | properDate : "ddd DD MMM" }}
+                            </span><br>
+                            <span ng-show="!item.is_update.piers_date_notes">
+                                {{item.piers_date_notes}}
+                            </span>
+    
+                            <form name="form20" ng-submit="patchItem(item, 'piers_date')" ng-show="item.is_update.piers_date" style="min-width: 170px;">
+                                <ocom-table-date-picker model="item.piers_date"
+                                  name="piers_date"
+                                  required="false"
+                                  placeholder="Piers Date" form="form20">
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.piers_date.$error" role="alert" ng-show="showOnError(form, 'piers_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="piers_date" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'piers_date')" class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.piers_date_notes">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'piers_date_notes')" ng-show="item.is_update.piers_date_notes" style="min-width: 170px;">
+                                    <textarea id="piers_date_notes" name="piers_date_notes" class="form-control" ng-model="item.piers_date_notes"
+                                                ng-required="true" model="item.piers_date_notes" perm-can-update="piers_date_notes" errors="item._errors"
+                                                catch-server-errors="piers_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('piers_date_notes')"
+                                                ng-change="patchItem(item, 'piers_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.piers_date_notes.$error" role="alert" ng-show="showOnError(form, 'piers_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="piers_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'piers_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.piers_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'piers_inspection_date');setUpdate(item, 'piers_inspection_date')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.piers_inspection_date">
+                                {{item.piers_inspection_date | properDate : "ddd DD MMM"}}
+                            </span><br>
+                            <span ng-show="!item.is_update.piers_inspection_date_notes">
+                                {{item.piers_inspection_date_notes}}
+                            </span>
+                            <form name="form6" ng-submit="patchItem(item, 'piers_inspection_date')" ng-show="item.is_update.piers_inspection_date" style="min-width: 170px;">
+                                <ocom-table-date-picker model="item.piers_inspection_date"
+                                  name="piers_inspection_date"
+                                  required="false"
+                                  placeholder="Piers Inspection Date" form="form6">
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.piers_inspection_date.$error" role="alert" ng-show="showOnError(form, 'piers_inspection_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="piers_inspection_date" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'piers_inspection_date')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.piers_inspection_date">Save</button>
+                                </span>
+    
+                                <form name="form10" ng-submit="patchItem(item, 'piers_inspection_date_notes')" ng-show="item.is_update.piers_inspection_date_notes" style="min-width: 170px;">
+                                    <textarea id="piers_inspection_date_notes" name="piers_inspection_date_notes" class="form-control" ng-model="item.piers_inspection_date_notes"
+                                                ng-required="true" model="item.piers_inspection_date_notes" perm-can-update="piers_inspection_date_notes" errors="item._errors"
+                                                catch-server-errors="piers_inspection_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('piers_inspection_date_notes')"
+                                                ng-change="patchItem(item, 'piers_inspection_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.piers_inspection_date_notes.$error" role="alert" ng-show="showOnError(form, 'piers_inspection_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="piers_inspection_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'piers_inspection_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.piers_inspection_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+    
+                        <td model="job" ng-click="setAllUpdate(item, 'piers_inspection_time_of_day');setUpdate(item, 'piers_inspection_time_of_day')">
+                                <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                    <br><br>
+                                </div>
+                                <span ng-show="!item.is_update.piers_inspection_time_of_day">
+                                    {{ options.time_of_day_List[item.piers_inspection_time_of_day].description || "-" }}
+                                 </span>
+                                <form name="form" ng-submit="patchItem(item, 'piers_inspection_time_of_day')" ng-show="item.is_update.piers_inspection_time_of_day" style="min-width: 150px;">
+                                        <select id="all_piers_inspection_time_of_day" class="form-control" name="piers_inspection_time_of_day"
+                                        ng-options="o.id as o.description for o in time_of_day_List | activeOnly:item.piers_inspection_time_of_day"
+                                        ng-model="item.piers_inspection_time_of_day" ng-disabled="viewOnly('piers_inspection_time_of_day')"
+                                        ng-required="false" model="job" perm-can-update="piers_inspection_time_of_day" errors="item._errors"
+                                        catch-server-errors="piers_inspection_time_of_day" ng-disabled="viewOnly('piers_inspection_time_of_day')"
+                                        ng-change="patchItem(item, 'piers_inspection_time_of_day')"
+                                        >
+                                    <option value="">-- SELECT AN OPTION --</option>
+                                </select>
+                                </form>
+                            </td>
+    
+    
+                        <td ng-click="setAllUpdate(item, 'pier_inspection_done');setUpdate(item, 'pier_inspection_done')">
+                            
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <form name="form" ng-submit="patchItem(item, 'pier_inspection_done')" >
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="pier_inspection_done"
+                                           ng-model="item.pier_inspection_done" name="pier_inspection_done" ng-required="false"
+                                           model="job" perm-can-update="pier_inspection_done" errors="item._errors" catch-server-errors="pier_inspection_done"
+                                           ng-disabled="viewOnly('pier_inspection_done')"
+                                           ng-blur="patchItem(item, 'pier_inspection_done')">
+                                        <span class="ocom-checkbox">
+                                            <i class="ocom-checkbox-icon fa fa-check"></i>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div ng-messages="form.pier_inspection_done.$error" role="alert" ng-show="showOnError(form, 'pier_inspection_done')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="pier_inspection_done" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'pier_inspection_done')"
+                                      class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'pier_concrete');setUpdate(item, 'pier_concrete')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.pier_concrete">
+                                {{item.pier_concrete | properDate : "ddd DD MMM" }}
+                            </span><br>
+                            <span ng-show="!item.is_update.pier_concrete_notes">
+                                {{item.pier_concrete_notes}}
+                            </span>
+                            <form name="form8" ng-submit="patchItem(item, 'pier_concrete')" ng-show="item.is_update.pier_concrete" style="min-width: 170px;">
+                                <ocom-table-date-picker model="item.pier_concrete"
+                                  name="pier_concrete"
+                                  required="false"
+                                  placeholder="Pier Concrete Date"
+                                  form="form8"
+                                  disabled="viewOnly('pier_concrete')"
+                                  >
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.pier_concrete.$error" role="alert" ng-show="showOnError(form, 'pier_concrete')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="pier_concrete" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'pier_concrete')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.pier_concrete">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'pier_concrete_notes')" ng-show="item.is_update.pier_concrete_notes" style="min-width: 170px;">
+                                    <textarea id="pier_concrete_notes" name="pier_concrete_notes" class="form-control" ng-model="item.pier_concrete_notes"
+                                                ng-required="true" model="item.pier_concrete_notes" perm-can-update="pier_concrete_notes" errors="item._errors"
+                                                catch-server-errors="pier_concrete_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('pier_concrete_notes')"
+                                                ng-change="patchItem(item, 'pier_concrete_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.pier_concrete_notes.$error" role="alert" ng-show="showOnError(form, 'pier_concrete_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="pier_concrete_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'pier_concrete_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.pier_concrete_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'rock_booked_date');setUpdate(item, 'rock_booked_date')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.rock_booked_date">
+                                {{item.rock_booked_date | properDate : "ddd DD MMM"}}
+                            </span><br>
+                            <span ng-show="!item.is_update.rock_booked_date_notes">
+                                {{item.rock_booked_date_notes}}
+                            </span>
+                            <form name="form6" ng-submit="patchItem(item, 'rock_booked_date')" ng-show="item.is_update.rock_booked_date" style="min-width: 170px;">
+                                <ocom-table-date-picker model="item.rock_booked_date"
+                                  name="rock_booked_date"
+                                  required="false"
+                                  placeholder="Rock Booked Date" form="form6">
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.rock_booked_date.$error" role="alert" ng-show="showOnError(form, 'rock_booked_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="rock_booked_date" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'rock_booked_date')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.rock_booked_date">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'rock_booked_date_notes')" ng-show="item.is_update.rock_booked_date_notes" style="min-width: 170px;">
+                                    <textarea id="rock_booked_date_notes" name="rock_booked_date_notes" class="form-control" ng-model="item.rock_booked_date_notes"
+                                                ng-required="true" model="item.rock_booked_date_notes" perm-can-update="rock_booked_date_notes" errors="item._errors"
+                                                catch-server-errors="rock_booked_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('rock_booked_date_notes')"
+                                                ng-change="patchItem(item, 'rock_booked_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.rock_booked_date_notes.$error" role="alert" ng-show="showOnError(form, 'rock_booked_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="rock_booked_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'rock_booked_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.rock_booked_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+    
+                        <td ng-click="setAllUpdate(item, 'part_a_date');setUpdate(item, 'part_a_date')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.part_a_date">
+                                {{item.part_a_date | properDate : "ddd DD MMM"}}
+                            </span><br>
+                            <span ng-show="!item.is_update.part_a_date_notes">
+                                {{item.part_a_date_notes}}
+                            </span>
+                            <form name="form7" ng-submit="patchItem(item, 'part_a_date')" ng-show="item.is_update.part_a_date" style="min-width: 170px;">
+                                <ocom-table-date-picker model="item.part_a_date"
+                                  name="part_a_date"
+                                  required="false"
+                                  placeholder="Part A Date"
+                                  form="form7">
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.part_a_date.$error" role="alert" ng-show="showOnError(form, 'part_a_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="part_a_date" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'part_a_date')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.part_a_date">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'part_a_date_notes')" ng-show="item.is_update.part_a_date_notes" style="min-width: 170px;">
+                                    <textarea id="part_a_date_notes" name="part_a_date_notes" class="form-control" ng-model="item.part_a_date_notes"
+                                                ng-required="true" model="item.part_a_date_notes" perm-can-update="part_a_date_notes" errors="item._errors"
+                                                catch-server-errors="part_a_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('part_a_date_notes')"
+                                                ng-change="patchItem(item, 'part_a_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.part_a_date_notes.$error" role="alert" ng-show="showOnError(form, 'part_a_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="part_a_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'part_a_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.part_a_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'pod_delivery_date');setUpdate(item, 'pod_delivery_date')">
+                           
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.pod_delivery_date">
+                                {{item.pod_delivery_date | properDate : "ddd DD MMM"}}
+                            </span><br>
+                            <span ng-show="!item.is_update.pod_delivery_date_notes">
+                                {{item.pod_delivery_date_notes}}
+                            </span>
+                            <form name="form2" ng-submit="patchItem(item, 'pod_delivery_date')" ng-show="item.is_update.pod_delivery_date" style="min-width: 170px;">
+                                <ocom-table-date-picker
+                                  model="item.pod_delivery_date"
+                                  name="pod_delivery_date"
+                                  placeholder="Pot Delivery Date"
+                                  form="form2"
+                                  >
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.pod_delivery_date.$error" role="alert" ng-show="showOnError(form, 'pod_delivery_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="pod_delivery_date" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'pod_delivery_date')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.pod_delivery_date">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'pod_delivery_date_notes')" ng-show="item.is_update.pod_delivery_date_notes" style="min-width: 170px;">
+                                    <textarea id="pod_delivery_date_notes" name="pod_delivery_date_notes" class="form-control" ng-model="item.pod_delivery_date_notes"
+                                                ng-required="true" model="item.pod_delivery_date_notes" perm-can-update="pod_delivery_date_notes" errors="item._errors"
+                                                catch-server-errors="pod_delivery_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('pod_delivery_date_notes')"
+                                                ng-change="patchItem(item, 'pod_delivery_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.pod_delivery_date_notes.$error" role="alert" ng-show="showOnError(form, 'pod_delivery_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="pod_delivery_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'pod_delivery_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.pod_delivery_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'steel_delivery_date');setUpdate(item, 'steel_delivery_date')">
+                                <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                    <br><br>
+                                </div>
+                              <span ng-show="!item.is_update.steel_delivery_date">
+                                  {{item.steel_delivery_date | properDate : "ddd DD MMM"}}
+                              </span><br>
+                              <span ng-show="!item.is_update.steel_delivery_date_notes">
+                                  {{item.steel_delivery_date_notes}}
+                              </span>
+                              <form name="form2" ng-submit="patchItem(item, 'steel_delivery_date')" ng-show="item.is_update.steel_delivery_date" style="min-width: 170px;">
+                                  <ocom-table-date-picker
+                                    model="item.steel_delivery_date"
+                                    name="steel_delivery_date"
+                                    placeholder="Steel Delivery Date"
+                                    form="form2"
+                                    >
+                                  </ocom-table-date-picker>
+                                  <div ng-messages="form.steel_delivery_date.$error" role="alert" ng-show="showOnError(form, 'steel_delivery_date')">
+                                      <p class="error margin-top-5px" ng-message="serverError">
+                                          <div show-server-errors="steel_delivery_date" errors="item._errors"></div>
+                                      </p>
+                                  </div>
+                                  <span ng-if="showOnError(form, 'steel_delivery_date')"
+                                        class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                  <span class="editable-buttons">
+                                      <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.steel_delivery_date">Save</button>
+                                  </span>
+                                  <form name="form10" ng-submit="patchItem(item, 'steel_delivery_date_notes')" ng-show="item.is_update.steel_delivery_date_notes" style="min-width: 170px;">
+                                      <textarea id="steel_delivery_date_notes" name="steel_delivery_date_notes" class="form-control" ng-model="item.steel_delivery_date_notes"
+                                                  ng-required="true" model="item.steel_delivery_date_notes" perm-can-update="steel_delivery_date_notes" errors="item._errors"
+                                                  catch-server-errors="steel_delivery_date_notes" placeholder="Description"
+                                                  ng-disabled="viewOnly('steel_delivery_date_notes')"
+                                                  ng-change="patchItem(item, 'steel_delivery_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                      </textarea>
+                                      <div ng-messages="form.steel_delivery_date_notes.$error" role="alert" ng-show="showOnError(form, 'steel_delivery_date_notes')">
+                                          <p class="error margin-top-5px" ng-message="serverError">
+                                              <div show-server-errors="steel_delivery_date_notes" errors="item._errors"></div>
+                                          </p>
+                                      </div>
+                                      <span ng-if="showOnError(form, 'steel_delivery_date_notes')"
+                                              class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                      <span class="editable-buttons">
+                                          <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.steel_delivery_date_notes">Save</button>
+                                      </span>
+                                  </form>
+                              </form>
+                          </td>
+    
+                          <td ng-click="setAllUpdate(item, 'base_date');setUpdate(item, 'base_date')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.base_date">
+                                {{ item.base_date | properDate : "ddd DD MMM hh:mm:ss" || "-" }}
+                            </span><br>
+                            <span ng-show="!item.is_update.base_date_notes">
+                                {{ item.base_date_notes}}
+                            </span>
+                            <form name="form1" ng-submit="patchItem(item, 'base_date')" ng-show="item.is_update.base_date" style="min-width: 170px;">
+                                <ocom-datetime-picker model="item.base_date"
+                                name="base_date"
+                                required="false"
+                                placeholder="Base Date"
+                                form="form8"
+                                min_date="{{ item.date_received | previousDate }}"
+                                max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                                disabled="viewOnly('base_date')"
+                                >
+                              </ocom-datetime-picker>
+                                <div ng-messages="form.base_date.$error" role="alert" ng-show="showOnError(form, 'base_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="base_date" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'base_date')" class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.base_date">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'base_date_notes')" ng-show="item.is_update.base_date_notes" style="min-width: 170px;">
+                                    <textarea id="base_date_notes" name="base_date_notes" class="form-control" ng-model="item.base_date_notes"
+                                                ng-required="true" model="item.base_date_notes" perm-can-update="base_date_notes" errors="item._errors"
+                                                catch-server-errors="base_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('base_date_notes')"
+                                                ng-change="patchItem(item, 'base_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.base_date_notes.$error" role="alert" ng-show="showOnError(form, 'base_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="base_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'base_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.base_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+                        <td ng-click="setAllUpdate(item, 'base_inspection_date');setUpdate(item, 'base_inspection_date')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.base_inspection_date">
+                                {{item.base_inspection_date | properDate : "ddd DD MMM" }}
+                            </span><br>
+                            <span ng-show="!item.is_update.base_inspection_date_notes">
+                                {{item.base_inspection_date_notes}}
+                            </span>
+                            <form name="form8" ng-submit="patchItem(item, 'base_inspection_date')" ng-show="item.is_update.base_inspection_date" style="min-width: 170px;">
+                                <ocom-table-date-picker model="item.base_inspection_date"
+                                  name="base_inspection_date"
+                                  required="false"
+                                  placeholder="Base Inspection Date"
+                                  form="form8">
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.base_inspection_date.$error" role="alert" ng-show="showOnError(form, 'base_inspection_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="base_inspection_date" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'base_inspection_date')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.base_inspection_date">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'base_inspection_date_notes')" ng-show="item.is_update.base_inspection_date_notes" style="min-width: 170px;">
+                                    <textarea id="base_inspection_date_notes" name="base_inspection_date_notes" class="form-control" ng-model="item.base_inspection_date_notes"
+                                                ng-required="true" model="item.base_inspection_date_notes" perm-can-update="base_inspection_date_notes" errors="item._errors"
+                                                catch-server-errors="base_inspection_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('base_inspection_date_notes')"
+                                                ng-change="patchItem(item, 'base_inspection_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.base_inspection_date_notes.$error" role="alert" ng-show="showOnError(form, 'base_inspection_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="base_inspection_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'base_inspection_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.base_inspection_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+                        <td ng-dblclick="" ng-click="setAllUpdate(item, 'base_inspection_done');setUpdate(item, 'base_inspection_done')">
+                           <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                            <br><br>
+                            </div>
+                        <form name="form" ng-submit="patchItem(item, 'base_inspection_done')">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="base_inspection_done"
+                                        ng-model="item.base_inspection_done"
+                                        name="base_inspection_done" ng-required="false"
+                                        model="job" perm-can-update="base_inspection_done" errors="item._errors" catch-server-errors="base_inspection_done"
+                                        ng-disabled="viewOnly('base_inspection_done')"
+                                        ng-blur="patchItem(item, 'base_inspection_done')">
+                                    <span class="ocom-checkbox">
+                                        <i class="ocom-checkbox-icon fa fa-check"></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div ng-messages="form.base_inspection_done.$error" role="alert" ng-show="showOnError(form, 'base_inspection_done')">
+                                <p class="error margin-top-5px" ng-message="serverError">
+                                    <div show-server-errors="base_inspection_done" errors="item._errors"></div>
+                                </p>
+                            </div>
+                            <span ng-if="showOnError(form, 'base_inspection_done')"
+                                    class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                        </form>
+                        </td>
+    
+                        <td ng-dblclick="" ng-click="setAllUpdate(item, 'steel_inspection_date');setUpdate(item, 'steel_inspection_date')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.steel_inspection_date">
+                                {{item.steel_inspection_date | properDate : "ddd DD MMM" }}
+                            </span><br>
+                            <span ng-show="!item.is_update.steel_inspection_date">
+                                {{time_of_day_List_by_id[item.steel_inspection_time_of_day].description}}
+                            </span><br>
+                            <span ng-show="!item.is_update.steel_inspection_date_notes">
+                                {{item.steel_inspection_date_notes}}
+                            </span>
+                            <form name="form9" ng-submit="patchItem(item, 'steel_inspection_date')" ng-show="item.is_update.steel_inspection_date" style="min-width: 170px;">
+                                <ocom-table-date-picker model="item.steel_inspection_date"
+                                  name="steel_inspection_date"
+                                  required="false"
+                                  placeholder="Steel Inspection Date"
+                                  form="form9"
+                                  min_date="{{ item.date_received| previousDate }}"
+                                  max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                                  disabled="viewOnly('base_inspection_date')"
+                                  >
+                                </ocom-table-date-picker>
+                                <br>
+                                <select class="form-control" id="client" ng-model="item.steel_inspection_time_of_day"
+                                        name="steel_inspection_time_of_day"
+                                        ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                                        model="job" perm-can-update="steel_inspection_time_of_day" errors="item._errors"
+                                        catch-server-errors="steel_inspection_time_of_day"
+                                        ng-disabled="viewOnly('steel_inspection_time_of_day')">
+                                    <option value="">-- SELECT TIME --</option>
+                                </select>
+                                <div ng-messages="form.steel_inspection_date.$error" role="alert" ng-show="showOnError(form, 'steel_inspection_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="steel_inspection_date" errors="item._errors"></div>
+                                    </p>
+                                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                                </div>
+                                <span ng-if="showOnError(form, 'steel_inspection_date')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.steel_inspection_date">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'steel_inspection_date_notes')" ng-show="item.is_update.steel_inspection_date_notes" style="min-width: 170px;">
+                                    <textarea id="steel_inspection_date_notes" name="steel_inspection_date_notes" class="form-control" ng-model="item.steel_inspection_date_notes"
+                                                ng-required="true" model="item.steel_inspection_date_notes" perm-can-update="steel_inspection_date_notes" errors="item._errors"
+                                                catch-server-errors="steel_inspection_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('steel_inspection_date_notes')"
+                                                ng-change="patchItem(item, 'steel_inspection_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.steel_inspection_date_notes.$error" role="alert" ng-show="showOnError(form, 'steel_inspection_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="steel_inspection_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'steel_inspection_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.steel_inspection_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+    
+                        <td ng-dblclick="" ng-click="setAllUpdate(item, 'steel_inspection_done');setUpdate(item, 'steel_inspection_done')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <form name="form" ng-submit="patchItem(item, 'steel_inspection_done')">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="steel_inspection_done"
+                                           ng-model="item.steel_inspection_done" name="steel_inspection_done" ng-required="false"
+                                           model="job" perm-can-update="steel_inspection_done" errors="item._errors" catch-server-errors="steel_inspection_done"
+                                           ng-disabled="viewOnly('steel_inspection_done')"
+                                           ng-change="patchItem(item, 'steel_inspection_done')">
+                                        <span class="ocom-checkbox">
+                                            <i class="ocom-checkbox-icon fa fa-check"></i>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div ng-messages="form.steel_inspection_done.$error" role="alert" ng-show="showOnError(form, 'steel_inspection_done')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="steel_inspection_done" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'steel_inspection_done')"
+                                      class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            </form>
+                        </td>
+    
+                        <td ng-dblclick="" ng-click="setAllUpdate(item, 'sub_contractor');setUpdate(item, 'sub_contractor')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.sub_contractor" style="min-width: 100px;">
+                                {{ options.subbie_List_by_id[item.sub_contractor].name }}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'sub_contractor')" ng-show="item.is_update.sub_contractor" style="min-width: 150px;">
+                                <select id="all_sub_contractors" class="form-control" name="sub_contractor"
+                                        ng-options="o.id as o.name for o in subcontractors | activeOnly:item.sub_contractor | filter:{type:{id:6}} | orderBy:'o.name'""
+                                        ng-model="item.sub_contractor" ng-disabled="viewOnly('sub_contractor')"
+                                        ng-required="false" model="job" perm-can-update="sub_contractor" errors="item._errors"
+                                        catch-server-errors="sub_contractor" ng-disabled="viewOnly('sub_contractor')"
+                                        ng-change="patchItem(item, 'sub_contractor')"
+                                        >
+                                    <option value="">-- None --</option>
+                                </select>
+                            </form>
+                        </td>
+    
+                        <td ng-dblclick="" ng-click="setAllUpdate(item, 'pump_inspector');setUpdate(item, 'pump_inspector')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.pump_inspector" style="min-width: 100px;">
+                                {{ options.subbie_List_by_id[item.pump_inspector].name }}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'pump_inspector')" ng-show="item.is_update.pump_inspector" style="min-width: 150px;">
+                                <select id="all_pump_inspectors" class="form-control" name="pump_inspector"
+                                        ng-options="o.id as o.name for o in subcontractors | activeOnly:item.pump_inspector | filter:{type:{code:'Pumping'}} | orderBy:'o.name'"
+                                        ng-model="item.pump_inspector" ng-disabled="viewOnly('pump_inspector')"
+                                        ng-required="false" model="job" perm-can-update="pump_inspector" errors="item._errors"
+                                        catch-server-errors="pump_inspector" ng-disabled="viewOnly('pump_inspector')"
+                                        ng-change="patchItem(item, 'pump_inspector')"
+                                        >
+                                    <option value="">-- SELECT AN OPTION --</option>
+                                </select>
+                            </form>
+                        </td>
+    
+                        <td ng-dblclick="" ng-click="setAllUpdate(item, 'concrete_date');setUpdate(item, 'concrete_date')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-show="!item.is_update.concrete_date">
+                                {{item.concrete_date | properDate : "ddd DD MMM"}}
+                            </span><br>
+                            <span ng-show="!item.is_update.concrete_date_notes">
+                                {{item.concrete_date_notes}}
+                            </span>
+                            <form name="form10" ng-submit="patchItem(item, 'concrete_date')" ng-show="item.is_update.concrete_date" style="min-width: 170px;">
+                            <ocom-table-date-picker model="item.concrete_date"
+                                  name="concrete_date"
+                                  required="false"
+                                  placeholder="Concrete Date"
+                                  form="form9"
+                                  min_date="{{ item.date_received| previousDate }}"
+                                  max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                                  disabled="viewOnly('concrete_date')"
+                                  >
+                                </ocom-table-date-picker>
+                                <div ng-messages="form.concrete_date.$error" role="alert" ng-show="showOnError(form, 'concrete_date')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="concrete_date" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'concrete_date')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.concrete_date">Save</button>
+                                </span>
+                                <form name="form10" ng-submit="patchItem(item, 'concrete_date_notes')" ng-show="item.is_update.concrete_date_notes" style="min-width: 170px;">
+                                    <textarea id="concrete_date_notes" name="concrete_date_notes" class="form-control" ng-model="item.concrete_date_notes"
+                                                ng-required="true" model="item.concrete_date_notes" perm-can-update="concrete_date_notes" errors="item._errors"
+                                                catch-server-errors="concrete_date_notes" placeholder="Description"
+                                                ng-disabled="viewOnly('concrete_date_notes')"
+                                                ng-change="patchItem(item, 'concrete_date_notes')" ng-model-options="{'updateOn':'blur'}">
+                                    </textarea>
+                                    <div ng-messages="form.concrete_date_notes.$error" role="alert" ng-show="showOnError(form, 'concrete_date_notes')">
+                                        <p class="error margin-top-5px" ng-message="serverError">
+                                            <div show-server-errors="concrete_date_notes" errors="item._errors"></div>
+                                        </p>
+                                    </div>
+                                    <span ng-if="showOnError(form, 'concrete_date_notes')"
+                                            class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                    <span class="editable-buttons">
+                                        <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.concrete_date_notes">Save</button>
+                                    </span>
+                                </form>
+                            </form>
+                        </td>
+                        <td ng-click="setUpdate(item, 'slab_schedule_notes')">
+                            <div ng-show="item.pour_date != list[$index - 1].pour_date" >
+                                <br><br>
+                            </div>
+                            <span ng-hide="item.is_update.slab_schedule_notes" style="min-width: 100px;">
+                                {{item.slab_schedule_notes}}
+                            </span>
+                            <form name="form" ng-submit="patchItem(item, 'slab_schedule_notes')" ng-show="item.is_update.slab_schedule_notes" style="min-width: 200px;">
+                                <textarea name="slab_schedule_notes" class="form-control" ng-model="item.slab_schedule_notes"
+                                          ng-required="true" model="item.slab_schedule_notes" perm-can-update="slab_schedule_notes" errors="item._errors"
+                                          catch-server-errors="slab_schedule_notes" placeholder="Description"
+                                          ng-disabled="viewOnly('slab_schedule_notes')" ng-model-options="{'updateOn':'blur'}"
+                                          >
+                                </textarea>
+                                <div ng-messages="form.slab_schedule_notes.$error" role="alert" ng-show="showOnError(form, 'slab_schedule_notes')">
+                                    <p class="error margin-top-5px" ng-message="required">Please provide a value for slab schedule notes.</p>
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="slab_schedule_notes" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'slab_schedule_notes')"
+                                      class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+                            </form>
+                        </td>
+                    </tr>
+                <tbody>
+            </table>
+        </ocom-table>
+        </div>
+    </div>
+    

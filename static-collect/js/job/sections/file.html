@@ -1,0 +1,18 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">Files</label>
+    <div class="col-sm-10">
+        <ocom-file-upload uploaded-files="uploadedFiles" model-files="item.files" form="form" prefix-path="job"
+                          compile-emails="compileEmails" file-types="fileTypes" show-internal="isAdmin"
+                          disabled="!filesEditable" no-link="!item.isActive"
+                          user="limitUser" file-type-change-only="item.email">
+        </ocom-file-upload>
+    </div>
+</div>

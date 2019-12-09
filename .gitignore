@@ -1,0 +1,22 @@
+.idea
+.vagrant
+*.log
+/tests/html/
+/tests/screenshots/
+venv
+/api/migrations/0050_merge_20180309_0904.py
+/api/migrations/0046_auto_20180308_0938.py
+/api/migrations/0045_codetasktype_job_date_order.py
+/api/migrations/0046_codetasktype_job_date_order.py
+/api/migrations/0020_job_job_tasks.py
+node_modules/
+/builder/
+api/__pycache__/
+api/migrations/__pycache__/
+api/utils/__pycache__/
+Would skip repository builder/
+config/__pycache__/
+config/settings/__pycache__/
+static/bower_components/angu-fixed-header-table/
+static/bower_components/
+.env2

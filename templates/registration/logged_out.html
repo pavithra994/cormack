@@ -1,0 +1,18 @@
+{% extends "registration/logged_out.html" %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+    <h3 class="italic-title">Thanks for spending some quality time with the Cormack JMS Admin Dashboard today.</h3>
+{% endblock %}
+
+{% block content-left %}
+    <div id="suit-left" class="suit-column">
+        <div class="left-nav" id="left-nav">
+            <ul>
+                <li><a href="{% url 'admin:index' %}"><i class="icon-lock"></i>Log in again</a></li>
+                <li><a href="/"><i class="icon-arrow-left"></i>Return to Cormack JMS</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

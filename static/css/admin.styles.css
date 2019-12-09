@@ -1,0 +1,26 @@
+/*
+ * Copyright (C) 2019 Ocom Software- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Ocom Software <licence@ocom.com.au, 2019
+ *
+ */
+
+.errorlist > li {
+    list-style-type: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.color-block {
+    width: 100%;
+    float: left;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.table td.field-order_actual {
+    text-align: center;
+}

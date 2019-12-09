@@ -1,0 +1,58 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1 class="capitalize">Task List</h1>
+    </div>
+    <form name="form" novalidate ng-submit="loadList()">
+        <div class="input-group">
+            <input class="form-control" ng-model="listOptions.q" placeholder="Search">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="list-group padding-top-20px">
+      <span class="list-group-item"  ng-repeat="item in list">
+          <div ng-if="item.task_type">
+              <h4>{{ item.address }}, {{item.suburb}} <a class="btn btn-default" ng-click="openMap(item, true)">
+                  <i class="glyphicon glyphicon-map-marker"></i> </a>
+              </h4>
+              <h4>{{ item.job_description }} </h4>
+              <small>({{ getTaskType(item.task_type)}})</small> {{ item.client }}
+              <a ui-sref="job.edit({id: {{ item.job }} })"
+                 ng-if="canSeePlansBeforeAccept || item.accepted_date || item.rejected_date">
+                  <i class="glyphicon glyphicon-chevron-right pull-right"></i>
+              </a>
+              <br>
+              {{item.date_scheduled | date:"dd/MM/yyyy"}}
+          </div>
+          <div ng-if="item.repair_type">
+              <h4>
+                  {{ item.address_label }}, {{ item.suburb_label }}
+                  <a class="btn btn-default" ng-click="openMap(item, false)">
+                    <i class="glyphicon glyphicon-map-marker"></i>
+                  </a>
+              </h4>
+              <h4>{{ item.description }} </h4>
+              <small>(Repair)</small> {{ item.client_name }}
+              <a ui-sref="repair.edit({id: {{ item.id }} })"
+                 ng-if="canSeePlansBeforeAccept || item.accepted_date || item.rejected_date">
+                  <i class="glyphicon glyphicon-chevron-right pull-right"></i>
+              </a>
+              <br>
+              {{item.start_by | date:"dd/MM/yyyy"}} <br />
+          </div>
+          <div class="btn-group" ng-if="!item.accepted_date" ng-cloak>
+                <button type="button" class="btn btn-success" ng-click="accept(item)">Accept</button>
+                <button type="button" class="btn btn-danger"  ng-click="reject(item)">Reject</button>
+          </div>
+      </span>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="date_retrieved">Date Retrieved</label>
+    <div class="col-sm-10">
+        <input id="date_retrieved" type="text" class="form-control" ng-model="item.fetched" disabled>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="source">From</label>
+    <div class="col-sm-10">
+        <input type="email" id="source" class="form-control" ng-model="item.from_email" disabled>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="subject">Subject</label>
+    <div class="col-sm-10">
+        <input class="form-control" ng-model="item.subject" disabled id="subject">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="body">Body</label>
+    <div class="col-sm-10">
+        <textarea id="body" rows="12" class="form-control" ng-model="item.text" disabled></textarea>
+    </div>
+</div>
+
+<div ng-include="'js/email/sections/attachment.html'"></div>

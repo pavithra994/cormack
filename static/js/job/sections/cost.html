@@ -1,0 +1,125 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="form-group">
+    <div class="col-sm-12">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center width-25pct">Item</th>
+                    <th class="text-center width-25pct">Details</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-center">Unit Price (ex GST)</th>
+                    <th class="text-center" style="width: 130px;">Total Price</th>
+                    <th class="text-center width-1px required">PO No.</th>
+                    <th class="text-center">Invoiced</th>
+                    <th class="text-center width-1px" ng-if="!viewOnly('job_costs')">
+                        <button type="button" list-append list="item.job_costs"
+                                ng-disabled="viewOnly('job_costs')"
+                                item="{unit_price:0, quantity:1, total_price:0, editable:true,
+                                    hidden_actual:false, active_end_date:null, invoiced: false,
+                                    purchase_order_number: '{{ lastPurchaseOrderNumber }}'}"
+                                class="btn btn-default btn-xs" title="Add New Cost">
+                           <i class="glyphicon glyphicon-plus-sign"></i>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="job_cost in item.job_costs | activeOnly | orderBy:'-when'
+                    track by $index" ng-hide="job_cost.hide && !showCostStatus" ng-if="job_cost.item !== null">
+                    <td>
+                        <div xero-select-item="" ng-model="job_cost.xero_item_code" ng-required="true"
+                             on-change="costItemChanged(job_cost, item)" ng-disabled="job_cost.invoiced"></div>
+                    </td>
+                     <td>
+                        <input class="form-control" ng-model="job_cost.details" ng-required="true"
+                               ng-disabled="job_cost.invoiced === true" placeholder="Details"
+                               title="{{ job_cost.details }}" />
+                    </td>
+                    <td><input class="form-control text-right" type="number" step="0.001" ng-model="job_cost.quantity"
+                               string-to-number style="width:5em;" placeholder="Qty."
+                               min="0.00"
+                               ng-disabled="job_cost.invoiced === true"   ng-change="getTotal(job_cost)"></td>
+                    <td>
+                        <div class="input-group">
+                            <div class="input-group-addon">$</div>
+                            <input type="number"  step="0.01" string-to-number id="unit_price"
+                                   class="form-control text-right" ng-model="job_cost.unit_price"
+                                   style="width:8em;"
+                                   placeholder="Unit Price" ng-disabled="job_cost.invoiced === true"
+                                   ng-change="getTotal(job_cost)">
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="input-group">
+                            <div class="input-group-addon">$</div>
+                            <input id="total_price" class="form-control text-right" ng-model="job_cost.total_price"
+                                   style="width:8em;"
+                                   placeholder="Total Price" ng-readonly="true">
+                        </div>
+                    </td>
+                    <td>
+                        <select class="form-control"
+                                ng-options="purchase_order.number as purchase_order.number for purchase_order in item.purchase_orders"
+                                ng-required="true"
+                                ng-model="job_cost.purchase_order_number"
+                                ng-disabled="job_cost.invoiced === true"
+                                style="width:10em;"
+                                ng-change="onPurchaseOrderNumberChanged(job_cost)"
+                                title="Purchase Order No.">
+                        </select>
+                    </td>
+                    <td class="text-center">
+                        <div class="col-sm-10 checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="job_cost.invoiced" ng-disabled="job_cost.id">
+                                <span class="ocom-checkbox"><i class="ocom-checkbox-icon fa fa-check"></i></span>
+                            </label>
+                        </div>
+                    </td>
+                    <td ng-if="!viewOnly('job_costs')">
+                        <div class="btn-group-vertical">
+                            <button type="button" class="btn btn-danger btn-xs top" list-remove list="item.job_costs"
+                                    ng-if="!job_cost.invoiced"
+                                    form="form" after-click="updateDollarsDifference()" ng-disabled="viewOnly('job_costs')"
+                                    item="job_cost" title="Remove this cost">
+                                <i class="glyphicon glyphicon-minus-sign"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            <tr ng-if="canGenerateInvoice()">
+                <td></td>
+                <td class="text-right" colspan="3">
+                    <p class="form-control-static">Total Not Invoiced:</p>
+                </td>
+                <td class="text-right">
+                    <p class="form-control-static">${{ item.job_costs | activeOnly | filter:{'invoiced': false} | sumByKey:'total_price' | number:2 }}</p>
+                </td>
+                <td></td>
+                <td ng-if="!viewOnly('job_costs')"></td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <a class="btn btn-success" ng-if="!viewOnly('job_costs') && canGenerateInvoice() && !form.$invalid"
+                       ng-click="createInvoices()">Generate Invoice</a>
+                </td>
+                <td class="text-right" colspan="3">
+                    <p class="form-control-static">Grand Total:</p>
+                </td>
+                <td class="text-right">
+                    <p class="form-control-static">${{ item.job_costs | activeOnly | sumByKey:'total_price' | number:2 }}</p>
+                </td>
+                <td></td>
+                <td ng-if="!viewOnly('job_costs')"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+{
+  "Char": [
+    {"code":"eq", "name":"Equals", "values":["Text"]},
+    {"code":"contains", "name":"Contains", "values":["Text"]},
+    {"code":"icontains", "name":"Contains (Case Insensitive)", "values":["Text"]},
+    {"code":"is_null", "name":"Is Not Set", "values":[]},
+    {"code":"is_not_null", "name":"Is Set", "values":[]}
+  ],
+  "Text": [
+    {"code":"eq", "name":"Equals", "values":["Text"]},
+    {"code":"contains", "name":"Contains", "values":["Text"]},
+    {"code":"icontains", "name":"Contains (Case Insensitive)", "values":["Text"]},
+    {"code":"is_null", "name":"Is Not Set", "values":[]},
+    {"code":"is_not_null", "name":"Is Set", "values":[]}
+  ],
+  "Boolean": [
+    {"code":"eq", "name":"Equals", "values":["Boolean"]}
+  ],
+  "NullBoolean": [
+    {"code":"eq", "name":"Equals", "values":["Boolean"]},
+    {"code":"is_null", "name":"Is Not Set", "values":[]},
+    {"code":"is_not_null", "name":"Is Set", "values":[]}
+  ],
+  "Decimal":[
+    {"code":"eq", "name":"Equals", "values":["Decimal"]},
+    {"code":"is_null", "name":"Is Not Set", "values":[]},
+    {"code":"is_not_null", "name":"Is Set", "values":[]},
+    {"code":"gt", "name":">", "values":["Decimal"]},
+    {"code":"lt", "name":"<", "values":["Decimal"]},
+    {"code":"ge", "name":">=", "values":["Decimal"]},
+    {"code":"le", "name":"<=", "values":["Decimal"]},
+    {"code":"between", "name":"Between", "values":["Decimal", "Decimal"]}
+  ],
+  "DateTime":[
+    {"code":"eq", "name":"Equals", "values":["DateTime"]},
+    {"code":"is_null", "name":"Is Not Set", "values":[]},
+    {"code":"is_not_null", "name":"Is Set", "values":[]},
+    {"code":"gt", "name":"After", "values":["DateTime"]},
+    {"code":"lt", "name":"Before", "values":["DateTime"]},
+    {"code":"ge", "name":"After/On", "values":["DateTime"]},
+    {"code":"le", "name":"Before/On", "values":["DateTime"]},
+    {"code":"between", "name":"Between", "values":["DateTime", "DateTime"]}
+  ],
+  "ForeignKey":[],
+  "BigInteger":[
+    {"code":"eq", "name":"Equals", "values":["Integer"]},
+    {"code":"is_null", "name":"Is Not Set", "values":[]},
+    {"code":"is_not_null", "name":"Is Set", "values":[]},
+    {"code":"gt", "name":">", "values":["Integer"]},
+    {"code":"lt", "name":"<", "values":["Integer"]},
+    {"code":"ge", "name":">=", "values":["Integer"]},
+    {"code":"le", "name":"<=", "values":["Integer"]},
+    {"code":"between", "name":"Between", "values":["Integer", "Integer"]}
+  ],
+  "Auto":[
+    {"code":"eq", "name":"Equals", "values":["Integer"]},
+    {"code":"is_null", "name":"Is Not Set", "values":[]},
+    {"code":"is_not_null", "name":"Is Set", "values":[]},
+    {"code":"gt", "name":">", "values":["Integer"]},
+    {"code":"lt", "name":"<", "values":["Integer"]},
+    {"code":"ge", "name":">=", "values":["Integer"]},
+    {"code":"le", "name":"<=", "values":["Integer"]},
+    {"code":"between", "name":"Between", "values":["Integer", "Integer"]}
+  ]
+}

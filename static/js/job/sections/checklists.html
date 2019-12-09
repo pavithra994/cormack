@@ -1,0 +1,178 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="form-group" model="job" perm-can-read="down_pipes_installed" ng-if="viewable('down_pipes_installed')"
+    ng-class="{ 'has-error has-feedback': showOnError(form, 'down_pipes_installed') || showOnError(form, 'down_pipes_comment') }">
+    <!--div form-entry-list other-id="item.id" other-name="'job'" templates="templates" read-only="viewOnly('checklists')"></div-->
+    <label class="col-sm-2 control-label" for="down_pipes_installed">Down Pipes Installed?</label>
+    <div class="col-sm-10">
+        <yes-no item="item" field="'down_pipes_installed'"></yes-no>
+
+        <div ng-messages="form.down_pipes_installed.$error" role="alert" ng-show="showOnError(form, 'down_pipes_installed')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="down_pipes_installed" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'down_pipes_installed')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        <textarea id="down_pipes_comment" name="down_pipes_comment" class="form-control margin-top-5px" model="job"
+                  perm-can-update="down_pipes_comment" errors="item._errors" catch-server-errors="down_pipes_comment"
+                  ng-show="item.down_pipes_installed !== null"
+                  ng-model="item.down_pipes_comment" ng-required="false" placeholder="Comment"
+                  ng-disabled="viewOnly('down_pipes_comment')"></textarea>
+        <div ng-messages="form.down_pipes_comment.$error" role="alert"
+             ng-show="showOnError(form, 'down_pipes_comment')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="down_pipes_comment" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'down_pipes_comment')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+<div class="form-group" model="job" perm-can-read="gas_line_installed" ng-if="viewable('gas_line_installed')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'gas_line_installed') || showOnError(form, 'gas_line_comment') }">
+    <label class="col-sm-2 control-label" for="gas_line_installed">Gas Line Installed?</label>
+    <div class="col-sm-10">
+        <yes-no item="item" field="'gas_line_installed'"></yes-no>
+
+        <div ng-messages="form.gas_line_installed.$error" role="alert" ng-show="showOnError(form, 'gas_line_installed')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="gas_line_installed" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'gas_line_installed')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        <textarea id="gas_line_comment" name="gas_line_comment" class="form-control margin-top-5px" model="job"
+                  perm-can-update="gas_line_comment" errors="item._errors" catch-server-errors="gas_line_comment"
+                  ng-show="item.gas_line_installed !== null"
+                  ng-model="item.gas_line_comment" ng-required="false" placeholder="Comment"
+                  ng-disabled="viewOnly('gas_line_comment')"></textarea>
+        <div ng-messages="form.gas_line_comment.$error" role="alert" ng-show="showOnError(form, 'gas_line_comment')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="gas_line_comment" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'gas_line_comment')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+<div class="form-group" model="job" perm-can-read="rebates_brickwork" ng-if="viewable('rebates_brickwork')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'rebates_brickwork') || showOnError(form, 'rebates_brickwork_comment') }">
+    <label class="col-sm-2 control-label" for="rebates_brickwork">Rebates Flush with Brickwork?</label>
+    <div class="col-sm-10">
+        <yes-no item="item" field="'rebates_brickwork'"></yes-no>
+
+        <div ng-messages="form.rebates_brickwork.$error" role="alert" ng-show="showOnError(form, 'rebates_brickwork')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="rebates_brickwork" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'rebates_brickwork')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        <textarea id="rebates_brickwork_comment" name="rebates_brickwork_comment" class="form-control margin-top-5px" model="job"
+                  perm-can-update="rebates_brickwork_comment" errors="item._errors" catch-server-errors="rebates_brickwork_comment"
+                  ng-show="item.rebates_brickwork !== null"
+                  ng-model="item.rebates_brickwork_comment" ng-required="false" placeholder="Comment"
+                  ng-disabled="viewOnly('rebates_brickwork_comment')"></textarea>
+        <div ng-messages="form.rebates_brickwork_comment.$error" role="alert"
+             ng-show="showOnError(form, 'rebates_brickwork_comment')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="rebates_brickwork_comment" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'rebates_brickwork_comment')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+<div class="form-group" model="job" perm-can-read="risers_correct_location" ng-if="viewable('risers_correct_location')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'risers_correct_location') || showOnError(form, 'risers_location_comment') }">
+    <label class="col-sm-2 control-label" for="risers_correct_location">Risers in Correct Location?</label>
+    <div class="col-sm-10">
+        <yes-no item="item" field="'risers_correct_location'"></yes-no>
+
+        <div ng-messages="form.risers_correct_location.$error" role="alert" ng-show="showOnError(form, 'risers_correct_location')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="risers_correct_location" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'risers_correct_location')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        <textarea id="risers_location_comment" name="risers_location_comment" class="form-control margin-top-5px" model="job"
+                  perm-can-update="risers_location_comment" errors="item._errors" catch-server-errors="risers_location_comment"
+                  ng-show="item.risers_correct_location !== null"
+                  ng-model="item.risers_location_comment" ng-required="false" placeholder="Comment"
+                  ng-disabled="viewOnly('risers_location_comment')"></textarea>
+        <div ng-messages="form.risers_location_comment.$error" role="alert"
+             ng-show="showOnError(form, 'risers_location_comment')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="risers_location_comment" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'risers_location_comment')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+<div class="form-group" model="job" perm-can-read="good_access_rear_paving" ng-if="viewable('good_access_rear_paving')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'good_access_rear_paving') || showOnError(form, 'rear_paving_comment') }">
+    <label class="col-sm-2 control-label" for="good_access_rear_paving">Good Access for Rear Paving?</label>
+    <div class="col-sm-10">
+        <yes-no item="item" field="'good_access_rear_paving'"></yes-no>
+
+        <div ng-messages="form.good_access_rear_paving.$error" role="alert"
+             ng-show="showOnError(form, 'good_access_rear_paving')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="good_access_rear_paving" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'good_access_rear_paving')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        <textarea id="rear_paving_comment" name="rear_paving_comment" class="form-control margin-top-5px" model="job"
+                  perm-can-update="rear_paving_comment" errors="item._errors" catch-server-errors="rear_paving_comment"
+                  ng-show="item.good_access_rear_paving !== null"
+                  ng-model="item.rear_paving_comment" ng-required="false" placeholder="Comment"
+                  ng-disabled="viewOnly('rear_paving_comment')"></textarea>
+        <div ng-messages="form.rear_paving_comment.$error" role="alert" ng-show="showOnError(form, 'rear_paving_comment')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="rear_paving_comment" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'rear_paving_comment')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+<div class="form-group" model="job" perm-can-read="pacing_within_tolerance" ng-if="viewable('pacing_within_tolerance')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'pacing_within_tolerance') || showOnError(form, 'pacing_heights_comment') }">
+    <label class="col-sm-2 control-label" for="pacing_within_tolerance">Paving heights within tolerance?</label>
+    <div class="col-sm-10">
+        <yes-no item="item" field="'pacing_within_tolerance'"></yes-no>
+
+
+        <div ng-messages="form.pacing_within_tolerance.$error" role="alert"
+             ng-show="showOnError(form, 'pacing_within_tolerance')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="pacing_within_tolerance" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'pacing_within_tolerance')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        <textarea id="pacing_heights_comment" name="pacing_heights_comment" class="form-control margin-top-5px" model="job"
+                  perm-can-update="pacing_heights_comment" errors="item._errors" catch-server-errors="pacing_heights_comment"
+                  ng-show="item.pacing_within_tolerance !== null"
+                  ng-model="item.pacing_heights_comment" ng-required="false" placeholder="Comment"
+                  ng-disabled="viewOnly('pacing_heights_comment')"></textarea>
+        <div ng-messages="form.pacing_heights_comment.$error" role="alert"
+             ng-show="showOnError(form, 'pacing_heights_comment')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="pacing_heights_comment" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'pacing_heights_comment')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>

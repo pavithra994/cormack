@@ -1,0 +1,115 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1 class="capitalize">Repair List</h1>
+    </div>
+    <ocom-table hide_new_button="!accessible('repair', 'repair.create')" ng-if="accessible('repair', 'repair.list')">
+        <filter>
+            <button ng-click="clearFilters()" class="btn btn-danger expandable" title="Clear Search Terms"
+                    type="button">Clear</button>
+        </filter>
+        <table class="table table-striped table-bordered list repairs">
+            <thead>
+                <tr>
+                    <th sortable="date_received" ng-model="listOptions" changed="refreshList()">Date Received</th>
+                    <th sortable="repair_subbie__name" ng-model="listOptions" changed="refreshList()">By Whom</th>
+                    <th sortable="due_date" ng-model="listOptions" changed="refreshList()">Due Date</th>
+                    <th sortable="description" ng-model="listOptions" changed="refreshList()" class="col-sm-4">Description</th>
+                    <th sortable="address" ng-model="listOptions" changed="refreshList()">Address</th>
+                    <th sortable="suburb" ng-model="listOptions" changed="refreshList()">Suburb</th>
+                    <th sortable="client" ng-model="listOptions" changed="refreshList()">Client</th>
+                    <th sortable="back_charge" ng-model="listOptions" changed="refreshList()">Back Charge</th>
+                    <th sortable="end_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">End Date</th>
+                    <th sortable="repair_amount" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in list | orderBy: ['-date_received','+due_date']" ng-hide="item.completed_date">
+                    <td ng-class="{strikethrough1: !item.is_active}">
+                        <a ui-sref="repair.edit({id: {{ item.id }} })">
+                            {{ item.date_received | properDate }}
+                        </a>
+                    </td>
+                    <td ng-class="{strikethrough1: !item.is_active}">{{ item.repair_subbie_label }}</td>
+                    <td ng-class="{strikethrough1: !item.is_active}">{{ item.due_date | properDate  }}</td>
+                    <td class="col-sm-4" ng-class="{strikethrough1: !item.is_active}">{{ item.description }}</td>
+                    <td ng-class="{strikethrough1: !item.is_active}">{{ item.address_label }} {{item.address}}</td>
+                    <td ng-class="{strikethrough1: !item.is_active}">{{ item.suburb_label }} {{item.suburb}}</td>
+                    <td ng-class="{strikethrough1: !item.is_active}">{{ item.client_name }}</td>
+                    <td ng-class="{strikethrough1: !item.is_active}">{{ {true:'Yes', false:''}[item.back_charge] }}</td>
+                    <td ng-click="setAllUpdate(item, 'end_date');setUpdate(item, 'end_date')">
+                        <span ng-show="!item.is_update.end_date">
+                            {{item.end_date | properDate : "ddd DD MMM" }}
+                        </span><br>
+                        <span ng-show="!item.is_update.end_date_notes">
+                            {{item.end_date_notes}}
+                        </span>
+
+                        <form name="form" ng-submit="patchItem(item, 'end_date')" ng-show="item.is_update.end_date" style="min-width: 170px;">
+                            <ocom-table-date-picker model="item.end_date"
+                              name="end_date"
+                              required="false"
+                              placeholder="End Date" form="form20"
+                              min_date="{{ item.date_received | previousDate }}"
+                              max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                              disabled="viewOnly('end_date')">
+                            </ocom-table-date-picker>
+                            <div ng-messages="form.end_date.$error" role="alert" ng-show="showOnError(form, 'end_date')">
+                                <p class="error margin-top-5px" ng-message="serverError">
+                                    <div show-server-errors="end_date" errors="item._errors"></div>
+                                </p>
+                                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                            </div>
+                            <span ng-if="showOnError(form, 'end_date')" class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                            <form name="form" ng-submit="patchItem(item, 'end_date_notes')" ng-show="item.is_update.end_date_notes" style="min-width: 170px;">
+                                <textarea id="end_date_notes" name="end_date_notes" class="form-control" ng-model="item.end_date_notes"
+                                            ng-required="true" model="item.end_date_notes" perm-can-update="end_date_notes" errors="item._errors"
+                                            catch-server-errors="end_date_notes" placeholder="Description"
+                                            ng-disabled="viewOnly('end_date_notes')"
+                                            ng-change="patchItem(item, 'end_date_notes')">
+                                </textarea>
+                                <div ng-messages="form.end_date_notes.$error" role="alert" ng-show="showOnError(form, 'end_date_notes')">
+                                    <p class="error margin-top-5px" ng-message="serverError">
+                                        <div show-server-errors="end_date_notes" errors="item._errors"></div>
+                                    </p>
+                                </div>
+                                <span ng-if="showOnError(form, 'end_date_notes')"
+                                        class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                                <span class="editable-buttons">
+                                    <button type="submit" class="btn btn-success mrg-top-5 hide" title="Submit" aria-label="Submit" ng-show="item.is_update.end_date_notes">Save</button>
+                                </span>
+                            </form>
+                        </form>
+                    </td>
+                    <td ng-click="setAllUpdate(item, 'repair_amount');setUpdate(item, 'repair_amount')">
+                        <span ng-show="!item.is_update.repair_amount">
+                            {{item.repair_amount}}
+                        </span>
+
+                        <form name="form" ng-submit="patchItem(item, 'repair_amount')" ng-show="item.is_update.repair_amount" style="min-width: 170px;">
+                            <input class="form-control" id="repair_amount" ng-model="item.repair_amount" name="repair_amount" model="item.repair_amount" perm-can-update="repair_amount" errors="item._errors" catch-server-errors="repair_amount" title="Repair Value" placeholder="Repair Value">
+
+                            <div ng-messages="form.repair_amount.$error" role="alert" ng-show="showOnError(form, 'repair_amount')">
+                                <p class="error margin-top-5px" ng-message="serverError">
+                                    <div show-server-errors="repair_amount" errors="item._errors"></div>
+                                </p>
+                                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                            </div>
+                            <span ng-if="showOnError(form, 'repair_amount')" class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+                            
+                        </form>
+                    </td>
+            </tr>
+            <tbody>
+        </table>
+    </ocom-table>
+</div>

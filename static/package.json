@@ -1,0 +1,22 @@
+{
+  "name": "cormack",
+  "version": "0.93.0",
+  "description": "Cormack Concreting Job Management System",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "python manage.py runserver",
+    "bump": "bumpversion patch --commit --allow-dirty && git push origin master --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://ocom.repositoryhosting.com/git/ocom/coramack-jms.git"
+  },
+  "author": "Peter Garas <peter.garas@ocomsoft.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@uirouter/angularjs": "^1.0.22",
+    "angular-xeditable": "^0.8.1",
+    "html2canvas": "^1.0.0-alpha.12"
+  }
+}

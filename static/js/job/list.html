@@ -1,0 +1,91 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1 class="capitalize">Job List</h1>
+    </div>
+    <ocom-table hide_new_button="!accessible('job', 'job.create')" ng-if="accessible('job', 'job.list')">
+        <filter>
+                <select class="form-control" ng-model="listOptions.job_type"
+                        ng-options="jobType.id as jobType.description for jobType in codeJobTypes | activeOnly | orderBy:'description'"
+                        ng-change="triggerCallupReset(true)">
+                    <option value="">-- All Job Types --</option>
+                </select>
+                <input type="text" class="form-control"
+                       name="date" size="15"
+                       ng-model="listOptions.pour_date__ge"
+                       data-autoclose="1"
+                       placeholder="Pour Date"
+                       data-date-type="iso"
+                       data-date-format="dd/MM/yyyy"
+                       min-length="20"
+                       autocomplete="off"
+                       bs-datepicker>
+            <button ng-click="clearFilters()" class="btn btn-danger expandable" title="Clear Search Terms"
+                    type="button">Clear</button>
+        </filter>
+        <table class="table table-striped table-bordered list jobs">
+            <thead>
+                <tr>
+                    <th ng-if="!isClientView" sortable="date_received" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Date Received</th>
+                    <th sortable="id" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Job No.</th>
+                    <th sortable="call_up_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()" ng-if="showCallUpDateColumn">
+                        <span ng-if="!isClientView">Call Up Date</span>
+                        <span ng-if="isClientView">Called Up Pour Date</span>
+                    </th>
+                    <th sortable="pour_date" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()" ng-if="showPourDateColumn">
+                        <span ng-if="!isClientView">Proposed Pour Date</span>
+                        <span ng-if="isClientView">Cormack Pour Date</span>
+                    </th>
+                    <th sortable="job_type__description" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Job Type</th>
+                    <th sortable="job_number" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Job Number</th>
+                    <th sortable="description" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Description</th>
+                    <th sortable="address" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Address</th>
+                    <th sortable="suburb" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Suburb</th>
+                    <th sortable="client__name" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Client</th>
+                    <th sortable="supervisor__name" ng-model="listOptions" changed="triggerCallupReset(false); refreshList()">Supervisor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in list" ng-class="{strikethrough: !item.is_active}"
+                    style="background-color: {{ options.job_types_List_by_id[item.job_type].background_colour }};
+                           color: {{ options.job_types_List_by_id[item.job_type].foreground_colour }};">
+                    <td ng-if="!isClientView">
+                        <a ui-sref="job.edit({id: {{ item.id }} })" ng-show="isAdmin || item.is_active">
+                            {{ item.date_received | properDate }}
+                        </a>
+                        <span ng-show="!isAdmin && !item.is_active">
+                            {{ item.date_received | properDate }}
+                        </span>
+                    </td>
+                    <td>{{item.code}}</td>
+                    <td ng-if="showCallUpDateColumn">
+                        <span ng-if="!isClientView">{{ item.call_up_date | properDate }}</span>
+                        <span ng-if="isClientView">
+                            <a ui-sref="job.edit({id: {{ item.id }} })" ng-show="isAdmin || item.is_active">
+                                {{ item.call_up_date | properDate }}
+                            </a>
+                            <span ng-show="!isAdmin && !item.is_active">
+                                {{ item.call_up_date | properDate }}
+                            </span>
+                        </span>
+                    </td>
+                    <td ng-if="showPourDateColumn">{{ item.pour_date | properDate }}</td>
+                    <td>{{ options.job_types_List_by_id[item.job_type].description }}</td>
+                    <td>{{ item.job_number }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.address }}</td>
+                    <td>{{ item.suburb }}</td>
+                    <td>{{ options.client_List_by_id[item.client].name }}</td>
+                    <td>{{ options.supervisor_List_by_id[item.supervisor].name || "-" }}</td>
+                </tr>
+            <tbody>
+        </table>
+    </ocom-table>
+</div>

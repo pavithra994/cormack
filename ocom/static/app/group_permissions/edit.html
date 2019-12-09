@@ -1,0 +1,33 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1>
+            Edit Group Permission
+        </h1>
+    </div>
+    <div class="container">
+        <form dirty-tracking name="form" class="form-horizontal" role="form" novalidate errors-context="item._errors" item="item">
+            <div ng-include="'app/group_permissions/form.html'"></div>
+            <ocom-form-buttons sidebar="false" hide-delete-button="!allowDelete('group_permissions') || platform.isTablet()"
+                               show-restore-button="allowRestore('group_permissions') && !platform.isTablet()"
+                               hide-update-button="!editable('group_permissions', route)">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Actions <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a ng-click="download()"><i class="glyphicon glyphicon-download"></i>Download Template</a></li>
+                  </ul>
+                </div>
+            </ocom-form-buttons>
+        </form>
+    </div>
+    <a id="downloadAnchorElem" style="display:none"></a>
+</div>

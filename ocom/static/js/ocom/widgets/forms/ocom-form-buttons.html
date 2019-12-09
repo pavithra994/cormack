@@ -1,0 +1,93 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="side-form-group" ng-if="sidebar">
+        <!-- Save Button -->
+        <button type="button" class="btn btn-primary "
+                ng-disabled="disableSave(form)"
+                ng-click="update(item, saveSuccessMessage)"
+                ng-if="!hideUpdateButton && !read_only">
+            <i class="glyphicon glyphicon-ok"></i> {{ updateLabel }}
+        </button>
+
+        <!-- Save and Close -->
+        <button type="button"
+                class="btn btn-primary margin-top-20px"
+                ng-disabled="disableSave(form)"
+                ng-click="updateAndClose(item, saveSuccessMessage)"
+                ng-if="!hideUpdateButton && !read_only">
+            <i class="glyphicon glyphicon-ok"></i> {{ updateCloseLabel }}
+        </button>
+
+        <!-- Close -->
+        <button type="button"
+                class="btn btn-default margin-top-20px"
+                ng-disabled="formState('saving')"
+                ng-click="close()">
+            <i class="glyphicon glyphicon-list"></i> {{ closeLabel }}
+        </button>
+
+        <!-- Delete -->
+        <button ng-if="showDelete()" type="button" class="btn btn-danger margin-top-20px"
+                ng-disabled="disableDelete(form)"
+                ng-click="updateAndDelete(item, deletePrompt, deleteSuccessMessage)">
+            <i class="glyphicon glyphicon-trash"></i> {{ deleteLabel }}
+        </button>
+
+        <!-- Restore -->
+        <button ng-show="showRestoreButton && !read_only" type="button" class="btn btn-success pull-right margin-top-20px"
+                ng-disabled="disableDelete(form)"
+                ng-click="updateAndRestore(item, restorePrompt, restoreSuccessMessage)">
+            <i class="glyphicon glyphicon-repeat"></i> {{ restoreLabel }}
+        </button>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <!-- Save Button -->
+        <button type="button" class="btn btn-primary"
+                ng-disabled="disableSave(form)"
+                ng-click="update(item, saveSuccessMessage)"
+                ng-if="!hideUpdateButton && !read_only">
+            <i class="glyphicon glyphicon-ok"></i> {{ updateLabel }}
+        </button>
+
+        <!-- Save and Close -->
+        <button type="button"
+                class="btn btn-primary"
+                ng-disabled="disableSave(form)"
+                ng-click="updateAndClose(item, saveSuccessMessage)"
+                ng-if="!hideUpdateButton && !read_only">
+            <i class="glyphicon glyphicon-ok"></i> {{ updateCloseLabel }}
+        </button>
+
+        <!-- Close -->
+        <button type="button"
+                class="btn btn-default"
+                ng-disabled="formState('saving')"
+                ng-click="close()">
+            <i class="glyphicon glyphicon-list"></i> {{ closeLabel }}
+        </button>
+
+        <!-- Delete -->
+        <button ng-if="showDelete()" type="button" class="btn btn-danger pull-right"
+                ng-disabled="disableDelete(form)"
+                ng-click="updateAndDelete(item, deletePrompt, deleteSuccessMessage)">
+            <i class="glyphicon glyphicon-trash"></i> {{ deleteLabel }}
+        </button>
+
+        <!-- Restore -->
+        <button ng-show="showRestoreButton && !read_only" type="button" class="btn btn-success pull-right"
+                ng-disabled="disableDelete(form)"
+                ng-click="updateAndRestore(item, restorePrompt, restoreSuccessMessage)">
+            <i class="glyphicon glyphicon-repeat"></i> {{ restoreLabel }}
+        </button>
+
+        <span ng-transclude></span>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1>New Job</h1>
+    </div>
+    <div class="job container" ng-if="accessible('job', 'job.create')">
+        <form dirty-tracking name="form" class="form-horizontal" novalidate errors-context="item._errors" item="item">
+            <div ng-include="'js/job/form.html'"></div>
+            <ocom-form-buttons create="true" save-success-message="A job has been added."></ocom-form-buttons>
+        </form>
+    </div>
+</div>

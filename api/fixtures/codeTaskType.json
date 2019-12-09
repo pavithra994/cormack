@@ -1,0 +1,77 @@
+[
+  {
+    "model": "api.codetasktype",
+    "pk": 1,
+    "fields": {
+      "modified_date": "2018-01-01T06:15:50Z",
+      "created_date": "2018-01-01T06:15:50Z",
+      "active_start_date": "2018-01-01T06:15:50Z",
+      "active_end_date": null,
+      "description": "Base",
+      "code": "BASE",
+      "background_colour": "#80ff80",
+      "foreground_colour": "#000000",
+      "job_date_field": ""
+    }
+  },
+  {
+    "model": "api.codetasktype",
+    "pk": 2,
+    "fields": {
+      "modified_date": "2018-01-01T06:15:50Z",
+      "created_date": "2018-01-01T06:15:50Z",
+      "active_start_date": "2018-01-01T06:15:50Z",
+      "active_end_date": null,
+      "description": "Piers",
+      "code": "PIERS",
+      "background_colour": "#ff8000",
+      "foreground_colour": "#000000",
+      "job_date_field": "piers_date"
+    }
+  },
+  {
+    "model": "api.codetasktype",
+    "pk": 3,
+    "fields": {
+      "modified_date": "2018-01-01T06:15:50Z",
+      "created_date": "2018-01-01T06:15:50Z",
+      "active_start_date": "2018-01-01T06:15:50Z",
+      "active_end_date": null,
+      "description": "Pour",
+      "code": "POUR",
+      "background_colour": "#0080ff",
+      "foreground_colour": "#ffff80",
+      "job_date_field": "pour_date"
+    }
+  },
+  {
+    "model": "api.codetasktype",
+    "pk": 4,
+    "fields": {
+      "modified_date": "2018-01-01T06:15:50Z",
+      "created_date": "2018-01-01T06:15:50Z",
+      "active_start_date": "2018-01-01T06:15:50Z",
+      "active_end_date": null,
+      "description": "Setup",
+      "code": "SETUP",
+      "background_colour": "#c0c0c0",
+      "foreground_colour": "#000000",
+      "job_date_field": ""
+    }
+  },
+  {
+    "model": "api.codetasktype",
+    "pk": 5,
+    "fields": {
+      "modified_date": "2018-01-01T06:15:50Z",
+      "created_date": "2018-01-01T06:15:50Z",
+      "active_start_date": "2018-01-01T06:15:50Z",
+      "active_end_date": null,
+      "description": "TBC",
+      "code": "TBC",
+      "background_colour": "#ff80c0",
+      "foreground_colour": "#000000",
+      "job_date_field": ""
+    }
+  }
+]

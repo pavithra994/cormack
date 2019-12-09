@@ -1,0 +1,165 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="modal-bg">
+    <div class="dialog">
+        <div class="modal fade email-modal-lg" focus-group focus-group-head="loop" focus-group-tail="loop"
+             focus-stacktabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Email Files</h4>
+                    </div>
+                    <div class="modal-body pull-left">
+                        <div class="row">
+                            <label class="col-sm-2 control-label padding-top-0" for="">Contacts<span style="color:red;">*</span>:</label>
+                            <div class="col-sm-10">
+                                <div class="btn btn-link" ng-repeat="email in emails" ng-click="selectEmail(email)">
+                                {{email.name}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="col-sm-2 control-label padding-top-0" for="email_other_recipients">To<span style="color:red;">*</span>:</label>
+                        <div class="col-sm-10">
+                            <input id="email_other_recipients" class="form-control" ng-model="email_data.to">
+                        </div>
+                        <label class="col-sm-2 control-label clear-both" for="email_source">From<span style="color:red;">*</span>:</label>
+                        <div class="col-sm-10">
+                            <input id="email_source" class="form-control" ng-model="email_data.from" readonly>
+                        </div>
+                        <label class="col-sm-2 control-label" for="email_subject">Subject<span style="color:red;">*</span></label>
+                        <div class="col-sm-10">
+                            <input id="email_subject" class="form-control" ng-model="email_data.subject">
+                        </div>
+                        <label class="col-sm-2 control-label" for="email_message">Message<span style="color:red;">*</span></label>
+                        <div class="col-sm-10">
+                            <textarea id="email_message" class="form-control" ng-model="email_data.body" rows="10">
+                            </textarea>
+                        </div>
+                        <div class="padding-top-20px col-sm-12 pull-left">
+                            <p ng-show="files_to_send.length > 0">Files To Include:</p>
+                            <ul class="list-group">
+                                <li class="list-group-item" ng-repeat="file in files_to_send">
+                                    <div class="checkbox padding-top-0 pull-left">
+                                        <label>
+                                            <input type="checkbox" ng-model="file._send">
+                                            <span class="ocom-checkbox">
+                                                <i class="ocom-checkbox-icon fa fa-check"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <a href="{{ file.file }}" target="_blank">{{ file.name }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" focus-element="autofocus" data-dismiss="modal"
+                                ng-click="sendEmail()" ng-disabled="(!email_data.to) || !email_data.subject || !email_data.body">Send
+                        </button>
+                        <button type="button" class="btn btn-cancel" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="file-upload table table-striped table-bordered">
+    <tr>
+        <th colspan="2" class="text-center">File</th>
+        <th class="text-center">File Type</th>
+        <th class="text-center">Who Uploaded</th>
+        <th class="text-center">When Uploaded</th>
+        <th class="text-center" ng-if="!disabled && !fileTypeChangeOnly">
+            <button type="button" focus-index="1" class="btn btn-primary" data-toggle="modal" focus-element="autofocus"
+                    ng-disabled="uploadedFiles.length < 1 || disabled || uploading || sending" data-target=".email-modal-lg"
+                    ng-click="emailPopup()" ng-if="!user">Email
+            </button>
+        </th>
+    </tr>
+    <tr ng-if="!disabled && !fileTypeChangeOnly">
+        <td>
+            <input class="form-control upload" type="file" ng-model="upload.file" ngf-select>
+            <button class="btn width-100pct" type="button"
+                    ng-disabled="disabled"
+                    onclick="document.querySelector('.file-upload input.upload').click();">
+                Browse...
+            </button>
+        </td>
+        <td>
+            <input class="form-control" ng-model="upload.file.name" disabled title="File Name">
+        </td>
+        <td>
+            <select class="form-control" name="file_type"
+                    ng-options="file_type.id as file_type.description for file_type in fileTypes
+                        | filter: (!showInternal || '') && {is_internal: false} | orderBy: 'description'"
+                    ng-disabled="disabled" ng-model="entry.file_type" title="File Type">
+                <option value="">None</option>
+            </select>
+        </td>
+        <td>-</td>
+        <td>-</td>
+        <td class="text-center">
+            <div class="col-sm-10 checkbox">
+                <label>
+                    <input type="checkbox" ng-model="upload.notify">
+                    <span class="ocom-checkbox"><i class="ocom-checkbox-icon fa fa-check"></i></span>
+                    <span>Notify</span>
+                </label>
+            </div>
+            <button type="button" class="btn btn-primary margin-top-5px" ng-disabled="!upload.file.name || disabled ||
+                    (user && !entry.file_type) || uploading" title="Upload a file"
+                    ng-click="uploadFile(upload, entry.file_type)">
+                <span ng-hide="uploading">Upload File</span>
+                <span ng-show="uploading">Uploading...</span>
+            </button>
+        </td>
+    </tr>
+    <tr ng-repeat="entry in uploadedFiles | orderBy: '-created_date' track by $index"
+        ng-show="uploadedFiles.length > 0" ng-if="showFile(entry)">
+        <td colspan="2">
+            <div ng-if="entry.file">
+                <a href="{{ entry.file }}" target="_blank" ng-if="!listOnly">{{ entry.name }}</a>
+                <span ng-if="listOnly">{{ entry.name }}</span>
+            </div>
+
+            <div ng-if="entry.children.length > 0">
+                <br> Pages:
+                <ul>
+                    <li ng-repeat="child in entry.children">
+                        <a href="{{ child }}" ng-if="!noLink">{{ child }}</a>
+                        <span ng-if="noLink">{{ entry.name }}</span>
+                    </li>
+                </ul>
+            </div>
+        </td>
+        <td>
+            <select class="form-control" name="file_type"
+                    ng-options="file_type.id as file_type.description for file_type in fileTypes
+                        | filter: (!showInternal || '') && {is_internal: false} | orderBy: 'description'"
+                    ng-disabled="disabled || !isAuthorized(entry)"
+                    ng-model="entry.file_type" ng-change="updateFileType(entry)"
+                    title="File Type">
+                <option value="" ng-if="!user">None</option>
+            </select>
+        </td>
+        <td>{{ entry.who_uploaded || "-"}}</td>
+        <td>{{ entry.when_uploaded || "-"}}</td>
+        <td ng-if="!disabled && !fileTypeChangeOnly">
+            <div class="btn-group-vertical">
+                <button type="button" class="btn btn-danger top" ng-click="removeFile(entry)"
+                        ng-disabled="disabled || !isAuthorized(entry)" title="Remove this file">
+                    <i class="glyphicon glyphicon-minus-sign"></i>
+                </button>
+            </div>
+        </td>
+    </tr>
+</table>

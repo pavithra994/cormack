@@ -1,0 +1,18 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="btn-group" role="group">
+  <button type="button"
+          ng-class="{'btn': true, 'btn-success': $ctrl.item[$ctrl.field] != null, 'btn-default': $ctrl.item[$ctrl.field] == null}"
+          ng-click="$ctrl.setValue(true)">Approved
+  </button>
+  <button type="button"
+          ng-class="{'btn': true, 'btn-danger': $ctrl.item[$ctrl.field] == null, 'btn-default': $ctrl.item[$ctrl.field] != null}"
+          ng-click="$ctrl.setValue(false)">Not Approved
+  </button>
+</div>

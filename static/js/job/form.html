@@ -1,0 +1,1737 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<!-- not generated -->
+<div class="form-group" ng-if="!viewOnly('code') && item.code">
+    <label class="col-sm-2 control-label">Job Number</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="code" ng-model="item.code" name="code"
+                   model="job" perm-can-update="code" errors="item._errors" catch-server-errors="code"
+                   title="The Job Number" placeholder="Job No." readonly>
+    </div>
+</div>
+
+<!-- address = CharField-->
+<div class="form-group required" model="job" perm-can-read="address" ng-if="viewable('address')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'address') }">
+    <label class="col-sm-2 control-label" for="address">Address</label>
+    <div class="col-sm-10">
+        <div class="input-group">
+            <input class="form-control" id="address" ng-model="item.address" name="address" ng-required="true"
+                   model="job" perm-can-update="address" errors="item._errors" catch-server-errors="address"
+                   title="The site address" placeholder="Address" ng-disabled="viewOnly('address')">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-disabled="!canShowMap()" ng-click="openMap()">
+                    <i class="glyphicon glyphicon-map-marker"></i>
+                </button>
+            </div>
+        </div>
+        <div ng-messages="form.address.$error" role="alert" ng-show="showOnError(form, 'address')">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Address.</p>
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="address" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'address')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-55px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- suburb = CharField-->
+<div class="form-group required" model="job" perm-can-read="suburb" ng-if="viewable('suburb')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'suburb') }">
+    <label class="col-sm-2 control-label" for="suburb">Suburb</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="suburb" ng-model="item.suburb" name="suburb" ng-required="true" model="job"
+               perm-can-update="suburb" errors="item._errors" catch-server-errors="suburb" maxlength="255"
+               title="The suburb where the site is located" placeholder="Suburb" ng-disabled="viewOnly('suburb')">
+        <div ng-messages="form.suburb.$error" role="alert" ng-show="showOnError(form, 'suburb')">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Suburb.</p>
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="suburb" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'suburb')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- **client = ForeignKey-->
+<div class="form-group required" model="job" perm-can-read="client" ng-if="viewable('client')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'client') }">
+    <label class="col-sm-2 control-label" for="client">Client</label>
+    <div class="col-sm-10">
+        <select class="form-control" id="client" ng-model="item.client" name="client"
+                ng-options="o.id as o.name for o in clients | activeOnly:item.client | orderBy:'o.name'"
+                ng-required="true" model="job" perm-can-update="client" errors="item._errors"
+                catch-server-errors="client" ng-disabled="viewOnly('client')" ng-change="selectClient(item.client)">
+            <option value="">-- None --</option>
+        </select>
+        <div ng-messages="form.client.$error" role="alert" ng-show="showOnError(form, 'client')">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Client.</p>
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="client" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'client')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- job_type = ForeignKey-->
+<div class="form-group required" model="job" perm-can-read="job_type" ng-if="viewable('job_type')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'job_type') }">
+    <label class="col-sm-2 control-label" for="job_type">Job Type</label>
+    <div class="col-sm-10">
+        <select class="form-control" id="job_type" ng-model="item.job_type" name="job_type"
+                ng-options="o.id as o.description for o in jobTypes | activeOnly:item.job_type | orderBy:'o.description'"
+                ng-required="true" model="job" perm-can-update="job_type" errors="item._errors"
+                catch-server-errors="job_type" ng-disabled="viewOnly('job_type')">
+            <option value="">-- None --</option>
+        </select>
+        <div ng-messages="form.job_type.$error" role="alert" ng-show="showOnError(form, 'job_type')">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Job Type.</p>
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="job_type" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'job_type')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- job_number = CharField-->
+<div class="form-group required" model="job" perm-can-read="job_number" ng-if="viewable('job_number')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'job_number') }">
+    <label class="col-sm-2 control-label" for="job_number">Job Number</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="job_number" ng-model="item.job_number" name="job_number" ng-required="true"
+               model="job" perm-can-update="job_number" errors="item._errors" catch-server-errors="job_number"
+               maxlength="50" placeholder="Job Number" ng-disabled="viewOnly('job_number')">
+        <div ng-messages="form.job_number.$error" role="alert" ng-show="showOnError(form, 'job_number')">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Job Number.</p>
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="job_number" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="unique">Value for Job Number already exists.</p>
+        </div>
+        <span ng-if="showOnError(form, 'job_number')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- Depot = ForeignKey-->
+<div class="form-group" model="job" perm-can-read="depot_type" ng-if="viewable('depot_type')"
+     ng-hide="isJobType('Paving')" ng-class="{ 'has-error has-feedback': showOnError(form, 'depot_type') }">
+    <label class="col-sm-2 control-label" for="depot_type">Depot</label>
+           
+    <div class="col-sm-6 no-padding-right">
+      <!-- ng-options="o.id as o.description for o in depotTypes | activeOnly | orderBy:'id'" -->
+        <select 
+        ng-required="false" 
+        class="form-control" 
+        id="client" 
+        ng-options="o.id as o.description for o in depotTypes | activeOnly | orderBy:'id'"
+        ng-model="item.depot_type" 
+        name="depot_type" 
+        model="job" 
+        perm-can-update="description" 
+        errors="item._errors" 
+        catch-server-errors="depot_type"
+        ng-disabled="viewOnly('depot_type')">
+            <option value="">-- None --</option>
+        </select>
+        <div ng-messages="form.depot_type.$error" role="alert" ng-show="showOnError(form, 'depot_type')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="depot_type" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'depot_type')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- date_received = DateField-->
+<div class="form-group required" model="job" perm-can-read="date_received" ng-if="viewable('date_received')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'date_received') }">
+    <label class="col-sm-2 control-label" for="date_received">Date Received</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.date_received"
+                          name="date_received"
+                          required="true"
+                          hide-time="true"
+                          placeholder="Date Received" form="form"
+                          max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                          disabled="viewOnly('date_received')">
+        </ocom-date-picker>
+        <div ng-messages="form.date_received.$error" role="alert" ng-show="showOnError(form, 'date_received')">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value
+                for Date Received.</p>
+            <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="date_received" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'date_received')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- comments = TextField-->
+<div class="form-group" model="job" perm-can-read="comments" ng-if="viewable('comments')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'comments') }">
+    <label class="col-sm-2 control-label" for="comments">Comments</label>
+    <div class="col-sm-10">
+        <textarea id="comments" name="comments" class="form-control" ng-model="item.comments" ng-required="false"
+                  model="job" perm-can-update="comments" errors="item._errors" catch-server-errors="comments"
+                  placeholder="Comments" ng-disabled="viewOnly('comments')"></textarea>
+        <div ng-messages="form.comments.$error" role="alert" ng-show="showOnError(form, 'comments')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="comments" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'comments')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- **sqm = DecimalField-->
+<div class="form-group" model="job" perm-can-read="sqm" ng-if="viewable('sqm')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'sqm') }">
+    <label class="col-sm-2 control-label" for="sqm">SQM</label>
+    <div class="col-sm-10">
+        <input class="form-control" ng-class="{'negative': item.sqm < 0}" id="sqm" ng-model="item.sqm" name="sqm"
+               string-to-number type="number" ng-required="false" model="job" perm-can-update="sqm"
+               errors="item._errors" catch-server-errors="sqm" min="0" max="100000" step="0.01" placeholder="-"
+               ng-disabled="viewOnly('sqm')" ng-change="changeRockM3(item.sqm)">
+        <div ng-messages="form.sqm.$error" role="alert" ng-show="showOnError(form, 'sqm')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="sqm" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="min">SQM must have a value of 0 or higher.</p>
+            <p class="error margin-top-5px" ng-message="max">SQM must have a value not greater than 100000.</p>
+            <p class="error margin-top-5px" ng-message="number">SQM must be a number.</p>
+        </div>
+        <span ng-if="showOnError(form, 'sqm')" class="glyphicon glyphicon-remove form-control-feedback"
+              aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- **sub_contractor = ForeignKey-->
+<div class="form-group" model="job" perm-can-read="sub_contractor" ng-if="viewable('sub_contractor')" ng-show="isJobType('Slab')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'sub_contractor') }">
+    <label class="col-sm-2 control-label" for="sub_contractor">Sub-Contractor</label>
+    <div class="col-sm-10">
+        <select id="all_sub_contractors" class="form-control" name="sub_contractor"
+                ng-options="o.id as o.name for o in subcontractors | activeOnly:item.sub_contractor | orderBy:'o.name'"
+                ng-model="item.sub_contractor" ng-disabled="viewOnly('sub_contractor')"
+                ng-required="false" model="job" perm-can-update="sub_contractor" errors="item._errors"
+                ng-if="showAllSubcontractors"
+                catch-server-errors="sub_contractor" ng-disabled="viewOnly('sub_contractor')"
+                ng-change="changeSubcontractorRate(item.sub_contractor)">
+            <option value="">-- None --</option>
+        </select>
+        <select id="preferred_sub_contractors" class="form-control" name="sub_contractor"
+                ng-options="subcontractor.id as subcontractor.name for subcontractor in filteredSubcontractors | activeOnly | orderBy:'name'"
+                ng-model="item.sub_contractor" ng-disabled="viewOnly('sub_contractor')" title="Sub-Contractor"
+                ng-required="false" model="job" perm-can-update="sub_contractor" errors="item._errors"
+                ng-if="!showAllSubcontractors"
+                catch-server-errors="sub_contractor" ng-disabled="viewOnly('sub_contractor')"
+                ng-change="changeSubcontractorRate(item.sub_contractor)">
+            <option value="">-- None --</option>
+        </select>
+        <div class="checkbox" ng-show="filteredSubcontractors.length">
+            <label ng-hide="viewOnly('sub_contractor')">
+                <span>Show All Sub-Contractors</span>
+                <input type="checkbox" ng-model="showAllSubcontractors" ng-disabled="viewOnly('sub_contractor')">
+                <span class="ocom-checkbox"><i class="ocom-checkbox-icon fa fa-check"></i></span>
+            </label>
+        </div>
+        <div ng-messages="form.sub_contractor.$error" role="alert" ng-show="showOnError(form, 'sub_contractor')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="sub_contractor" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'sub_contractor')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- not generated -->
+<div class="form-group" ng-if="!viewOnly('sub_contractor')" ng-show="isJobType('Slab')">
+    <label class="col-sm-2 control-label">Subbie's Purchase Order</label>
+    <div class="col-sm-10">
+        <a class="btn btn-success" ng-if="!item.xero_purchase_order" ng-disabled="!(item.sub_contractor && item.sqm && item.pour_date)" ng-click="createPurchaseOrder()">Generate Purchase Order Now</a>
+        <span ng-if="item.xero_purchase_order">
+            <a ng-href="https://go.xero.com/Accounts/Payable/PurchaseOrders/View/{{item.xero_purchase_order.xero_id}}" target="xero">View Purchase Order</a>
+            (<a ng-href="/api/download_purchase_order/{{item.xero_purchase_order.id}}/" target="xero">Download</a>)
+        </span>
+    </div>
+</div>
+
+<!-- take_off_sent = DateField-->
+<div class="form-group" model="job" perm-can-read="take_off_sent" ng-if="viewable('take_off_sent')" ng-show="isJobType('Slab')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'take_off_sent') }">
+
+    <label class="col-sm-2 control-label" for="take_off_sent">Take Off Sent</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.take_off_sent"
+                          name="take_off_sent"
+                          required="false"
+                          placeholder="Take Off Sent" form="form"
+                          max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                          disabled="viewOnly('take_off_sent')">
+        </ocom-date-picker>
+        <div ng-messages="form.take_off_sent.$error" role="alert" ng-show="showOnError(form, 'take_off_sent')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="take_off_sent" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+        </div>
+        <span ng-if="showOnError(form, 'take_off_sent')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- description = TextField-->
+<div class="form-group required" model="job" perm-can-read="description" ng-if="viewable('description')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'description') }">
+
+    <label class="col-sm-2 control-label" for="description">Description</label>
+    <div class="col-sm-10">
+        <textarea id="description" name="description" class="form-control" ng-model="item.description"
+                  ng-required="true" model="job" perm-can-update="description" errors="item._errors"
+                  catch-server-errors="description" placeholder="Description"
+                  ng-disabled="viewOnly('description')"></textarea>
+        <div ng-messages="form.description.$error" role="alert" ng-show="showOnError(form, 'description')">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for Description.</p>
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="description" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'description')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- *set_out_date = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="set_out_date"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'set_out_date') }">
+    <label class="col-sm-2 control-label" for="set_out_date">
+        <span>Set Out Date</span>
+    </label>
+    <div class="col-sm-10">
+        <div class="col-sm-6 no-padding-left">
+            <ocom-date-picker model="item.set_out_date"
+                              name="set_out_date"
+                              required="false"
+                              placeholder="Pour Date" form="form"
+                              disabled="viewOnly('set_out_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.set_out_date.$error" role="alert" ng-show="showOnError(form, 'set_out_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="set_out_date" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'set_out_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+        <div class="col-sm-6 no-padding-right">
+            <select class="form-control" id="client" ng-model="item.set_out_date_time_of_day" name="set_out_date_time_of_day"
+                    ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                    model="job" perm-can-update="description" errors="item._errors" catch-server-errors="set_out_date_time_of_day"
+                    ng-disabled="viewOnly('set_out_date_time_of_day')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.set_out_date_time_of_day.$error" role="alert" ng-show="showOnError(form, 'set_out_date_time_of_day')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="set_out_date_time_of_day" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'set_out_date_time_of_day')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+</div>
+
+<!-- drain_date = DateTimeField -->
+<div class="form-group" model="job" perm-can-read="drain_date"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'drain_date') }">
+    <label class="col-sm-2 control-label" for="drain_date">
+        <span>Drain Date</span>
+    </label>
+    <div class="col-sm-10">
+        <div class="col-sm-6 no-padding-left">
+            <ocom-date-picker model="item.drain_date"
+                              name="drain_date"
+                              required="false"
+                              placeholder="Pour Date" form="form"
+                              disabled="viewOnly('drain_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.drain_date.$error" role="alert" ng-show="showOnError(form, 'drain_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="drain_date" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'drain_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+        <div class="col-sm-6 no-padding-right">
+            <select class="form-control" id="client" ng-model="item.drain_date_time_of_day" name="drain_date_time_of_day"
+                    ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                    model="job" perm-can-update="description" errors="item._errors" catch-server-errors="drain_date_time_of_day"
+                    ng-disabled="viewOnly('drain_date_time_of_day')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.drain_date_time_of_day.$error" role="alert" ng-show="showOnError(form, 'drain_date_time_of_day')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="drain_date_time_of_day" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'drain_date_time_of_day')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- *wanted_pour_date = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="wanted_pour_date"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'wanted_pour_date') }" ng-hide="isJobType('Paving')">
+    <label class="col-sm-2 control-label" for="wanted_pour_date">
+        <span>Wanted Pour Date</span>
+    </label>
+    <div class="col-sm-10">
+        <!-- <div class="col-sm-6 no-padding-left"> -->
+            <ocom-date-picker model="item.wanted_pour_date"
+                              name="wanted_pour_date"
+                              required="false"
+                              placeholder="Pour Date" form="form"
+                              disabled="viewOnly('wanted_pour_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.wanted_pour_date.$error" role="alert" ng-show="showOnError(form, 'wanted_pour_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="wanted_pour_date" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'wanted_pour_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+        <!-- <div class="col-sm-6 no-padding-right">
+            <select class="form-control" id="client" ng-model="item.wanted_pour_date_time_of_day" name="wanted_pour_date_time_of_day"
+                    ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                    model="job" perm-can-update="description" errors="item._errors" catch-server-errors="wanted_pour_date_time_of_day"
+                    ng-disabled="viewOnly('wanted_pour_date_time_of_day')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.wanted_pour_date_time_of_day.$error" role="alert" ng-show="showOnError(form, 'wanted_pour_date_time_of_day')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="wanted_pour_date_time_of_day" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'wanted_pour_date_time_of_day')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>-->
+</div>
+
+<!-- *pour_date = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="pour_date"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'pour_date') }"
+     ng-show="!isJobType('Paving') && !isJobType('enumber')">
+    <label class="col-sm-2 control-label" for="pour_date">
+        <span ng-if="!isClientView">Pour Date</span>
+        <span ng-if="isClientView">Cormack Pour Date</span>
+    </label>
+    <div class="col-sm-10">
+        <!-- <div class="col-sm-6 no-padding-left"> -->
+            <ocom-date-picker model="item.pour_date"
+                              name="pour_date"
+                              required="false"
+                              placeholder="Pour Date" form="form"
+                              min_date="{{ item.date_received | previousDate }}"
+                              max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                              disabled="viewOnly('pour_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.pour_date.$error" role="alert" ng-show="showOnError(form, 'pour_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="pour_date" errors="item._errors"></div>
+                </p>
+                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            </div>
+            <span ng-if="showOnError(form, 'pour_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+        <!-- <div class="col-sm-6 no-padding-right">
+            <select class="form-control" id="client" ng-model="item.pour_date_time_of_day" name="pour_date_time_of_day"
+                    ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                    model="job" perm-can-update="description" errors="item._errors" catch-server-errors="pour_date_time_of_day"
+                    ng-disabled="viewOnly('pour_date_time_of_day')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.pour_date_time_of_day.$error" role="alert" ng-show="showOnError(form, 'pour_date_time_of_day')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="pour_date_time_of_day" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'pour_date_time_of_day')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div> -->
+</div>
+
+<!-- **supervisor = ForeignKey-->
+<div class="form-group" model="job" perm-can-read="supervisor" ng-if="viewable('supervisor')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'supervisor') }">
+
+    <label class="col-sm-2 control-label" for="supervisor">Supervisor</label>
+    <div class="col-sm-10">
+<!--         <select class="form-control select2" id="supervisor" ng-model="item.supervisor" name="supervisor"
+                ng-options="o.id as o.name for o in supervisors | activeOnly:item.supervisor | orderBy:'name'"
+                ng-required="false" model="job" perm-can-update="supervisor" errors="item._errors"
+                catch-server-errors="supervisor" ng-disabled="viewOnly('supervisor')"
+                ng-change="changeSupervisor(item.supervisor)">
+            <option value="">-- None --</option>
+        </select> -->
+
+       <ui-select ng-model="item.supervisor" name="supervisor" ng-change="changeSupervisor(item.supervisor)" ng-disabled="viewOnly('supervisor')" ng-required="false" model="job" >
+          <ui-select-match>
+              <span ng-bind="$select.selected.name"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="supervisor.id as supervisor in (supervisors | filter: $select.search | orderBy:'name')">
+              <span ng-bind="supervisor.name"></span>
+          </ui-select-choices>
+      </ui-select>
+
+        <div ng-messages="form.supervisor.$error" role="alert" ng-show="showOnError(form, 'supervisor')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="supervisor" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'supervisor')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- supervisor_mobile_number = CharField-->
+<div class="form-group" model="job" perm-can-read="supervisor_mobile_number" ng-if="viewable('supervisor')">
+    <label class="col-sm-2 control-label" for="supervisor_mobile_number">Supervisor Mobile No.</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="supervisor_mobile_number" ng-model="item.supervisor_mobile_number"
+               name="supervisor_mobile_number" readonly placeholder="-">
+    </div>
+</div>
+
+<!-- supervisor_email = CharField-->
+<div class="form-group" model="job" perm-can-read="supervisor_email" ng-if="viewable('supervisor')">
+    <label class="col-sm-2 control-label" for="supervisor_email">Supervisor Email</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="supervisor_email" ng-model="item.supervisor_email" name="supervisor_email"
+               readonly placeholder="-">
+    </div>
+</div>
+
+<!-- base_inspector = ForeignKey-->
+<div class="form-group" model="job" perm-can-read="base_inspector" ng-if="viewable('base_inspector')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'base_inspector') }">
+    <label class="col-sm-2 control-label" for="base_inspector">Base</label>
+    <div class="col-sm-10">
+        <select class="form-control" name="base_inspector"
+                ng-options="o.id as o.name for o in subcontractors | activeOnly:item.base_inspector | filter:{type:{code:'Excavator'}} | orderBy:'o.name'"
+                ng-model="item.base_inspector" ng-disabled="viewOnly('base_inspector')"
+                ng-required="false" model="job" perm-can-update="base_inspector" errors="item._errors"
+                ng-if="showAllSubcontractors"
+                catch-server-errors="base_inspector" ng-disabled="viewOnly('base_inspector')">
+            <option value="">-- None --</option>
+        </select>
+        <div ng-messages="form.base_inspector.$error" role="alert"
+             ng-show="showOnError(form, 'base_inspector')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="base_inspector" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'base_inspector')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- end_date = DateField-->
+<div class="form-group" model="job" perm-can-read="base_date" ng-if="viewable('base_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'base_date') }">
+    <label class="col-sm-2 control-label" for="base_date">Base Date</label>
+    <div class="col-sm-10">
+        <ocom-datetime-picker model="item.base_date"
+                          name="base_date"
+                          required="false"
+                          hide-time="false"
+                          placeholder="Base Date" form="form"
+                          min_date="{{ item.date_received | previousDate }}"
+                          disabled="viewOnly('base_date')">
+        </ocom-datetime-picker>
+        <div ng-messages="form.base_date.$error" role="alert" ng-show="showOnError(form, 'base_date')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="base_date" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+        </div>
+        <span ng-if="showOnError(form, 'base_date')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+    </div>
+</div>
+
+
+<!-- *base_inspection_date = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="base_inspection_date" ng-if="viewable('base_inspection_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'base_inspection_date') }"
+     >
+    <label class="col-sm-2 control-label" for="base_inspection_date">Base Inspection Date</label>
+    <div class="col-sm-10">
+        <div class="col-sm-6 no-padding-left">
+            <ocom-date-picker model="item.base_inspection_date"
+                              name="base_inspection_date"
+                              required="false"
+                              placeholder="Base Inspection Date" form="form"
+                              min_date="{{ item.date_received | previousDate }}"
+                              max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                              disabled="viewOnly('base_inspection_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.base_inspection_date.$error" role="alert" ng-show="showOnError(form, 'base_inspection_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="base_inspection_date" errors="item._errors"></div>
+                </p>
+                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            </div>
+            <span ng-if="showOnError(form, 'base_inspection_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+        <div class="col-sm-6 no-padding-right">
+            <select class="form-control" id="client" ng-model="item.base_inspection_time_of_day"
+                    name="base_inspection_time_of_day"
+                    ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                    model="job" perm-can-update="base_inspection_time_of_day" errors="item._errors"
+                    catch-server-errors="base_inspection_time_of_day"
+                    ng-disabled="viewOnly('base_inspection_time_of_day')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.base_inspection_time_of_day.$error" role="alert"
+                 ng-show="showOnError(form, 'base_inspection_time_of_day')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="base_inspection_time_of_day" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'base_inspection_time_of_day')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+</div>
+
+<!-- *base_inspection_done = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="base_inspection_done" ng-if="viewable('base_inspection_done')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'base_inspection_done') }"
+     ng-show="!isJobType('Paving') && !isJobType('enumber')">
+    <label class="col-sm-2 control-label" for="base_inspection_done">Base Inspection Done</label>
+    <div class="col-sm-10">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="base_inspection_done" ng-model="item.base_inspection_done" name="base_inspection_done" ng-required="false"
+                       model="job" perm-can-update="base_inspection_done" errors="item._errors" catch-server-errors="base_inspection_done"
+                       ng-disabled="viewOnly('base_inspection_done')">
+                <span class="ocom-checkbox">
+                    <i class="ocom-checkbox-icon fa fa-check"></i>
+                </span>
+            </label>
+        </div>
+        <div ng-messages="form.base_inspection_done.$error" role="alert" ng-show="showOnError(form, 'base_inspection_done')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="base_inspection_done" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'base_inspection_done')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- pump_inspector = ForeignKey-->
+<div class="form-group" model="job" perm-can-read="pump_inspector" ng-if="viewable('pump_inspector')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'pump_inspector') }"
+     ng-show="!isJobType('Paving') && !isJobType('enumber')">
+    <label class="col-sm-2 control-label" for="pump_inspector">Pump</label>
+    <div class="col-sm-10">
+        <select class="form-control" name="pump_inspector"
+                ng-options="o.id as o.name for o in subcontractors | activeOnly:item.pump_inspector | filter:{type:{code:'Pumping'}} | orderBy:'o.name'"
+                ng-model="item.pump_inspector" ng-disabled="viewOnly('pump_inspector')"
+                ng-required="false" model="job" perm-can-update="pump_inspector" errors="item._errors"
+                ng-if="showAllSubcontractors"
+                catch-server-errors="pump_inspector" ng-disabled="viewOnly('pump_inspector')">
+            <option value="">-- None --</option>
+        </select>
+        <div ng-messages="form.pump_inspector.$error" role="alert"
+             ng-show="showOnError(form, 'pump_inspector')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="pump_inspector" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'pump_inspector')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- *steel_inspection_date = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="steel_inspection_date" ng-if="viewable('steel_inspection_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'steel_inspection_date') }"
+     ng-show="!isJobType('Paving') && !isJobType('enumber')">
+    <label class="col-sm-2 control-label" for="steel_inspection_date">Steel Inspection Date</label>
+    <div class="col-sm-10">
+        <div class="col-sm-6 no-padding-left">
+            <ocom-date-picker model="item.steel_inspection_date"
+                              name="steel_inspection_date"
+                              required="false"
+                              placeholder="Steel Inspection Date" form="form"
+                              min_date="{{ item.date_received| previousDate }}"
+                              max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                              disabled="viewOnly('base_inspection_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.steel_inspection_date.$error" role="alert" ng-show="showOnError(form, 'steel_inspection_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="steel_inspection_date" errors="item._errors"></div>
+                </p>
+                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            </div>
+            <span ng-if="showOnError(form, 'steel_inspection_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+        <div class="col-sm-6 no-padding-right">
+            <select class="form-control" id="client" ng-model="item.steel_inspection_time_of_day"
+                    name="steel_inspection_time_of_day"
+                    ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                    model="job" perm-can-update="steel_inspection_time_of_day" errors="item._errors"
+                    catch-server-errors="steel_inspection_time_of_day"
+                    ng-disabled="viewOnly('steel_inspection_time_of_day')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.steel_inspection_time_of_day.$error" role="alert"
+                 ng-show="showOnError(form, 'steel_inspection_time_of_day')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="steel_inspection_time_of_day" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'steel_inspection_time_of_day')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+</div>
+
+<!-- *steel_inspection_done = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="steel_inspection_done" ng-if="viewable('steel_inspection_done')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'steel_inspection_done') }"
+     ng-show="!isJobType('Paving') && !isJobType('enumber')">
+    <label class="col-sm-2 control-label" for="steel_inspection_done">Steel Inspection Done</label>
+    <div class="col-sm-10">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="steel_inspection_done" ng-model="item.steel_inspection_done" name="steel_inspection_done" ng-required="false"
+                       model="job" perm-can-update="steel_inspection_done" errors="item._errors" catch-server-errors="steel_inspection_done"
+                       ng-disabled="viewOnly('steel_inspection_done')">
+                <span class="ocom-checkbox">
+                    <i class="ocom-checkbox-icon fa fa-check"></i>
+                </span>
+            </label>
+        </div>
+        <div ng-messages="form.steel_inspection_done.$error" role="alert" ng-show="showOnError(form, 'steel_inspection_done')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="steel_inspection_done" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'steel_inspection_done')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+
+
+<!-- building_inspector_supplier = ForeignKey-->
+<div class="form-group" model="job" perm-can-read="building_inspector_supplier" ng-if="viewable('building_inspector_supplier')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'building_inspector_supplier') }"
+     ng-show="!isJobType('Paving') && !isJobType('enumber')">
+    <label class="col-sm-2 control-label" for="building_inspector_supplier">Building Inspector</label>
+    <div class="col-sm-10">
+        <select class="form-control" id="building_inspector_supplier" ng-model="item.building_inspector_supplier"
+                name="building_inspector_supplier"
+                ng-options="o.id as o.description for o in supplier  | filter:{supplier_type:{code:'building'}} | activeOnly | orderBy:'description'"
+                model="job" perm-can-update="building_inspector_supplier" errors="item._errors"
+                catch-server-errors="building_inspector_supplier" ng-disabled="viewOnly('building_inspector_supplier')">
+            <option value="">-- SELECT AN OPTION --</option>
+        </select>
+        <div ng-messages="form.building_inspector_supplier.$error" role="alert"
+             ng-show="showOnError(form, 'building_inspector_supplier')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="building_inspector_supplier" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'building_inspector_supplier')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- Slabs here --->
+<span ng-if="isJobType('Slab')">
+    <!-- rock_m3 = DecimalField-->
+    <div class="form-group" model="job" perm-can-read="rock_m3" ng-if="viewable('rock_m3')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'rock_m3') }">
+        <label class="col-sm-2 control-label" for="rock_m3">Rock (m<sup>3</sup>)</label>
+        <div class="col-sm-10">
+            <input class="form-control" ng-class="{'negative': item.rock_m3 < 0}" id="rock_m3" ng-model="item.rock_m3"
+                   name="rock_m3" string-to-number type="number" ng-required="false" model="job" perm-can-update="rock_m3"
+                   errors="item._errors" catch-server-errors="rock_m3" min="0" max="100000" step="0.001" placeholder="-"
+                   ng-disabled="viewOnly('rock_m3')">
+            <div ng-messages="form.rock_m3.$error" role="alert" ng-show="showOnError(form, 'rock_m3')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="rock_m3" errors="item._errors"></div>
+                </p>
+                <p class="error margin-top-5px" ng-message="min">Rock (m<sup>3</sup>) must have a value of 0 or higher.</p>
+                <p class="error margin-top-5px" ng-message="max">Rock (m<sup>3</sup>) must have a value not greater than 100000.</p>
+                <p class="error margin-top-5px" ng-message="number">Rock (m<sup>3</sup>) must be a number.</p>
+            </div>
+            <span ng-if="showOnError(form, 'rock_m3')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- *rock_booked_date = DateTimeField-->
+    <div class="form-group" model="job" perm-can-read="rock_booked_date" ng-if="viewable('rock_booked_date')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'rock_booked_date') }">
+        <label class="col-sm-2 control-label" for="rock_booked_date">Rock Booked Date</label>
+        <div class="col-sm-10">
+            <div class="col-sm-6 no-padding-left">
+                <ocom-date-picker model="item.rock_booked_date"
+                                  name="rock_booked_date"
+                                  required="false"
+                                  placeholder="Rock Booked Date" form="form"
+                                  min_date="{{ item.date_received | previousDate }}"
+                                  max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                                  disabled="viewOnly('rock_booked_date')">
+                </ocom-date-picker>
+                <div ng-messages="form.rock_booked_date.$error" role="alert" ng-show="showOnError(form, 'rock_booked_date')">
+                    <p class="error margin-top-5px" ng-message="serverError">
+                        <div show-server-errors="rock_booked_date" errors="item._errors"></div>
+                    </p>
+                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                </div>
+                <span ng-if="showOnError(form, 'rock_booked_date')"
+                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+            </div>
+            <div class="col-sm-6 no-padding-right">
+                <select class="form-control" id="client" ng-model="item.rock_booked_time_of_day"
+                        name="rock_booked_time_of_day"
+                        ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                        model="job" perm-can-update="rock_booked_time_of_day" errors="item._errors"
+                        catch-server-errors="rock_booked_time_of_day" ng-disabled="viewOnly('rock_booked_time_of_day')">
+                    <option value="">-- SELECT AN OPTION --</option>
+                </select>
+                <div ng-messages="form.rock_booked_time_of_day.$error" role="alert"
+                     ng-show="showOnError(form, 'rock_booked_time_of_day')">
+                    <p class="error margin-top-5px" ng-message="serverError">
+                        <div show-server-errors="rock_booked_time_of_day" errors="item._errors"></div>
+                    </p>
+                </div>
+                <span ng-if="showOnError(form, 'rock_booked_time_of_day')"
+                      class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- rock_supplier = ForeignKey-->
+    <div class="form-group" model="job" perm-can-read="rock_supplier" ng-if="viewable('rock_supplier')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'rock_supplier') }">
+        <label class="col-sm-2 control-label" for="rock_supplier">Rock Supplier</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="rock_supplier" ng-model="item.rock_supplier" name="rock_supplier"
+                    ng-options="o.id as o.description for o in supplier | filter:{supplier_type:{code:'rock'}} | activeOnly | orderBy:'description'"
+                    model="job" perm-can-update="rock_supplier" errors="item._errors"
+                    catch-server-errors="rock_supplier" ng-disabled="viewOnly('rock_supplier')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.rock_supplier.$error" role="alert" ng-show="showOnError(form, 'rock_supplier')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="rock_supplier" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'rock_supplier')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- *steel_delivery_date = DateTimeField-->
+    <div class="form-group" model="job" perm-can-read="steel_delivery_date" ng-if="viewable('steel_delivery_date')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'steel_delivery_date') }">
+        <label class="col-sm-2 control-label" for="steel_delivery_date">Steel Delivery Date</label>
+        <div class="col-sm-10">
+            <div class="col-sm-6 no-padding-left">
+                <ocom-date-picker model="item.steel_delivery_date"
+                                  name="steel_delivery_date"
+                                  required="false"
+                                  placeholder="Steel Delivery Date" form="form"
+                                  min_date="{{ item.date_received | previousDate }}"
+                                  max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                                  disabled="viewOnly('steel_delivery_date')">
+                </ocom-date-picker>
+                <div ng-messages="form.steel_delivery_date.$error" role="alert" ng-show="showOnError(form, 'steel_delivery_date')">
+                    <p class="error margin-top-5px" ng-message="serverError">
+                        <div show-server-errors="steel_delivery_date" errors="item._errors"></div>
+                    </p>
+                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                </div>
+                <span ng-if="showOnError(form, 'steel_delivery_date')"
+                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+            </div>
+            <div class="col-sm-6 no-padding-right">
+                <select class="form-control" id="client" ng-model="item.steel_delivery_time_of_day"
+                        name="steel_delivery_time_of_day"
+                        ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                        model="job" perm-can-update="steel_delivery_time_of_day" errors="item._errors"
+                        catch-server-errors="steel_delivery_time_of_day" ng-disabled="viewOnly('steel_delivery_time_of_day')">
+                    <option value="">-- SELECT AN OPTION --</option>
+                </select>
+                <div ng-messages="form.steel_delivery_time_of_day.$error" role="alert"
+                     ng-show="showOnError(form, 'steel_delivery_time_of_day')">
+                    <p class="error margin-top-5px" ng-message="serverError">
+                        <div show-server-errors="steel_delivery_time_of_day" errors="item._errors"></div>
+                    </p>
+                </div>
+                <span ng-if="showOnError(form, 'steel_delivery_time_of_day')"
+                      class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- steel_supplier = ForeignKey-->
+    <div class="form-group" model="job" perm-can-read="steel_supplier" ng-if="viewable('steel_supplier')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'steel_supplier') }">
+        <label class="col-sm-2 control-label" for="steel_supplier">Steel Supplier</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="steel_supplier" ng-model="item.steel_supplier" name="steel_supplier"
+                    ng-options="o.id as o.description for o in supplier | filter:{supplier_type:{code:'steel'}} | activeOnly | orderBy:'description'"
+                    model="job" perm-can-update="steel_supplier" errors="item._errors"
+                    catch-server-errors="steel_supplier" ng-disabled="viewOnly('steel_supplier')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.steel_supplier.$error" role="alert" ng-show="showOnError(form, 'steel_supplier')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="steel_supplier" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'steel_supplier')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- *pod_delivery_date = DateTimeField-->
+    <div class="form-group" model="job" perm-can-read="pod_delivery_date" ng-if="viewable('pod_delivery_date')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'pod_delivery_date') }">
+        <label class="col-sm-2 control-label" for="pod_delivery_date">Pod Delivery Date</label>
+        <div class="col-sm-10">
+            <div class="col-sm-6 no-padding-left">
+                <ocom-date-picker model="item.pod_delivery_date"
+                                      name="pod_delivery_date"
+                                      required="false"
+                                      placeholder="Pod Delivery Date" form="form"
+                                      min_date="{{ item.date_received | previousDate }}"
+                                      max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                                      disabled="viewOnly('pod_delivery_date')">
+                </ocom-date-picker>
+                <div ng-messages="form.pod_delivery_date.$error" role="alert" ng-show="showOnError(form, 'pod_delivery_date')">
+                    <p class="error margin-top-5px" ng-message="serverError">
+                        <div show-server-errors="pod_delivery_date" errors="item._errors"></div>
+                    </p>
+                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                </div>
+                <span ng-if="showOnError(form, 'pod_delivery_date')"
+                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+            </div>
+            <div class="col-sm-6 no-padding-right">
+                <select class="form-control" id="client" ng-model="item.pod_delivery_time_of_day"
+                        name="pod_delivery_time_of_day"
+                        ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                        model="job" perm-can-update="pod_delivery_time_of_day" errors="item._errors"
+                        catch-server-errors="pod_delivery_time_of_day" ng-disabled="viewOnly('pod_delivery_time_of_day')">
+                    <option value="">-- SELECT AN OPTION --</option>
+                </select>
+                <div ng-messages="form.steel_delivery_time_of_day.$error" role="alert"
+                     ng-show="showOnError(form, 'pod_delivery_time_of_day')">
+                    <p class="error margin-top-5px" ng-message="serverError">
+                        <div show-server-errors="pod_delivery_time_of_day" errors="item._errors"></div>
+                    </p>
+                </div>
+                <span ng-if="showOnError(form, 'pod_delivery_time_of_day')"
+                      class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- pod_supplier = ForeignKey-->
+    <div class="form-group" model="job" perm-can-read="pod_supplier" ng-if="viewable('pod_supplier')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'pod_supplier') }">
+        <label class="col-sm-2 control-label" for="pod_supplier">Pod Supplier</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="pod_supplier" ng-model="item.pod_supplier" name="pod_supplier"
+                    ng-options="o.id as o.description for o in supplier | filter:{supplier_type:{code:'steel'}} | activeOnly | orderBy:'description'"
+                    model="job" perm-can-update="pod_supplier" errors="item._errors"
+                    catch-server-errors="pod_supplier" ng-disabled="viewOnly('pod_supplier')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.pod_supplier.$error" role="alert" ng-show="showOnError(form, 'pod_supplier')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="pod_supplier" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'pod_supplier')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- materials = DateField-->
+    <!--div class="form-group" ng-if="viewable('materials')">
+        <label class="col-sm-2 control-label" for="materials">Materials</label>
+        <div class="col-sm-10">
+            <ocom-date-picker model="item.materials"
+                              name="materials"
+                              required="false"
+                              placeholder="Materials" form="form"
+                              min_date="{{ item.date_received | previousDate }}"
+                              max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                              disabled="viewOnly('materials')">
+            </ocom-date-picker>
+            <div ng-messages="form.materials.$error" role="alert" ng-show="form.materials.$touched">
+                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            </div>
+        </div>
+    </div-->
+
+    <!-- materials_time = CharField-->
+    <!--div class="form-group" ng-if="viewable('materials_time')">
+        <label class="col-sm-2 control-label" for="materials_time">Materials Time</label>
+        <div class="col-sm-10">
+            <input class="form-control" id="materials_time" ng-model="item.materials_time" name="materials_time"
+                   ng-required="false" maxlength="255" placeholder="Materials Time"
+                   ng-disabled="viewOnly('materials_time')">
+        </div>
+    </div-->
+
+    <!-- contractor_swms = NullableBooleanField-->
+    <div class="form-group hide" model="job" perm-can-read="contractor_swms" ng-if="viewable('contractor_swms')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'contractor_swms') }">
+        <label class="col-sm-2 control-label" for="contractor_swms">SWMS</label>
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="contractor_swms" ng-model="item.contractor_swms" name="contractor_swms" ng-required="false"
+                           model="job" perm-can-update="contractor_swms" errors="item._errors" catch-server-errors="contractor_swms"
+                           ng-disabled="viewOnly('contractor_swms')">
+                    <span class="ocom-checkbox">
+                        <i class="ocom-checkbox-icon fa fa-check"></i>
+                    </span>
+                </label>
+            </div>
+            <div ng-messages="form.contractor_swms.$error" role="alert" ng-show="showOnError(form, 'contractor_swms')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="contractor_swms" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'contractor_swms')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- has_part_a = BooleanField-->
+    <div class="form-group" model="job" perm-can-read="has_part_a" ng-if="viewable('has_part_a')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'has_part_a') }">
+        <label class="col-sm-2 control-label" for="has_part_a">Has Part A</label>
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="has_part_a" ng-model="item.has_part_a" name="has_part_a" ng-required="false"
+                           model="job" perm-can-update="has_part_a" errors="item._errors" catch-server-errors="has_part_a"
+                           ng-disabled="viewOnly('has_part_a')">
+                    <span class="ocom-checkbox">
+                        <i class="ocom-checkbox-icon fa fa-check"></i>
+                    </span>
+                </label>
+            </div>
+            <div ng-messages="form.has_part_a.$error" role="alert" ng-show="showOnError(form, 'has_part_a')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="has_part_a" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'has_part_a')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+
+
+
+
+    <!-- *part_a_date = DateTimeField-->
+    <div class="form-group" model="job" perm-can-read="part_a_date" ng-if="viewable('has_part_a_date')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'part_a_date') }" ng-show="item.has_part_a">
+        <label class="col-sm-2 control-label" for="part_a_date">Part A Date</label>
+        <div class="col-sm-10">
+            <div class="col-sm-6 no-padding-left">
+                <ocom-date-picker model="item.part_a_date"
+                                  name="part_a_date"
+                                  required="false"
+                                  placeholder="Part A Date" form="form"
+                                  min_date="{{ item.date_received | previousDate }}"
+                                  max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                                  disabled="viewOnly('has_part_a_date')">
+                </ocom-date-picker>
+                <div ng-messages="form.part_a_date.$error" role="alert" ng-show="showOnError(form, 'part_a_date')">
+                    <p class="error margin-top-5px" ng-message="serverError">
+                        <div show-server-errors="part_a_date" errors="item._errors"></div>
+                    </p>
+                    <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                    <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+                </div>
+                <span ng-if="showOnError(form, 'part_a_date')"
+                      class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+            </div>
+            <div class="col-sm-6 no-padding-right">
+                <select class="form-control" id="client" ng-model="item.part_a_time_of_day"
+                        name="part_a_time_of_day"
+                        ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                        model="job" perm-can-update="part_a_time_of_day" errors="item._errors"
+                        catch-server-errors="part_a_time_of_day" ng-disabled="viewOnly('part_a_time_of_day')">
+                    <option value="">-- SELECT AN OPTION --</option>
+                </select>
+                <div ng-messages="form.part_a_date.$error" role="alert"
+                     ng-show="showOnError(form, 'part_a_time_of_day')">
+                    <p class="error margin-top-5px" ng-message="serverError">
+                        <div show-server-errors="part_a_time_of_day" errors="item._errors"></div>
+                    </p>
+                </div>
+                <span ng-if="showOnError(form, 'part_a_time_of_day')"
+                      class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- part_a_booking_number = CharField-->
+    <div class="form-group" model="job" perm-can-read="part_a_booking_number" ng-if="viewable('part_a_booking_number')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'part_a_booking_number') }">
+        <label class="col-sm-2 control-label" for="part_a_booking_number">Part A Booking Number</label>
+        <div class="col-sm-10">
+            <input class="form-control" id="part_a_booking_number" ng-model="item.part_a_booking_number"
+                   name="part_a_booking_number" ng-required="false" model="job" perm-can-update="part_a_booking_number"
+                   errors="item._errors" catch-server-errors="part_a_booking_number" maxlength="100"
+                   placeholder="Part A Booking Number" ng-disabled="viewOnly('part_a_booking_number')">
+            <div ng-messages="form.part_a_booking_number.$error" role="alert"
+                 ng-show="showOnError(form, 'part_a_booking_number')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="part_a_booking_number" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'part_a_booking_number')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- termite_supplier = ForeignKey-->
+    <div class="form-group" model="job" perm-can-read="termite_supplier" ng-if="viewable('termite_supplier')"
+         ng-class="{ 'has-error has-feedback': showOnError(form, 'termite_supplier') }"
+         ng-show="item.has_part_a">
+        <label class="col-sm-2 control-label" for="termite_supplier">Termite Supplier</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="termite_supplier" ng-model="item.termite_supplier" name="termite_supplier"
+                    ng-options="o.id as o.description for o in supplier | filter:{supplier_type:{code:'termite'}} | activeOnly | orderBy:'description'"
+                    model="job" perm-can-update="termite_supplier" errors="item._errors"
+                    catch-server-errors="termite_supplier" ng-disabled="viewOnly('termite_supplier')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.termite_supplier.$error" role="alert" ng-show="showOnError(form, 'termite_supplier')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="termite_supplier" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'termite_supplier')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+        </div>
+    </div>
+</span>
+
+<!-- *waste_date = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="waste_date" ng-if="viewable('waste_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'waste_date') }"
+     ng-show="!isJobType('Paving') && !isJobType('enumber')">
+    <label class="col-sm-2 control-label" for="waste_date">Waste Date</label>
+    <div class="col-sm-10">
+        <div class="col-sm-6 no-padding-left">
+            <ocom-date-picker model="item.waste_date"
+                              name="waste_date"
+                              required="false"
+                              placeholder="Waste Date" form="form"
+                              min_date="{{ item.date_received | previousDate }}"
+                              max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                              disabled="viewOnly('waste_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.waste_date.$error" role="alert" ng-show="showOnError(form, 'waste_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="waste_date" errors="item._errors"></div>
+                </p>
+                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            </div>
+            <span ng-if="showOnError(form, 'waste_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+    </div>
+</div>
+
+<!-- *piers = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="piers" ng-if="viewable('piers')"
+ng-class="{ 'has-error has-feedback': showOnError(form, 'piers') }" ng-show="isJobType('Slab')">
+    <label class="col-sm-2 control-label" for="piers">Proposed Piers</label>
+    <div class="col-sm-10">
+        <input class="form-control" ng-class="{'negative': item.piers < 0}" id="piers" ng-model="item.piers" name="piers"
+               string-to-number type="number" ng-required="false" model="job" perm-can-update="piers"
+               errors="item._errors" catch-server-errors="piers" min="0" max="100000" step="0.01" placeholder="-"
+               ng-disabled="viewOnly('piers')" ng-change="changeRockM3(item.piers)">
+        <div ng-messages="form.piers.$error" role="alert" ng-show="showOnError(form, 'piers')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="piers" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="min">piers must have a value of 0 or higher.</p>
+            <p class="error margin-top-5px" ng-message="max">piers must have a value not greater than 100000.</p>
+            <p class="error margin-top-5px" ng-message="number">piers must be a number.</p>
+        </div>
+        <span ng-if="showOnError(form, 'piers')" class="glyphicon glyphicon-remove form-control-feedback"
+              aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- *piers_date = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="piers_date" ng-if="viewable('piers_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'piers_date') }" ng-show="isJobType('Slab')">
+    <label class="col-sm-2 control-label" for="piers_date">Proposed Piers Date</label>
+    <div class="col-sm-10">
+        <!-- <div class="col-sm-6 no-padding-left"> -->
+            <ocom-date-picker model="item.piers_date"
+                              name="piers_date"
+                              required="false"
+                              placeholder="Proposed Piers Date" form="form"
+                              min_date="{{ item.date_received | previousDate }}"
+                              max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                              disabled="viewOnly('piers_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.piers_date.$error" role="alert" ng-show="showOnError(form, 'piers_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="piers_date" errors="item._errors"></div>
+                </p>
+                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            </div>
+            <span ng-if="showOnError(form, 'piers_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+        <!-- <div class="col-sm-6 no-padding-right">
+            <select class="form-control" id="client" ng-model="item.piers_time_of_day"
+                    name="piers_time_of_day"
+                    ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                    model="job" perm-can-update="piers_time_of_day" errors="item._errors"
+                    catch-server-errors="piers_time_of_day" ng-disabled="viewOnly('piers_time_of_day')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.piers_time_of_day.$error" role="alert" ng-show="showOnError(form, 'piers_time_of_day')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="piers_time_of_day" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'piers_time_of_day')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div> -->
+</div>
+
+<!-- *piers_inspection_date = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="piers_inspection_date" ng-if="viewable('piers_inspection_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'piers_inspection_date') }" ng-show="isJobType('Slab')">
+    <label class="col-sm-2 control-label" for="piers_inspection_date">Piers Inspection Date</label>
+    <div class="col-sm-10">
+        <div class="col-sm-6 no-padding-left">
+            <ocom-date-picker model="item.piers_inspection_date"
+                              name="piers_inspection_date"
+                              required="false"
+                              placeholder="Piers Inspection Date" form="form"
+                              min_date="{{ item.date_received | previousDate }}"
+                              max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                              disabled="viewOnly('piers_inspection_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.piers_inspection_date.$error" role="alert" ng-show="showOnError(form, 'piers_inspection_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="piers_inspection_date" errors="item._errors"></div>
+                </p>
+                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            </div>
+            <span ng-if="showOnError(form, 'piers_inspection_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+        <div class="col-sm-6 no-padding-right">
+            <select class="form-control" id="client" ng-model="item.piers_inspection_time_of_day"
+                    name="piers_inspection_time_of_day"
+                    ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                    model="job" perm-can-update="piers_inspection_time_of_day" errors="item._errors"
+                    catch-server-errors="piers_inspection_time_of_day" ng-disabled="viewOnly('piers_inspection_time_of_day')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.piers_inspection_time_of_day.$error" role="alert"
+                 ng-show="showOnError(form, 'piers_inspection_time_of_day')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="piers_inspection_time_of_day" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'piers_inspection_time_of_day')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+</div>
+
+
+<!-- *pier_inspection_done = DateTimeField-->
+<div class="form-group" model="job" perm-can-read="pier_inspection_done" ng-if="viewable('pier_inspection_done')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'pier_inspection_done') }" ng-show="isJobType('Slab')">
+    <label class="col-sm-2 control-label" for="pier_inspection_done">Piers Inspection Done</label>
+    <div class="col-sm-10">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="pier_inspection_done" ng-model="item.pier_inspection_done" name="pier_inspection_done" ng-required="false"
+                       model="job" perm-can-update="pier_inspection_done" errors="item._errors" catch-server-errors="pier_inspection_done"
+                       ng-disabled="viewOnly('pier_inspection_done')">
+                <span class="ocom-checkbox">
+                    <i class="ocom-checkbox-icon fa fa-check"></i>
+                </span>
+            </label>
+        </div>
+        <div ng-messages="form.pier_inspection_done.$error" role="alert" ng-show="showOnError(form, 'pier_inspection_done')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="pier_inspection_done" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'pier_inspection_done')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- Pier Concrete Date and Time -->
+<div class="form-group" model="job" perm-can-read="piers_concrete_date" ng-if="viewable('piers_concrete_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'piers_concrete_date') }"
+     >
+    <label class="col-sm-2 control-label" for="piers_concrete_date">Pier Concrete Date</label>
+    <div class="col-sm-10">
+        <div class="col-sm-6 no-padding-left">
+            <ocom-date-picker model="item.piers_concrete_date"
+                              name="piers_concrete_date"
+                              required="false"
+                              placeholder="Pier Concrete Date" form="form"
+                              min_date="{{ item.date_received | previousDate }}"
+                              max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                              disabled="viewOnly('piers_concrete_date')">
+            </ocom-date-picker>
+            <div ng-messages="form.piers_concrete_date.$error" role="alert" ng-show="showOnError(form, 'piers_concrete_date')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="piers_concrete_date" errors="item._errors"></div>
+                </p>
+                <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+                <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+            </div>
+            <span ng-if="showOnError(form, 'piers_concrete_date')"
+                  class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+        </div>
+        <div class="col-sm-6 no-padding-right">
+            <select class="form-control" id="client" ng-model="item.piers_concrete_time_of_day"
+                    name="piers_concrete_time_of_day"
+                    ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                    model="job" perm-can-update="piers_concrete_time_of_day" errors="item._errors"
+                    catch-server-errors="piers_concrete_time_of_day"
+                    ng-disabled="viewOnly('piers_concrete_time_of_day')">
+                <option value="">-- SELECT AN OPTION --</option>
+            </select>
+            <div ng-messages="form.piers_concrete_time_of_day.$error" role="alert"
+                 ng-show="showOnError(form, 'piers_concrete_time_of_day')">
+                <p class="error margin-top-5px" ng-message="serverError">
+                    <div show-server-errors="piers_concrete_time_of_day" errors="item._errors"></div>
+                </p>
+            </div>
+            <span ng-if="showOnError(form, 'piers_concrete_time_of_day')"
+                  class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+    </div>
+</div>
+
+<!-- concrete_date = DateField-->
+<div class="form-group" model="job" perm-can-read="concrete_date" ng-if="viewable('concrete_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'concrete_date') }" ng-hide="isJobType('Paving')">
+    <label class="col-sm-2 control-label" for="concrete_date">Concrete Date</label>
+    <div class="col-sm-5">
+        <ocom-date-picker model="item.concrete_date"
+                          name="concrete_date"
+                          required="false"
+                          placeholder="Start Date" form="form"
+                          disabled="viewOnly('concrete_date')">
+        </ocom-date-picker>
+        <div ng-messages="form.concrete_date.$error" role="alert" ng-show="showOnError(form, 'concrete_date')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="concrete_date" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'concrete_date')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+    </div>
+    <div class="col-sm-5 no-padding-right">
+        <select class="form-control" id="client" ng-model="item.concrete_time_of_day"
+                name="concrete_time_of_day"
+                ng-options="o.id as o.description for o in time_of_day_List | activeOnly | orderBy:'id'"
+                model="job" perm-can-update="concrete_time_of_day" errors="item._errors"
+                catch-server-errors="concrete_time_of_day"
+                ng-disabled="viewOnly('concrete_time_of_day')">
+            <option value="">-- SELECT AN OPTION --</option>
+        </select>
+        <div ng-messages="form.concrete_time_of_day.$error" role="alert"
+             ng-show="showOnError(form, 'concrete_time_of_day')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="concrete_time_of_day" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'concrete_time_of_day')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+
+
+<!-- concrete_mix = NumberField-->
+<div class="form-group" model="job" perm-can-read="concrete_mix" ng-if="viewable('concrete_mix')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'concrete_mix') }" ng-hide="isJobType('Paving')">
+    <label class="col-sm-2 control-label" for="concrete_mix">Concrete Mix</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="concrete_mix" ng-model="item.concrete_mix" name="concrete_mix" model="job" perm-can-update="concrete_mix" errors="item._errors" catch-server-errors="concrete_mix" title="Concrete Mix" placeholder="Concrete Mix">
+    </div>
+</div>
+
+
+<!-- slab_schedule_notes = TextField-->
+<div class="form-group" model="job" perm-can-read="slab_schedule_notes" ng-if="viewable('slab_schedule_notes')" ng-class="{ 'has-error has-feedback': showOnError(form, 'slab_schedule_notes') }" ng-hide="isJobType('Paving')">
+    <label class="col-sm-2 control-label" for="slab_schedule_notes">Slab Schedule Notes</label>
+    <div class="col-sm-10">
+        <textarea id="slab_schedule_notes" name="slab_schedule_notes" class="form-control" ng-model="item.slab_schedule_notes"
+                  ng-required="false" model="job" perm-can-update="slab_schedule_notes" errors="item._errors"
+                  catch-server-errors="slab_schedule_notes" placeholder="Description"
+                  ng-disabled="viewOnly('slab_schedule_notes')"></textarea>
+        <div ng-messages="form.slab_schedule_notes.$error" role="alert" ng-show="showOnError(form, 'slab_schedule_notes')">
+            <p class="error margin-top-5px" ng-message="required">Please provide a value for slab schedule notes.</p>
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="slab_schedule_notes" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'slab_schedule_notes')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- start_date = DateField-->
+<div class="form-group" model="job" perm-can-read="start_date" ng-if="viewable('start_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'start_date') }"
+     ng-show="!isJobType('Paving') && !isJobType('enumber')">
+    <label class="col-sm-2 control-label" for="start_date">Start Date</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.start_date"
+                          name="start_date"
+                          required="false"
+                          placeholder="Start Date" form="form"
+                          min_date="{{ item.date_received | previousDate }}"
+                          max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                          disabled="viewOnly('start_date')">
+        </ocom-date-picker>
+        <div ng-messages="form.start_date.$error" role="alert" ng-show="showOnError(form, 'start_date')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="start_date" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+            <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+        </div>
+        <span ng-if="showOnError(form, 'start_date')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- end_date = DateField-->
+<div class="form-group" model="job" perm-can-read="active_end_date" ng-if="viewable('active_end_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'active_end_date') }">
+    <label class="col-sm-2 control-label" for="active_end_date">End Date</label>
+    <div class="col-sm-10">
+        <ocom-datetime-picker model="item.active_end_date"
+                          name="active_end_date"
+                          required="false"
+                           hide-time="true"
+                          placeholder="End Date" form="form"
+                          min_date="{{ item.date_received | previousDate }}"
+                          disabled="viewOnly('active_end_date')">
+        </ocom-datetime-picker>
+        <div ng-messages="form.active_end_date.$error" role="alert" ng-show="showOnError(form, 'active_end_date')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="active_end_date" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+        </div>
+        <span ng-if="showOnError(form, 'active_end_date')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- call_up_date = DateField-->
+<div class="form-group" model="job" perm-can-read="call_up_date" ng-if="viewable('call_up_date')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'call_up_date') }">
+    <label class="col-sm-2 control-label" for="call_up_date">
+        <span ng-if="!isClientView">Call Up Date</span>
+        <span ng-if="isClientView">Called Up Pour Date</span>
+    </label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.call_up_date"
+                          name="call_up_date"
+                          required="false"
+                          placeholder="Call Up Date" form="form"
+                          min_date="{{ item.date_received | previousDate }}"
+                          max_date="{{ item.active_end_date | dateGreater:item.date_cancelled }}"
+                          disabled="viewOnly('call_up_date')">
+        </ocom-date-picker>
+        <div ng-messages="form.call_up_date.$error" role="alert" ng-show="showOnError(form, 'call_up_date')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="call_up_date" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+            <p class="error margin-top-5px" ng-message="max">Date is beyond Project End Date or Date of Cancellation.</p>
+        </div>
+        <span ng-if="showOnError(form, 'call_up_date')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- date_cancelled = DateField-->
+<div class="form-group" model="job" perm-can-read="date_cancelled" ng-if="viewable('date_cancelled')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'date_cancelled') }">
+    <label class="col-sm-2 control-label" for="date_cancelled">Date Cancelled</label>
+    <div class="col-sm-10">
+        <ocom-date-picker model="item.date_cancelled"
+                          name="date_cancelled"
+                          required="false"
+                          placeholder="Date Cancelled" form="form"
+                          min_date="{{ item.date_received | previousDate }}"
+                          disabled="viewOnly('date_cancelled')">
+        </ocom-date-picker>
+        <div ng-messages="form.date_cancelled.$error" role="alert" ng-show="showOnError(form, 'date_cancelled')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="date_cancelled" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="min">Date is prior to Date Received.</p>
+        </div>
+        <span ng-if="showOnError(form, 'date_cancelled')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-90px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- mix = ForeignKey-->
+<div class="form-group" model="job" perm-can-read="mix" ng-if="viewable('mix')" ng-show="isJobType('Paving')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'mix') }">
+    <label class="col-sm-2 control-label" for="mix">Mix</label>
+    <div class="col-sm-10">
+        <select class="form-control" id="mix" ng-model="item.mix" name="mix"
+                ng-options="o.id as o.description for o in pavingMixes | activeOnly:item.mix | orderBy:'o.description'"
+                ng-required="false" model="job" perm-can-update="mix" errors="item._errors" catch-server-errors="mix"
+                ng-disabled="viewOnly('mix')">
+            <option value="">-- None --</option>
+        </select>
+        <div ng-messages="form.mix.$error" role="alert" ng-show="showOnError(form, 'mix')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="mix" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'mix')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- paving_colour = ForeignKey-->
+<div class="form-group" model="job" perm-can-read="paving_colour" ng-if="viewable('paving_colour')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'paving_colour') }"  ng-show="isJobType('Paving')">
+    <label class="col-sm-2 control-label" for="paving_colour">Paving Colour</label>
+    <div class="col-sm-10">
+        <select class="form-control" id="paving_colour" ng-model="item.paving_colour" name="paving_colour"
+                ng-options="o.id as o.description for o in pavingColours | activeOnly:item.paving_colour | orderBy:'o.description'"
+                ng-required="false" model="job" perm-can-update="paving_colour" errors="item._errors"
+                catch-server-errors="paving_colour" ng-disabled="viewOnly('paving_colour')">
+            <option value="">-- None --</option>
+        </select>
+        <div ng-messages="form.paving_colour.$error" role="alert" ng-show="showOnError(form, 'paving_colour')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="paving_colour" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'paving_colour')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- excavation_allowance = DecimalField-->
+<div class="form-group" model="job" perm-can-read="excavation_allowance" ng-if="viewable('excavation_allowance')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'excavation_allowance') }" ng-show="false">
+    <label class="col-sm-2 control-label" for="excavation_allowance">Excavation Allowance</label>
+    <div class="col-sm-10">
+        <input class="form-control" ng-class="{'negative': item.excavation_allowance < 0}" id="excavation_allowance"
+               ng-model="item.excavation_allowance" name="excavation_allowance" string-to-number type="number"
+               ng-required="false" model="job" perm-can-update="excavation_allowance" errors="item._errors"
+               catch-server-errors="excavation_allowance" min="0" max="100000" step="0.01" placeholder="-"
+               ng-disabled="viewOnly('excavation_allowance')">
+        <div ng-messages="form.excavation_allowance.$error" role="alert"
+             ng-show="showOnError(form, 'excavation_allowance')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="excavation_allowance" errors="item._errors"></div>
+            </p>
+            <p class="error margin-top-5px" ng-message="min">Excavation Allowance must have a value of 0 or higher.</p>
+            <p class="error margin-top-5px" ng-message="max">Excavation Allowance must have a value not greater than
+                100000.</p>
+            <p class="error margin-top-5px" ng-message="number">Excavation Allowance must be a number.</p>
+        </div>
+        <span ng-if="showOnError(form, 'excavation_allowance')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- paving_type = ForeignKey-->
+<div class="form-group" model="job" perm-can-read="paving_type"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'paving_type') }">
+
+    <label class="col-sm-2 control-label" for="paving_type">Paving Type</label>
+    <div class="col-sm-10">
+        <select class="form-control" id="paving_type" ng-model="item.paving_type" name="paving_type"
+                ng-options="o.id as o.description for o in pavingTypes | activeOnly:item.paving_type | orderBy:'o.description'"
+                ng-required="false" model="job" perm-can-update="paving_type" errors="item._errors"
+                catch-server-errors="paving_type" ng-disabled="viewOnly('paving_type')">
+            <option value="">-- None --</option>
+        </select>
+        <div ng-messages="form.paving_type.$error" role="alert" ng-show="showOnError(form, 'paving_type')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="paving_type" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'paving_type')"
+              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- has_conduit = BooleanField-->
+<div class="form-group" model="job" perm-can-read="has_conduit" ng-if="viewable('has_conduit')"
+     ng-class="{ 'has-error has-feedback': showOnError(form, 'has_conduit') }" ng-show="isJobType('Paving')">
+    <label class="col-sm-2 control-label" for="has_conduit">Has Conduit</label>
+    <div class="col-sm-10">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="has_conduit" ng-model="item.has_conduit" name="has_conduit"
+                       ng-required="false" model="job" perm-can-update="has_conduit" errors="item._errors"
+                       catch-server-errors="has_conduit" ng-disabled="viewOnly('has_conduit')">
+                <span class="ocom-checkbox">
+                    <i class="ocom-checkbox-icon fa fa-check"></i>
+                </span>
+            </label>
+        </div>
+        <div ng-messages="form.has_conduit.$error" role="alert" ng-show="showOnError(form, 'has_conduit')">
+            <p class="error margin-top-5px" ng-message="serverError">
+                <div show-server-errors="has_conduit" errors="item._errors"></div>
+            </p>
+        </div>
+        <span ng-if="showOnError(form, 'has_conduit')"
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+</div>
+
+<!-- dollars_difference = DecimalField-->
+<div class="form-group" model="job" perm-can-read="dollars_difference" ng-if="viewable('dollars_difference')">
+    <label class="col-sm-2 control-label" for="dollars_difference">Dollars Difference</label>
+    <div class="col-sm-10">
+        <div class="input-group money">
+            <div class="input-group-addon">$</div>
+            <input class="form-control" ng-class="{'negative': item.dollars_difference < 0}" id="dollars_difference"
+                   ng-model="item.dollars_difference" name="dollars_difference" string-to-number type="number" readonly
+                   placeholder="-">
+        </div>
+    </div>
+</div>
+
+<div class="form-group hide" ng-if="viewable('steps')" ng-show="isJobType('Paving')">
+    <label class="col-sm-2 control-label" for="">Approved</label>
+    <div class="col-sm-10">
+        <radio-btn item="item" field="'approved_date'" disabled="viewOnly('approved_date')" ></radio-btn>
+    </div>
+</div>
+
+
+<div class="form-group" ng-if="viewable('steps')" ng-show="isJobType('Paving')">
+    <label class="col-sm-2 control-label" for="">Progress</label>
+    <div class="col-sm-10">
+        <steps item="item" steps="stepsConfigPaving" disabled="viewOnly('steps')"></steps>
+    </div>
+</div>
+
+<div class="form-group" ng-if="viewable('steps')" ng-show="isJobType('enumber')">
+    <label class="col-sm-2 control-label" for="">Steps</label>
+    <div class="col-sm-10">
+        <steps item="item" steps="stepsConfigENumber" disabled="viewOnly('steps')"></steps>
+    </div>
+</div>
+
+<div ng-include="'js/job/sections/purchase_orders.html'" ng-if="viewable('purchase_orders')"></div>
+
+<div ng-include="'js/job/sections/file.html'" ng-if="(item.id || item.email) && viewable('job_files')"></div>
+
+<div class="sub-header" ng-if="isJobType('Paving') && viewable('job_drains')">
+    <h3>Drains</h3>
+    <div ng-include="'js/job/sections/drains.html'"></div>
+</div>
+
+<div class="sub-header" ng-if="viewable('job_costs')">
+    <h3>Invoicing</h3>
+    <div ng-include="'js/job/sections/cost.html'"></div>
+</div>
+
+<div class="sub-header" ng-if="item.id && viewable('job_checklists') && !isJobType('Slab')">
+    <h3>Checklist</h3>
+    <div ng-include="'js/job/sections/checklists.html'"></div>
+</div>
+
+<div class="sub-header" ng-if="viewable('job_notes')">
+    <h3>Notes</h3>
+    <div ng-include="'js/job/sections/note.html'"></div>
+</div>
+
+<div class="sub-header" ng-if="item.id && viewable('tasks')" ng-show="isJobType('Slab')">
+    <h3>Tasks</h3>
+    <div ng-include="'js/job/sections/tasks.html'"></div>
+</div>
+
+<div class="sub-header" ng-if="item.id && viewable('job_accounting')">
+    <h3>Accounting</h3>
+    <div ng-include="'js/job/sections/accounting.html'"></div>
+</div>
+
+<span id="field_list" class="hide">
+{{fields_list}}
+</span>

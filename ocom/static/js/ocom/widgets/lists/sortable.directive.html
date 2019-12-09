@@ -1,0 +1,14 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<span>
+    <a href="#{{ location }}" ng-transclude ng-if="attrSortField && allowSort"></a>
+    <i ng-show='currentAsc' class='glyphicon glyphicon-chevron-up pull-right' ng-if="attrSortField"></i>
+    <i ng-show='currentDesc' class='glyphicon glyphicon-chevron-down pull-right' ng-if="attrSortField"></i>
+    <span ng-transclude ng-if="!attrSortField || !allowSort"></span>
+</span>

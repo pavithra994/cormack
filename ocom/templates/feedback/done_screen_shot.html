@@ -1,0 +1,23 @@
+<html>
+<head>
+    <script src="/static/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="/static/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+
+    <link href="/static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/node_modules/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="/static/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    {% csrf_token %}
+    <h1>Feedback Sent</h1>
+    <p>Thanks for your feedback. It has been passed on. Please close this tab</p>
+
+    <script>
+        window.top.close();
+    </script>
+</body>
+</html>

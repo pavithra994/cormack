@@ -1,0 +1,70 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="NavbarController">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a id="navbar-brand" class="navbar-brand" href="#">
+                <span ng-bind-html="appName"></span>
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav" ng-if="isAuthenticated">
+                <li class="divider-vertical"></li>
+                <li ng-if="navMenu"
+                    ng-hide="menu.skip === true"
+                    ng-repeat="menu in navMenu"
+                    ng-class="{active: $state.current.name == menu.stateName}">
+
+                    <a href="#" ui-sref="{{ menu.link }}">{{ menu.name }}</a>
+                </li>
+                <li class="divider-vertical"></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" ng-if="isAuthenticated">
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        {{ getName() }} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a id="account_profile" ui-sref="index.profile">Account Profile</a></li>
+                        <li ng-if="adminDashboard">
+                            <a id="admin_dashboard" href="/adm" target="_blank">Admin Dashboard</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li><a id="account_logout" href="" ng-click="logoutUser()">Logout</a></li>
+                    </ul>
+                </li>
+                <li ng-if="platform.isOffline() && platform.canGoOffline()">
+                    <a href="" class="text-danger">
+                        <span class="fa-stack-1x">
+                            <i class="fa fa-wifi fa-inverse fa-stack-1x"></i>
+                            <i class="fa fa-ban fa-inverse fa-stack-1x text-danger"></i>
+                        </span>
+                    </a>
+                </li>
+                <li ng-if="!platform.isOffline() && platform.canGoOffline()">
+                    <a href="" class="text-success">
+                        <span class="fa-stack-1x">
+                            <i class="fa fa-wifi fa-inverse fa-stack-1x"></i>
+                        </span>
+                    </a>
+                </li>
+                <li ng-if="can_take_screenshot()">
+                    <a ng-click="take_screen_shot()"><i class="fa fa-bug"></i> </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

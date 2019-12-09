@@ -1,0 +1,39 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="input-group" ng-class="{'read-only': readOnly, 'disabled': disabled, 'edit': !readOnly && !disabled}">
+    <input class="form-control date"
+           size="15"
+           name="{{ name }}"
+           ng-model="model"
+           data-autoclose="1"
+           placeholder="{{ placeholder }}"
+           title="{{ title }}"
+           data-date-format="dd/MM/yyyy"
+           data-date-type="{{ dateType || 'date' }}"
+           data-model-date-format="{{ modelDateFormat || null }}"
+           ng-disabled="disabled || readOnly"
+           ng-change="dateChanged()"
+           ng-init="dateChanged()"
+           ng-blur="onPickerBlur()"
+           autocomplete="off"
+           min-length="20"
+           bs-datepicker
+           ng-required="required || false"
+           data-min-date="{{ minDate || '' }}"
+           data-max-date="{{ maxDate || '' }}">
+    <div class="input-group-addon no-padding" ng-if="!readOnly">
+		<button type="button" class="btn btn-sm today" ng-click="setToday()" ng-disabled="disabled" title="Set date as today">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </button>
+		<button type="button" class="btn btn-sm clear" ng-click="clearDate()" ng-disabled="disabled || !model || required"
+                title="Clear date">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+	</div>
+</div>

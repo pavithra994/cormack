@@ -1,0 +1,63 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="row">
+    <div class="col-sm-{{ colSize }}" ng-class="{'read-only': readOnly, 'disabled': disabled, 'edit': !readOnly && !disabled}">
+        <div class="input-group">
+            <input class="form-control date"
+                   size="15"
+                   name="{{ name }}"
+                   ng-model="model"
+                   data-autoclose="1"
+                   placeholder="{{ placeholder }}"
+                   data-date-format="dd/MM/yyyy"
+                   ng-disabled="disabled || readOnly"
+                   ng-required="required || false"
+                   ng-blur="onPickerBlur()"
+                   min-length="20"
+                   autocomplete="off"
+                   bs-datepicker
+                   data-min-date="{{ minDate || '' }}"
+                   data-max-date="{{ maxDate || '' }}">
+            <div class="input-group-addon no-padding" ng-if="!readOnly && hideTime">
+                <button type="button" class="btn btn-sm today" ng-click="setToday()" ng-disabled="disabled"
+                        title="Set date/time as now">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </button>
+                <button type="button" class="btn btn-sm clear" ng-click="clearDate()"
+                        ng-disabled="disabled || !model || required" title="Clear date/time">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-{{ colSize }}" ng-hide="hideTime">
+        <div class="input-group">
+            <input class="form-control time"
+                   size="8"
+                   ng-model="model"
+                   name="{{ name }}-time"
+                   ng-disabled="disabled || readOnly"
+                   ng-required="required || false"
+                   placeholder="Time"
+                   bs-timepicker
+                   data-minute-step="15"
+                   >
+            <div class="input-group-addon no-padding" ng-if="!readOnly">
+                <button type="button" class="btn btn-sm today" ng-click="setToday()" ng-disabled="disabled"
+                        title="Set date/time as now">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </button>
+                <button type="button" class="btn btn-sm clear" ng-click="clearDate()"
+                        ng-disabled="disabled || !model || required" title="Clear date/time">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

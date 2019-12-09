@@ -1,0 +1,38 @@
+[
+  {
+    "model": "api.codesubbietype",
+    "pk": 1,
+    "fields": {
+      "modified_date": "2018-01-01T00:25:44.747Z",
+      "created_date": "2018-01-01T00:25:36.215Z",
+      "active_start_date": "2018-01-01T00:02:44Z",
+      "active_end_date": null,
+      "description": "Supplier",
+      "code": "supplier"
+    }
+  },
+  {
+    "model": "api.codesubbietype",
+    "pk": 2,
+    "fields": {
+      "modified_date": "2018-01-01T00:25:44.747Z",
+      "created_date": "2018-01-01T00:25:36.215Z",
+      "active_start_date": "2018-01-01T00:02:44Z",
+      "active_end_date": null,
+      "description": "Employee",
+      "code": "employee"
+    }
+  },
+  {
+    "model": "api.codesubbietype",
+    "pk": 3,
+    "fields": {
+      "modified_date": "2018-01-01T00:25:44.747Z",
+      "created_date": "2018-01-01T00:25:36.215Z",
+      "active_start_date": "2018-01-01T00:02:44Z",
+      "active_end_date": null,
+      "description": "Sub-Contractor",
+      "code": "subcontractor"
+    }
+  }
+]

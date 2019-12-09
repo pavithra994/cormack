@@ -1,0 +1,19 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<div class="content padding-top-20px">
+    <div class="page-header">
+        <h1>New Repair</h1>
+    </div>
+    <div class="repair container" ng-if="accessible('repair', 'repair.create')">
+        <form dirty-tracking name="form" class="form-horizontal" novalidate errors-context="item._errors" item="item">
+            <div ng-include="'js/repair/form.html'"></div>
+            <ocom-form-buttons create="true" save-success-message="A repair has been added."></ocom-form-buttons>
+        </form>
+    </div>
+</div>

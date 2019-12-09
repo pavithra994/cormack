@@ -1,0 +1,49 @@
+<!--
+  ~ Copyright (C) 2019 Ocom Software- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Ocom Software <licence@ocom.com.au, 2019
+  ~
+  -->
+
+<span ng-if="job">
+    <div class="input-group">
+        <input type="text" disabled class="form-control" value="{{ job.address }}, {{ job.suburb }}"/>
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" ng-click="start_again()"><i
+                    class="glyphicon glyphicon-remove"></i></button>
+      </span>
+    </div>
+</span>
+<span ng-if="!job">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search for..." ng-model="searchText"
+             job-enter="search(searchText)"/>
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="search(searchText)">Search</button>
+      </span>
+    </div>
+    <div ng-if="!joblist && !searching">Please type an address to search</div>
+    <div ng-if="searching">Searching...<i class="fa fa-spinner fa-spin" style="font-size:24px"></i></div>
+    <table class="table table-bordered table-condensed" ng-if="joblist && !searching">
+        <thead>
+            <th>Address</th>
+            <th>Client</th>
+            <th>Supervisor</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="jobItem in joblist">
+                <td>{{ jobItem.address }}, {{ jobItem.suburb }}</td>
+                <td>{{ jobItem.client_name }}</td>
+                <td>{{ jobItem.supervisor_name }}</td>
+                <td><button class="btn btn-primary" ng-click="select(jobItem)">SELECT</button></td>
+            </tr>
+        <tr>
+            <td colspan="4">
+                <a class="btn btn-default" ng-click="noJob(searchText)">No Old Job</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</span>
+{{ value | json }}
