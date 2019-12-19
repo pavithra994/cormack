@@ -128,6 +128,7 @@
 <!-- Depot = ForeignKey-->
 <div class="form-group" model="job" perm-can-read="depot_type" ng-if="viewable('depot_type')"
      ng-hide="isJobType('Paving')" ng-class="{ 'has-error has-feedback': showOnError(form, 'depot_type') }">
+
     <label class="col-sm-2 control-label" for="depot_type">Depot</label>
            
     <div class="col-sm-6 no-padding-right">
@@ -322,7 +323,7 @@
 
 <!-- *set_out_date = DateTimeField-->
 <div class="form-group" model="job" perm-can-read="set_out_date"
-     ng-class="{ 'has-error has-feedback': showOnError(form, 'set_out_date') }">
+     ng-hide="isJobType('Paving')" ng-class="{ 'has-error has-feedback': showOnError(form, 'set_out_date') }">
     <label class="col-sm-2 control-label" for="set_out_date">
         <span>Set Out Date</span>
     </label>
@@ -362,7 +363,7 @@
 
 <!-- drain_date = DateTimeField -->
 <div class="form-group" model="job" perm-can-read="drain_date"
-     ng-class="{ 'has-error has-feedback': showOnError(form, 'drain_date') }">
+     ng-hide="isJobType('Paving')" ng-class="{ 'has-error has-feedback': showOnError(form, 'drain_date') }">
     <label class="col-sm-2 control-label" for="drain_date">
         <span>Drain Date</span>
     </label>
@@ -404,7 +405,7 @@
 
 <!-- *wanted_pour_date = DateTimeField-->
 <div class="form-group" model="job" perm-can-read="wanted_pour_date"
-     ng-class="{ 'has-error has-feedback': showOnError(form, 'wanted_pour_date') }" ng-hide="isJobType('Paving')">
+     ng-hide="isJobType('Paving')" ng-class="{ 'has-error has-feedback': showOnError(form, 'wanted_pour_date') }" ng-hide="isJobType('Paving')">
     <label class="col-sm-2 control-label" for="wanted_pour_date">
         <span>Wanted Pour Date</span>
     </label>
@@ -655,8 +656,6 @@
                 <div show-server-errors="base_inspection_done" errors="item._errors"></div>
             </p>
         </div>
-        <span ng-if="showOnError(form, 'base_inspection_done')"
-              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     </div>
 </div>
 

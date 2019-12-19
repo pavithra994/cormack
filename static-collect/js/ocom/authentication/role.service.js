@@ -297,7 +297,7 @@ function roleService($interval, $localStorage, $q, $state, $rootScope, dataAPISe
         var user = $localStorage.user;
 
         // check for user.role
-        if (angular.isDefined(user.role) && angular.isDefined(user.role[role]) && user.role[role]) {
+        if (angular.isDefined(user.role) && user.role.hasOwnProperty(role) && angular.isDefined(user.role[role]) && user.role[role]) {
             console.log('Role found (ROLE): ', role);
             return true;
         }
@@ -404,9 +404,11 @@ function roleService($interval, $localStorage, $q, $state, $rootScope, dataAPISe
      */
     var updateUserRoles = function (customRole) {
         if ("user" in $localStorage && "role" in $localStorage.user) { //Do we have the role as part of the stored User Data? If so use this instead of asking with Ajax
+            console.warn("Roles found: ", $localStorage.user.role);
             updateRoles($localStorage.user.role)
         }
         else { // Deprecated. The Role should come from the Authentication request as part of the "user"
+            console.warn("Deprecated: Roles should come from the authentication requeset, but we are retrieving them from the roles API.");
             dataResourceService.getDataApi("/api/", 'roles').query({user: $localStorage.user.id}, function (response) {
                 console.log('Updating roles...', response);
                 if (angular.isDefined(response[0])) {

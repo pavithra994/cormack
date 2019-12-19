@@ -157,6 +157,8 @@
             dataAPIService
                 .getDataApi("/api/", 'job')
                 .list($scope.listOptions, function (data) {
+                    console.warn("$scope.listOptions", JSON.stringify($scope.listOptions));
+                    console.warn("data", data);
                     $scope.list = data.results;
 
                     angular.forEach($scope.list, function (value, key) {

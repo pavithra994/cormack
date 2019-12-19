@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "cormack-venv\\Scripts\\python.exe"
+    "python.pythonPath": "env/bin/python",
+    "git.ignoreLimitWarning": true
 }

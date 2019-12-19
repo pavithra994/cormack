@@ -127,23 +127,33 @@
 
 <!-- Depot = ForeignKey-->
 <div class="form-group" model="job" perm-can-read="depot_type" ng-if="viewable('depot_type')"
-     ng-class="{ 'has-error has-feedback': showOnError(form, 'depot_type') }">
+     ng-hide="isJobType('Paving')" ng-class="{ 'has-error has-feedback': showOnError(form, 'depot_type') }">
+
     <label class="col-sm-2 control-label" for="depot_type">Depot</label>
-    <div class="col-sm-10">
-        <select class="form-control" id="depot_type" ng-model="item.depot_type" name="depot_type"
-                ng-options="o.id as o.code for o in depotTypes | activeOnly:item.depot_type | orderBy:'o.code'"
-                model="job" perm-can-update="depot_type" errors="item._errors"
-                catch-server-errors="depot_type">
+           
+    <div class="col-sm-6 no-padding-right">
+      <!-- ng-options="o.id as o.description for o in depotTypes | activeOnly | orderBy:'id'" -->
+        <select 
+        ng-required="false" 
+        class="form-control" 
+        id="client" 
+        ng-options="o.id as o.description for o in depotTypes | activeOnly | orderBy:'id'"
+        ng-model="item.depot_type" 
+        name="depot_type" 
+        model="job" 
+        perm-can-update="description" 
+        errors="item._errors" 
+        catch-server-errors="depot_type"
+        ng-disabled="viewOnly('depot_type')">
             <option value="">-- None --</option>
         </select>
         <div ng-messages="form.depot_type.$error" role="alert" ng-show="showOnError(form, 'depot_type')">
-            <p class="error margin-top-5px" ng-message="required">Please provide a value for Depot Type.</p>
             <p class="error margin-top-5px" ng-message="serverError">
                 <div show-server-errors="depot_type" errors="item._errors"></div>
             </p>
         </div>
         <span ng-if="showOnError(form, 'depot_type')"
-              class="glyphicon glyphicon-remove form-control-feedback adjust-25px" aria-hidden="true"></span>
+              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     </div>
 </div>
 
@@ -313,7 +323,7 @@
 
 <!-- *set_out_date = DateTimeField-->
 <div class="form-group" model="job" perm-can-read="set_out_date"
-     ng-class="{ 'has-error has-feedback': showOnError(form, 'set_out_date') }">
+     ng-hide="isJobType('Paving')" ng-class="{ 'has-error has-feedback': showOnError(form, 'set_out_date') }">
     <label class="col-sm-2 control-label" for="set_out_date">
         <span>Set Out Date</span>
     </label>
@@ -353,7 +363,7 @@
 
 <!-- drain_date = DateTimeField -->
 <div class="form-group" model="job" perm-can-read="drain_date"
-     ng-class="{ 'has-error has-feedback': showOnError(form, 'drain_date') }">
+     ng-hide="isJobType('Paving')" ng-class="{ 'has-error has-feedback': showOnError(form, 'drain_date') }">
     <label class="col-sm-2 control-label" for="drain_date">
         <span>Drain Date</span>
     </label>
@@ -395,7 +405,7 @@
 
 <!-- *wanted_pour_date = DateTimeField-->
 <div class="form-group" model="job" perm-can-read="wanted_pour_date"
-     ng-class="{ 'has-error has-feedback': showOnError(form, 'wanted_pour_date') }" ng-hide="isJobType('Paving')">
+     ng-hide="isJobType('Paving')" ng-class="{ 'has-error has-feedback': showOnError(form, 'wanted_pour_date') }" ng-hide="isJobType('Paving')">
     <label class="col-sm-2 control-label" for="wanted_pour_date">
         <span>Wanted Pour Date</span>
     </label>
@@ -646,8 +656,6 @@
                 <div show-server-errors="base_inspection_done" errors="item._errors"></div>
             </p>
         </div>
-        <span ng-if="showOnError(form, 'base_inspection_done')"
-              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     </div>
 </div>
 
@@ -1421,11 +1429,11 @@ ng-class="{ 'has-error has-feedback': showOnError(form, 'piers') }" ng-show="isJ
 
 
 <!-- slab_schedule_notes = TextField-->
-<div class="form-group required" model="job" perm-can-read="slab_schedule_notes" ng-if="viewable('slab_schedule_notes')" ng-class="{ 'has-error has-feedback': showOnError(form, 'slab_schedule_notes') }" ng-hide="isJobType('Paving')">
+<div class="form-group" model="job" perm-can-read="slab_schedule_notes" ng-if="viewable('slab_schedule_notes')" ng-class="{ 'has-error has-feedback': showOnError(form, 'slab_schedule_notes') }" ng-hide="isJobType('Paving')">
     <label class="col-sm-2 control-label" for="slab_schedule_notes">Slab Schedule Notes</label>
     <div class="col-sm-10">
         <textarea id="slab_schedule_notes" name="slab_schedule_notes" class="form-control" ng-model="item.slab_schedule_notes"
-                  ng-required="true" model="job" perm-can-update="slab_schedule_notes" errors="item._errors"
+                  ng-required="false" model="job" perm-can-update="slab_schedule_notes" errors="item._errors"
                   catch-server-errors="slab_schedule_notes" placeholder="Description"
                   ng-disabled="viewOnly('slab_schedule_notes')"></textarea>
         <div ng-messages="form.slab_schedule_notes.$error" role="alert" ng-show="showOnError(form, 'slab_schedule_notes')">

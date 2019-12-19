@@ -1,3 +1,11 @@
+#
+# docker-compose.yml
+# Robert Howe <rc@rchowe.com>
+#
+# This is the **production** docker-compose file, which does not include a
+# bundled database and will force the app to use the production settings.
+#
+
 version: '3'
 
 services:
@@ -6,16 +14,17 @@ services:
       build: .
       volumes:
         - .:/opt/services/cormack/src
-        - static_volume:/opt/services/cormack/src/static
-        - media_volume:/opt/services/cormack/src/media
-        - ssl_certificate_volume:/opt/services/cormack/src/config/ssl
+        - static_volume:/opt/services/cormack/src/static-collect
+        - /var/local/cormack/app:/opt/services/cormack/src/media
       environment:
         - DJANGO_SETTINGS_MODULE=config.settings.production
+        - CORMACK_DEV_MODE=True
       networks:
         - nginx_network
-        - db_network
-      depends_on:
-        - db
+      ports:
+        - 8081:8002
+      extra_hosts:
+        - "db:10.19.96.4"
 
     nginx:
       restart: always
@@ -25,34 +34,31 @@ services:
         - 443:443
       volumes:
         - ./config/nginx/conf.d:/etc/nginx/conf.d
-        - static_volume:/opt/services/cormack/src/static
-        - media_volume:/opt/services/cormack/src/media
-        - ssl_certificate_volume:/opt/services/cormack/src/config/ssl
+        - static_volume:/opt/services/cormack/src/static-collect
+        - /var/local/cormack/app:/opt/services/cormack/src/media
+        - ./config/ssl:/etc/letsencrypt
+        - certbot_volume:/var/www/certbot
       depends_on:
         - cormackapp
+        - certbot
       networks:
         - nginx_network
+      command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    
+    certbot:
+      image: certbot/certbot
+      volumes: 
+        - ./config/ssl:/etc/letsencrypt
+        - certbot_volume:/var/www/certbot
+      entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
-    db:
-      restart: always
-      image: postgres:10
-      volumes:
-         - db_volume:/var/lib/postgresql/data
-      environment:
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
-        - POSTGRES_DB=cormack_jms
-      networks:
-        - db_network
 
 networks:
   nginx_network:
     driver: bridge
-  db_network:
-    driver: bridge
 
 volumes:
-  db_volume:
   static_volume:
   media_volume:
   ssl_certificate_volume:
+  certbot_volume:

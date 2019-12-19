@@ -326,18 +326,20 @@ function run($state, $rootScope, $localStorage, authService, dataCacheService, e
         };
         roleService.updatePermissions(permissions);
 
-        if (user.role.administrator) {    // ignore other roles
+        if (user.role && user.role.administrator) {    // ignore other roles
             access = roleService.getPermission('administrator');
         // TODO: Merge roles and permissions if user has two or more roles
-        } else if (user.role.subcontractor) {
+        } else if (user.role && user.role.subcontractor) {
             access = roleService.getPermission('subbie');
-        } else if (user.role.supervisor) {
+        } else if (user.role && user.role.supervisor) {
             access = roleService.getPermission('supervisor');
-        } else if (user.role.client_manager) {
+        } else if (user.role && user.role.client_manager) {
             access = roleService.getPermission('client_manager');
-        } else if (user.role.employee) {
+        } else if (user.role && user.role.employee) {
             access = roleService.getPermission('employee');
         } else {
+            if (!user.role)
+                console.warn("Unable to access user rules. Permissions will be limited.");
             access = roleService.getPermission('default');
         }
         roleService.updateAccessSettings(access);

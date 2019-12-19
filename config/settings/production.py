@@ -9,7 +9,6 @@
 from .base import *
 # from custom_storages import MediaStorage
 
-
 ALLOWED_HOSTS = ['*', 'cormack.ocom.com.au']
 
 # Change secret key if you want it different in production
@@ -31,3 +30,14 @@ EMAIL_PORT = 587
 VERBOSE_OCOM_TEST_CLASSES = 0
 # Set DEBUG as False only when static files are being served thru a web server (apache / nginx)
 DEBUG = False
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'cormack_jms',
+        'USER': 'postgres',
+        'PASSWORD': 'RedSox1!',
+        'HOST': '139.180.164.188',
+        'PORT': '5432'
+    }
+}

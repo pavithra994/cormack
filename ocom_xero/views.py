@@ -20,6 +20,7 @@ from django.core.cache import cache
 
 from query.filter.query_filter import QueryFilter
 
+from django.views.generic import TemplateView
 
 class ListContacts(APIView):
     """

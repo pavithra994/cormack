@@ -20,11 +20,26 @@ import datetime
 import os
 import raven
 
+# Xero Accounting OAuth 2.0 Client ID
+XERO_OAUTH2_CLIENT_ID = "E71FA5F8AC824ED5936E2640D93BB279"
+
+# Xero Accounting OAuth 2.0 Client ID
+XERO_OAUTH2_CLIENT_SECRET = "f5GGcGQUmqFS6xeJmU6BX_LI1Z_8q1S047aeQ2MHVYKNQe8h"
+
+# Xero Accounting OAuth 2.0 Callback URL
+# NOTE: Don't change this without changing the router as well.
+XERO_OAUTH2_REDIRECT_URI = "https://jms-app.cormackgroup.com.au/api/signin-redirect"
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'w&2!6t$oz*j)16id^3ka1o*!hw5m#88mp_44*rkrn9#_#pdq(u'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# Set dev mode if the environment variable CORMACK_DEV_MODE is set.
+devmode = os.environ.get("CORMACK_DEV_MODE")
+if devmode is not None and (devmode.lower() == "true" or devmode.lower() == "1"):
+    DEV_MODE = True
 
 ROOT_URLCONF = 'config.urls'
 
@@ -69,7 +84,7 @@ RAVEN_CONFIG = {
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s '

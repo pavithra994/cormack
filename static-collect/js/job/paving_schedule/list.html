@@ -51,7 +51,7 @@
                             {{ item.purchase_order_number }}
                         </span>
                     </td>
-                    <td >{{ item.call_up_date | properDate : "ddd DD MMM"}}</td>
+                    <td >{{ item.call_up_date | date:"dd/MM/yy"  }}</td>
                     <td >{{ item.address }}, {{item.suburb}}</td>
                     <td><radio1-btn item="item" field="'approved_date'" disabled="!accessible('job', 'job.paving_list', 'update', 'approved_date')" on-change="patchItem(item, 'approved_date')"></radio1-btn>
                         <steps item="item" steps="stepsConfig" on-change="patchItem(item, key)" disabled="!accessible('job', 'job.paving_list', 'update', 'steps')"></steps></td>

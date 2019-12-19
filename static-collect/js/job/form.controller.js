@@ -315,13 +315,15 @@
                 return false;
             }
         };
-        $scope.isDepotType = function (depotType) {
-            if ($scope.depotTypes_by_code && angular.isDefined($scope.depotTypes_by_code[depotType])) {
-                return $scope.depotTypes_by_code[depotType].id === $scope.item.depot_type;
-            } else {
-                return false;
-            }
-        };
+        
+        // $scope.isDepotType = function (depotType) {
+        //     console.log(' isDepotType ');
+        //     if ($scope.depotTypes_by_code && angular.isDefined($scope.depotTypes_by_code[depotType])) {
+        //         return $scope.depotTypes_by_code[depotType].id === $scope.item.depot_type;
+        //     } else {
+        //         return false;
+        //     }
+        // };
         
 
         $scope.getTotal = function (item) {

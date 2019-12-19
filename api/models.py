@@ -702,4 +702,11 @@ class JobSupply(models.Model):
     booking_number = models.CharField(verbose_name="Booking Number", null=True, blank=True, default=None, editable=True,
                                       help_text="", unique=False, db_index=False, max_length=255, )
 
+class XeroOAuth2Information (models.Model):
+    """
+    A class for storing the OAuth 2.0 access token and refresh token received from the sign-in with Xero.
+    """
 
+    # Columns
+    access_token = models.TextField(null=False)
+    refresh_token = models.TextField()

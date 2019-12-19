@@ -15,6 +15,7 @@ from api.resources.code_supplier_type import CodeSupplierTypeViewSet
 from api.resources.code_supplier import CodeSupplierViewSet
 from api.resources.job_supply import JobSupplyViewSet
 
+from django.views.generic.base import RedirectView
 
 router = routers.DefaultRouter()
 router.register('job', viewsets.JobViewSet)
@@ -64,4 +65,8 @@ urlpatterns += [
 
     url(r'^download_invoice/(?P<id>[0-9]+)/$', views.DownloadInvoice.as_view()),
     url(r'^download_purchase_order/(?P<id>[0-9]+)/$', views.DownloadPurchaseOrder.as_view()),
+
+    # OAuth 2.0 support.
+    url(r'^oauth2$', RedirectView.as_view(url="/", permanent=False)),
+    url(r'^signin-redirect$', views.XeroOAuth2CallbackView.as_view())
 ]
