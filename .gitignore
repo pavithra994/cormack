@@ -20,3 +20,4 @@ config/settings/__pycache__/
 static/bower_components/angu-fixed-header-table/
 static/bower_components/
 .env2
+env/

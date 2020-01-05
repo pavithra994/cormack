@@ -18,13 +18,13 @@ services:
         - /var/local/cormack/app:/opt/services/cormack/src/media
       environment:
         - DJANGO_SETTINGS_MODULE=config.settings.production
-        - CORMACK_DEV_MODE=True
+        - CORMACK_DEV_MODE={CORMACK_DEV_MODE}
       networks:
         - nginx_network
       ports:
         - 8081:8002
       extra_hosts:
-        - "db:10.19.96.4"
+        - "db:10.19.112.4"
 
     nginx:
       restart: always

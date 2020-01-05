@@ -52,22 +52,26 @@ class ListItems(APIView):
         """
         Return a list of all users.
         """
-        xero_items = cache.get("xero_items")
+        try:
+            xero_items = cache.get("xero_items")
 
-        if request.query_params.get("force", "false") == "true":
-            xero_items = None
+            if request.query_params.get("force", "false") == "true":
+                xero_items = None
 
-        if xero_items is None:
-            xero = connectToXero()
+            if xero_items is None:
+                xero = connectToXero()
 
-            xero_items = xero.items.all()
+                xero_items = xero.items.all()
 
-            for item in xero_items:
-                item['codeName'] = "%s %s" % (item['Code'], item.get('Name', item.get("Description", "")))
+                for item in xero_items:
+                    item['codeName'] = "%s %s" % (item['Code'], item.get('Name', item.get("Description", "")))
 
-            cache.set("xero_items", xero_items, 60) # cache for 1 minute
+                cache.set("xero_items", xero_items, 60) # cache for 1 minute
 
-        return Response(xero_items)
+            return Response(xero_items)
+        except Exception as e:
+            print("An exception occurred while retreiving data from Xero:")
+            print(e)
 
 class XeroEntityViewSet(OcomUserRoleMixin, viewsets.mixins.CreateModelMixin,
                        viewsets.mixins.ListModelMixin,

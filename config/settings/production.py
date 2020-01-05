@@ -37,7 +37,7 @@ DATABASES = {
         'NAME': 'cormack_jms',
         'USER': 'postgres',
         'PASSWORD': 'RedSox1!',
-        'HOST': '139.180.164.188',
+        'HOST': 'db',
         'PORT': '5432'
     }
 }

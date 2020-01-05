@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(jms-app.cormackgroup.com.au)
+domains=(jms.cormackgroup.com.au)
 rsa_key_size=4096
 data_path="./config/ssl"
 email="cormack@hordernit.com.au" # Adding a valid address is strongly recommended
