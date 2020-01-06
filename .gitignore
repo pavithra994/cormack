@@ -27,4 +27,4 @@ config/ssl/csr
 config/ssl/live
 config/ssl/keys
 config/ssl/renewal
-
+logs/

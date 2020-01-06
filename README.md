@@ -1,5 +1,6 @@
 # Cormack Concreting Job Management System 
 
+Simpler instructions to set up this app for development using Vagrant are also available: see `README.vagrant.md`.
 
 ## Admin Access
 In order to gain access to the Administrator dashboard (in the case of vagrant/local dev setup, it is usually in 
@@ -179,4 +180,3 @@ the maximum request size, edit `config/nginx/conf.d/local.conf` and change the f
 ```
 client_max_body_size 25M;
 ```
-
