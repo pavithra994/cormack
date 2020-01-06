@@ -21,3 +21,10 @@ static/bower_components/angu-fixed-header-table/
 static/bower_components/
 .env2
 env/
+*.pyc
+config/ssl/archive
+config/ssl/csr
+config/ssl/live
+config/ssl/keys
+config/ssl/renewal
+

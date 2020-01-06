@@ -170,3 +170,13 @@ Then save new dependencies to your bower.json with
     ````
     python manage.py test tests.unit
     ````
+
+## Maximum Request Size
+
+The maximum request size will affect, among other things, the largest file that can be uploaded to the app. To change
+the maximum request size, edit `config/nginx/conf.d/local.conf` and change the following line (2 places):
+
+```
+client_max_body_size 25M;
+```
+
