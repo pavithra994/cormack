@@ -8,7 +8,7 @@
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from rest_framework.authentication import SessionAuthentication
@@ -118,13 +118,27 @@ class SendEmailAPI(APIView):
     authentication_classes = [JSONWebTokenParamAuthentication,]
 
     def post(self, request, *args, **kwargs):
+
         data = request.data
         message = data.get('body', '')
         links = data.get('links', [])
 
+
         toAddresses = [x.strip() for x in data['to'].split(',')]  # handles if there is a , to send multiples
+
+        print("Sending email to " + ", ".join(to for to in toAddresses))
+
+        html_message = message
+        if data['from']:
+            html_message += "<br/><br/>This message was sent to you from the Cormack JMS app on behalf of " + data['from'] + "."
+            message += "\n\nThis message was sent to you from the Cormack JMS app on behalf of " + data["from"] + "."
+        else:
+            html_message += "<br/><br/>This message was sent to you from the Cormack JMS app."
+            message += "\n\nThis message was sent to you from the Cormack JMS app."
+
         if len(links) > 0:
-            html_message = message + '<br /><br />Links:'
+
+            html_message += '<br /><br />Links:'
             message += '\n\nLinks:'
 
             for link_file in links:
@@ -138,8 +152,20 @@ class SendEmailAPI(APIView):
             message += '\n-- Total {} files --'.format(len(links))
         else:
             html_message = message
-
-        send_mail(data['subject'], message, data['from'], toAddresses, html_message=html_message)
+        
+        # Removed due to an urgent need to get email working on 9 Jan 2020.
+        # Office 365 started rejecting emails not from the user you are logged in as.
+        #
+        #send_mail(data['subject'], message, data['from'], toAddresses, fail_silently=False, html_message=html_message)
+        email = EmailMultiAlternatives(
+            subject=data['subject'],
+            body=message,
+            from_email='Cormack JMS <jms@cormackgroup.com.au>', # TODO: Don't hard-code this.
+            to=toAddresses,
+            reply_to=data['from']
+        )
+        email.attach_alternative(html_message, "text/html")
+        email.send()
 
         return response.Response("OK")
 
