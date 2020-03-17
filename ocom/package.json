@@ -29,6 +29,7 @@
     "angular-ui-bootstrap": "^2.5.6",
     "angular-ui-date": "^1.0.1",
     "angular-ui-sortable": "^0.18.0",
+    "angular-ui-sortable-multiselection": "^0.7.0",
     "angular-xeditable": "^0.8.1",
     "async": "^2.1.4",
     "bootstrap": "3",

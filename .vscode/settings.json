@@ -1,4 +1,20 @@
 {
     "python.pythonPath": "/anaconda3/bin/python",
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "search.exclude":{
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "static-collect": true,
+    },
+    "files.exclude":{
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "static-collect": true,
+        "**/node_modules": true,
+        "**/bower_components": true,
+    }
 }

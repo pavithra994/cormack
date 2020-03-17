@@ -27,6 +27,7 @@
     "angular-ui-date": "^1.0.1",
     "angular-ui-router": "0.3.2",
     "angular-ui-sortable": "^0.18.0",
+    "angular-ui-sortable-multiselection": "^0.7.0",
     "async": "^2.1.4",
     "bootstrap": "^3.3.0",
     "dexie": "1.5.1",

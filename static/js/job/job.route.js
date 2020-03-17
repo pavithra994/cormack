@@ -42,8 +42,8 @@
                             $stateParams);
                     }
                 ],
-                data:{
-                    store_state:true
+                data: {
+                    store_state: true
                 }
             })
             .state('job.paving_list', {
@@ -64,8 +64,8 @@
                             $stateParams);
                     }
                 ],
-                data:{
-                    store_state:true
+                data: {
+                    store_state: true
                 }
             })
             .state('job.enumber_list', {
@@ -86,8 +86,8 @@
                             $stateParams);
                     }
                 ],
-                data:{
-                    store_state:true
+                data: {
+                    store_state: true
                 }
             })
             .state('job.create', {
@@ -110,6 +110,11 @@
                             $stateParams);
                     }
                 ]
+            })
+            .state("job.pour-schedule-test", {
+                url: "/pour-schedule-test",
+                templateUrl: "js/job/pour_schedule_test/pour_schedule_test.html",
+                controller: "JobPourScheduleTestController"
             })
     }
 })();

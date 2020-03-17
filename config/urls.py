@@ -12,6 +12,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic import RedirectView
+from django.views.static import serve as static_serve
 from api import views
 from api import viewsets
 #from api.admin import event_admin_site
@@ -112,4 +113,9 @@ urlpatterns = [
                   url(r'^notification/(?P<url_id>.*)$', views.redirect_notification, name='redirectnotification'),
                   # url(r'^reports/(?P<path>.*)$', ReportsProxyView.as_view()),
                   # url(r'^report_static/(?P<path>.*)$', ReportsStaticProxyView.as_view()),
+
+                  # URL for new UIs
+                  url(r"^ui/$", static_serve, kwargs={ "path": "index.html", "document_root": settings.BASE_DIR + "/ui" }),
+                  url(r"^ui/(?P<path>.+(js|map))$", static_serve, kwargs={ "document_root": settings.BASE_DIR + "/ui" }),
+                  url(r"^ui/.+(?:(?!js|map))$", static_serve, kwargs={ "path": "index.html", "document_root": settings.BASE_DIR + "/ui" })
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
