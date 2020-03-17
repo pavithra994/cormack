@@ -29,7 +29,8 @@
                     ng-repeat="menu in navMenu"
                     ng-class="{active: $state.current.name == menu.stateName}">
 
-                    <a href="#" ui-sref="{{ menu.link }}">{{ menu.name }}</a>
+                    <a href="#" ui-sref="{{ menu.link }}" ng-if="menu.link != 'job.pour-schedule'">{{ menu.name }}</a>
+                    <a href="/ui/slab-schedule" ng-if="menu.link == 'job.pour-schedule'">Slab Schedule</a>
                 </li>
                 <li class="divider-vertical"></li>
             </ul>

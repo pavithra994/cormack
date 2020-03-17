@@ -52,6 +52,7 @@ For Javascript
     <script src="node_modules/ng-file-upload/dist/ng-file-upload-all.min.js"></script>
     <script src="node_modules/angular-ui-date/dist/date.js"></script>
     <script src="node_modules/angular-ui-sortable/dist/sortable.min.js"></script>
+    <script src="node_modules/angular-ui-sortable-multiselection/dist/sortable.min.js"></script>
     <script src='node_modules/textangular/dist/textAngular-rangy.min.js'></script>
     <script src='node_modules/textangular/dist/textAngular-sanitize.min.js'></script>
     <script src='node_modules/textangular/dist/textAngular.min.js'></script>

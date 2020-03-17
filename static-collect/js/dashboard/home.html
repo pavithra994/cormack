@@ -24,8 +24,14 @@
                     <span><i class="glyphicon glyphicon-briefcase"></i></span>
                     Manage Jobs
                 </a>
+                <!--
                 <a ui-sref="job.pour-schedule({limit: 20, offset: 0, sort: name, order: 'asc', filter: 'all'})"
                    class="list-group-item" ng-if="accessible('job', 'job.pour-schedule')">
+                    <span><i class="glyphicon glyphicon-tasks"></i></span>
+                    Slab Schedule
+                </a>
+                -->
+                <a href="/ui/slab-schedule" class="list-group-item" ng-if="accessible('job', 'job.pour-schedule')">
                     <span><i class="glyphicon glyphicon-tasks"></i></span>
                     Slab Schedule
                 </a>

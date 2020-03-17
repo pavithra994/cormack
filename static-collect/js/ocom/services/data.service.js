@@ -48,7 +48,7 @@
             normalizedDate: normalizedDate,
 
             /* Migrate to using FormStateService instead */
-            setLoaded:formStateService.setLoaded,
+            setLoaded: formStateService.setLoaded,
             isLoaded: formStateService.isLoaded,
             formState: formStateService.getFormState,
             setFormState: formStateService.setFormState,
@@ -59,8 +59,8 @@
          * Set General Api Base URL
          * @param {string} url: the general url address to set
          */
-        function setGeneralApiBaseUrl (url) {
-            console.error ("Please don't use setGeneralApiBaseUrl. Please use new getDataApi instead");
+        function setGeneralApiBaseUrl(url) {
+            console.error("Please don't use setGeneralApiBaseUrl. Please use new getDataApi instead");
 
             _generalApiBaseUrl = url;
         }
@@ -73,7 +73,7 @@
          * @param {string} value the value of the property to compare
          * @returns {Array} the filtered data
          */
-        function filterPropertyEquals (data, property, value) {
+        function filterPropertyEquals(data, property, value) {
             var filteredData = [];
 
             if (data.constructor === Array) {
@@ -98,7 +98,7 @@
          * @param {string} value the value of the sub-property to compare
          * @returns {Array} the filtered data
          */
-        function filterSubPropertyEquals (data, property, sub, value) {
+        function filterSubPropertyEquals(data, property, sub, value) {
             var filteredData = [];
 
             if (data.constructor === Array) {
@@ -120,7 +120,7 @@
          * @param {Array} data an Array containing the data to filter
          * @returns {Array} the filtered data
          */
-        function filterActiveDate (data) {
+        function filterActiveDate(data) {
             if (data.constructor === Array) {
                 var filteredData = [];
 
@@ -151,7 +151,7 @@
          * @param {object} params general parameters
          * @returns {Array}
          */
-        function applyFilters (data, params) {
+        function applyFilters(data, params) {
             var filteredData = angular.copy(data);
             var filters;
 
@@ -189,7 +189,7 @@
             return filteredData;
         }
 
-        function getApi (model) {
+        function getApi(model) {
             // Note: data is ideally not filtered out as we rely Angular/JS on that regard
 
             console.log("This is the OLD API - please convert to the getDataApi");
@@ -226,7 +226,7 @@
          * Set scope reference
          * @param {object} controllerScope the $scope reference from the controller accessing widgetService
          */
-        function setScope (controllerScope) {
+        function setScope(controllerScope) {
             console.log("Scope: ", controllerScope);
             _scope = controllerScope;
             _scope.skipConfirm = false;
@@ -236,7 +236,7 @@
          * Set Form reference
          * @param {object} sourceForm the Form object to use
          */
-        function setForm (sourceForm) {
+        function setForm(sourceForm) {
             _form = sourceForm;
         }
 
@@ -244,7 +244,7 @@
          * Set Current API reference
          * @param {object} sourceApi the API object to use
          */
-        function setApi (sourceApi) {
+        function setApi(sourceApi) {
             _api = sourceApi;
         }
 
@@ -252,7 +252,7 @@
          * Callback function for saving error message to scope
          * @param {object} response the API response
          */
-        function saveError (response) {
+        function saveError(response) {
             console.log("ERROR", response);
             _scope.item['_errors'] = response.data;
             formStateService.setFormState({
@@ -264,7 +264,7 @@
             alerts.error("Something went wrong. Please try again.", true);
         }
 
-        function deleteSuccess (data, message, closeForm) {
+        function deleteSuccess(data, message, closeForm) {
             if (!angular.isDefined(message)) {
                 message = "Item was deleted.";
             }
@@ -283,7 +283,7 @@
             }
         }
 
-        function restoreSuccess (data, message, closeForm) {
+        function restoreSuccess(data, message, closeForm) {
             if (!angular.isDefined(message)) {
                 message = "Item was restored.";
             }
@@ -303,14 +303,14 @@
             }
         }
 
-        function createItem (item, validateCallback, successCallback, customSuccessMessage) {
-        /**
-         * Perform create operation on an item using the set API
-         * @param {object} item the item to save (must conform to the API's format)
-         * @param {function} validateCallback the callback function to run prior to saving the item
-         * @param {function} successCallback the callback function to run when save is successful
-         * @param {string} customSuccessMessage Display a custom success message alert or set to false to suppress it
-         */
+        function createItem(item, validateCallback, successCallback, customSuccessMessage) {
+            /**
+             * Perform create operation on an item using the set API
+             * @param {object} item the item to save (must conform to the API's format)
+             * @param {function} validateCallback the callback function to run prior to saving the item
+             * @param {function} successCallback the callback function to run when save is successful
+             * @param {string} customSuccessMessage Display a custom success message alert or set to false to suppress it
+             */
 
             if (_api) {
                 formStateService.setFormState({
@@ -363,7 +363,7 @@
          * @param {function} successCallback the callback function to run when save is successful
          * @param {string} customSuccessMessage Display a custom success message alert or set to false to suppress it
          */
-        function saveItem (item, validateCallback, successCallback, customSuccessMessage) {
+        function saveItem(item, validateCallback, successCallback, customSuccessMessage) {
             if (_api) {
                 formStateService.setFormState({
                     saving: true,
@@ -374,7 +374,7 @@
                 alerts.clearMessages();
                 console.log("Saving item...", item);
                 if (typeof validateCallback === 'function' && angular.isDefined(_api) && validateCallback(item)) {
-                    _api.update({id: $state.params.id}, new _api(item), function (response) {
+                    _api.update({ id: $state.params.id }, new _api(item), function (response) {
                         formStateService.setFormState({
                             saving: false,
                             gotError: false,
@@ -422,28 +422,28 @@
                 confirmButtonText: "Yes, delete it!",
                 closeOnConfirm: true
             },
-            function (isConfirm) {
-                if (isConfirm) {
-                    formStateService.setFormState({
-                        deleting: true,
-                        gotError: false,
-                        invalid: false,
-                        deleteOk: false
-                    });
-                    _scope.skipConfirm = true;
-                    var obj = new _api(item);
-                     //noinspection JSUnresolvedFunction
-                    obj.$delete(function (data) {
-                         deleteSuccess(data, successMessage);
-                    }, function (err) {
-                         console.log("Delete ERROR", err);
-                         formStateService.setFormState({
-                             deleting: false,
-                             gotError: true
-                         });
-                    });
-                }
-            });
+                function (isConfirm) {
+                    if (isConfirm) {
+                        formStateService.setFormState({
+                            deleting: true,
+                            gotError: false,
+                            invalid: false,
+                            deleteOk: false
+                        });
+                        _scope.skipConfirm = true;
+                        var obj = new _api(item);
+                        //noinspection JSUnresolvedFunction
+                        obj.$delete(function (data) {
+                            deleteSuccess(data, successMessage);
+                        }, function (err) {
+                            console.log("Delete ERROR", err);
+                            formStateService.setFormState({
+                                deleting: false,
+                                gotError: true
+                            });
+                        });
+                    }
+                });
         }
 
         /**
@@ -462,27 +462,27 @@
                 confirmButtonText: "Yes, restore it!",
                 closeOnConfirm: true
             },
-            function (isConfirm) {
-                if (isConfirm) {
-                    formStateService.setFormState({
-                        deleting: true,
-                        gotError: false,
-                        invalid: false,
-                        deleteOk: false
-                    });
-                    _scope.skipConfirm = true;
-                    item.active_end_date = null;
-                    _api.update({id: $state.params.id}, new _api(item), function (data) {
-                        restoreSuccess(data, restoreSuccessMessage);
-                    }, function (err) {
-                        console.log("Restore ERROR", err);
+                function (isConfirm) {
+                    if (isConfirm) {
                         formStateService.setFormState({
-                            deleting: false,
-                            gotError: true
+                            deleting: true,
+                            gotError: false,
+                            invalid: false,
+                            deleteOk: false
                         });
-                    });
-                }
-            });
+                        _scope.skipConfirm = true;
+                        item.active_end_date = null;
+                        _api.update({ id: $state.params.id }, new _api(item), function (data) {
+                            restoreSuccess(data, restoreSuccessMessage);
+                        }, function (err) {
+                            console.log("Restore ERROR", err);
+                            formStateService.setFormState({
+                                deleting: false,
+                                gotError: true
+                            });
+                        });
+                    }
+                });
         }
 
         /**
@@ -492,7 +492,7 @@
          * @param {boolean} created if true, signifies that the item was created
          * @param {string} url the base url of the form to use if forward is true (optional)
          */
-        function confirmSave (item, forward, created, url) {
+        function confirmSave(item, forward, created, url) {
             var _url = angular.isDefined(url) ? url : 'edit';
 
             if (typeof _scope.successSaveItem === 'function') {
@@ -500,14 +500,14 @@
             }
             _form.$setPristine();
             if (forward && angular.isDefined(item.id)) {
-                $state.go(getModelUrl(_url), {id: item.id, skip: true}, {reload: true});
+                $state.go(getModelUrl(_url), { id: item.id, skip: true }, { reload: true });
             }
         }
 
         /**
          * Return the model url from the given scope and base
          */
-        function getModelUrl (baseUrl) {
+        function getModelUrl(baseUrl) {
             var _url = angular.isDefined(baseUrl) ? baseUrl : 'list';
 
             return _scope.modelName + '.' + _url;
@@ -516,7 +516,7 @@
         /**
          * Close current form and proceed to the parent view
          */
-        function close (url) {
+        function close(url) {
             var returnUrl;
 
             if (_scope.closeRedirect) {
@@ -535,7 +535,7 @@
             }
 
             if (returnUrl) {
-                var params = _scope.nextViewParams || {limit: 10, offset: 0};
+                var params = _scope.nextViewParams || { limit: 10, offset: 0 };
 
                 $state.go(returnUrl, params);
             } else {
@@ -549,7 +549,7 @@
          * @param {string} dateString the date string to normalize / convert
          * @returns {string} the normalized string
          */
-        function normalizedDate (dateString) {
+        function normalizedDate(dateString) {
             var theDate = (dateString) ? new Date(dateString) : new Date();
 
             return moment(theDate).format(_normalizedDateFormat)
