@@ -13,6 +13,10 @@
 <!-- Job Code -->
 <td (click)="setUpdate('code')">
     <a href="/static/dev_index.html?v=0.94.0#/job/edit/{{job.id}}">{{job.code}}</a>
+    <div *ngIf="showLabel" style="font-size: 85%;">
+        <label *ngIf="job.depot_type==1" class="label label-default" style="background: #47F;">MELBOURNE</label>
+        <label *ngIf="job.depot_type==2" class="label label-default" style="background: #4C4;">TORQUAY</label>
+    </div>
 </td>
 
 <!-- Client (Builder) -->
@@ -161,7 +165,7 @@
 
 <!-- Pier Concrete -->
 <td (click)="setUpdate('pier_concrete')" [ngSwitch]="update['pier_concrete']">
-    <div *ngSwitchCase="true">
+    <div *ngSwitchCase="true" style="position: relative">
         <input id="edit_pier_concrete" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
             [(ngModel)]="job.pier_concrete" (change)="patch('pier_concrete')"
             appDatetimepicker />
@@ -232,10 +236,11 @@
 <!-- Base Date -->
 <td (click)="setUpdate('base_date')" [ngSwitch]="update['base_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <select class="form-control input-min-width" [(ngModel)]="job.depot_type" (change)="patch('depot_type', true)" style="margin-bottom: 0.5em;">
+        <select class="form-control input-min-width" [(ngModel)]="job.base_inspector" (change)="patch('base_inspector', true)" style="margin-bottom: 0.5em;">
             <option [ngValue]="">-- Select Base --</option>
-            <option [ngValue]="1">Melbourne</option>
-            <option [ngValue]="2">Torquay</option>
+            <ng-template ngFor let-item [ngForOf]="getBaseInspectors()">
+                <option [ngValue]="item[0]">{{ item[1].name }}</option>
+            </ng-template>
         </select>
 
         <input id="edit_base_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
@@ -245,10 +250,7 @@
         <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.base_date_notes" (change)="patch('base_date')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
-        <div style="font-size: 85%;">
-            <label *ngIf="job.depot_type==1" class="label label-default" style="background: #47F;">MELBOURNE</label>
-            <label *ngIf="job.depot_type==2" class="label label-default" style="background: #4C4;">TORQUAY</label>
-        </div>
+        <div>{{subcontractors[job.base_inspector]?.name}}</div>
         <div>{{job.base_date | date: 'EEE, d LLL'}}</div>
         <div class="date-notes">{{job.base_date_notes}}</div>
     </div>

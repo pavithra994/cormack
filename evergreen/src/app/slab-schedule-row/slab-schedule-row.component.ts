@@ -126,6 +126,20 @@ export class SlabScheduleRowComponent implements OnInit {
     }
 
     /**
+     * Get a list of base inspectors sorted by their names.
+     * o.id as o.name for o in subcontractors | activeOnly:item.base_inspector | filter:{type:{code:'Excavator'}} | orderBy:'o.name'
+     */
+    getBaseInspectors() : [string, any][] {
+        let keyvalues = Object.entries(this.subcontractors)
+            .filter(([key, value]) => value["type"]["code"] == "Excavator")
+        keyvalues.sort((a : any, b : any) => 
+            (a[1].name < b[1].name) ? -1 :
+            (a[1].name > b[1].name) ? 1 :
+            0);
+        return keyvalues;
+    }
+
+    /**
      * Required for comparing IDs in select tags, because otherwise Angular is particular about exact matching
      * references.
      * @param n1 
