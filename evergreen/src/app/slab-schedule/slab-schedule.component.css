@@ -1,5 +1,16 @@
-.jobs-table-header
-{
-    background: linear-gradient(to bottom, #ffffff, #eeeeee);
-    cursor: pointer;
+.jobs-table-header th {
+  background: linear-gradient(to bottom, #ffffff, #eeeeee);
+  cursor: pointer;
+}
+
+.fixed-header {
+    position: relative;
+}
+
+.fixed-header thead tr th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 51px;
+  z-index: 100;
+  vertical-align: top;
 }

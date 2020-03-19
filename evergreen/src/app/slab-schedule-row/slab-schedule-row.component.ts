@@ -74,14 +74,25 @@ export class SlabScheduleRowComponent implements OnInit {
     /**
      * Update this record in the database.
      */
-    patch(field : string) {
+    patch(field : string, force_reload : boolean = false) {
+        console.log("PATCH column " + field);
         this.dataService.patchJob(this.job).subscribe(
             (result) => {
                 console.log("PATCH result", result)
-                // TODO: Update sort order.
-                this.reload.emit(field);
+                this.reload.emit(force_reload ? "force_reload" : field);
             },
             (error) => console.log("PATCH error", error));
+    }
+
+    getBuildingInspectors() : [string, any][] {
+        let inspectors = Object.entries(this.suppliers)
+            .filter(([key, value]) => value["supplier_type"]["code"] == "Building Inspector")
+            .filter(([key, value]) => new Date(value["active_start_date"]) < new Date());
+        inspectors.sort((a : any, b : any) => 
+            (a[1]["description"] < b[1]["description"]) ? -1 :
+            (a[1]["description"] > b[1]["description"]) ? 1 :
+            0);
+        return inspectors;
     }
 
     getPumpInspectors() {
@@ -100,6 +111,18 @@ export class SlabScheduleRowComponent implements OnInit {
                 map[key] = value;
                 return map;
             }, {});
+    }
+
+    /**
+     * Get a list of supervisors sorted by their name.
+     */
+    getSortedSupervisors() : [string, any][] {
+        let keyvalues = Object.entries(this.supervisors);
+        keyvalues.sort((a : any, b : any) => 
+            (a[1].name < b[1].name) ? -1 :
+            (a[1].name > b[1].name) ? 1 :
+            0);
+        return keyvalues;
     }
 
     /**

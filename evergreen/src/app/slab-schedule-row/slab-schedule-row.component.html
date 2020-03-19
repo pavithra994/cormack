@@ -1,8 +1,8 @@
 <!-- Pour Date -->
 <td (click)="setUpdate('pour_date')" [ngSwitch]="update['pour_date']">
-    <div *ngSwitchCase="true">
-        <input id="edit_pour_date" type="text" class="form-control input-sm" [(ngModel)]="job.pour_date" (change)="patch('pour_date')" style="margin-bottom: 0.5em;" />
-        <textarea class="form-control input-sm" [(ngModel)]="job.pour_date_notes" (change)="patch('pour_date_notes')" placeholder="Description"></textarea>
+    <div *ngSwitchCase="true" style="position: relative;">
+        <input id="edit_pour_date" type="text" class="form-control input-sm input-min-width" [(ngModel)]="job.pour_date" (change)="patch('pour_date')" style="margin-bottom: 0.5em;" appDatetimepicker />
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.pour_date_notes" (change)="patch('pour_date_notes')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.pour_date | date: 'EEE, d LLL'}}</div>
@@ -13,16 +13,12 @@
 <!-- Job Code -->
 <td (click)="setUpdate('code')">
     <a href="/static/dev_index.html?v=0.94.0#/job/edit/{{job.id}}">{{job.code}}</a>
-    <div *ngIf="showLabel==true" style="font-size: 85%;">
-        <label *ngIf="job.depot_type==1" class="label label-default" style="background: #47F;">MELBOURNE</label>
-        <label *ngIf="job.depot_type==2" class="label label-default" style="background: #4C4;">TORQUAY</label>
-    </div>
 </td>
 
 <!-- Client (Builder) -->
 <td (click)="setUpdate('client')" [ngSwitch]="update['client']">
     <div *ngSwitchCase="true">
-        <select class="form-control" [(ngModel)]="job.client" [compareWith]="numberEquals" (change)="patch('client')">
+        <select class="form-control input-min-width" [(ngModel)]="job.client" [compareWith]="numberEquals" (change)="patch('client')">
             <option>-- Choose One --</option>
             <ng-template ngFor let-item [ngForOf]="builders | keyvalue">
                 <option [ngValue]="item.key">{{ item.value.name }}</option>
@@ -37,7 +33,7 @@
 <!-- Address -->
 <td (click)="setUpdate('address')" [ngSwitch]="update['address']">
     <div *ngSwitchCase="true">
-        <input id="edit_address" type="text" class="form-control input-sm" placeholder="Address" [(ngModel)]="job.address" (change)="patch('address')" />
+        <input id="edit_address" type="text" class="form-control input-sm input-min-width" placeholder="Address" [(ngModel)]="job.address" (change)="patch('address')" />
     </div>
     <div *ngSwitchDefault>
         <div>{{ job.address || "&ndash;" }}</div>
@@ -48,7 +44,7 @@
 <!-- Square Meters -->
 <td (click)="setUpdate('sqm')" [ngSwitch]="update['sqm']">
     <div *ngSwitchCase="true">
-        <input id="edit_sqm" type="number" class="form-control input-sm" placeholder="Sq. M" [(ngModel)]="job.sqm" (change)="patch('sqm')" />
+        <input id="edit_sqm" type="number" class="form-control input-sm input-min-width" placeholder="Sq. M" [(ngModel)]="job.sqm" (change)="patch('sqm')" />
     </div>
     <div *ngSwitchDefault>
         {{ job.sqm | number }}
@@ -58,10 +54,10 @@
 <!-- Supervisor -->
 <td (click)="setUpdate('supervisor')" [ngSwitch]="update['supervisor']">
     <div *ngSwitchCase="true">
-        <select class="form-control" [(ngModel)]="job.supervisor" [compareWith]="numberEquals" (change)="patch('supervisor')">
+        <select class="form-control input-min-width" [(ngModel)]="job.supervisor" [compareWith]="numberEquals" (change)="patch('supervisor')">
             <option>-- Choose One --</option>
-            <ng-template ngFor let-item [ngForOf]="supervisors | keyvalue">
-                <option [ngValue]="item.key">{{ item.value.name }}</option>
+            <ng-template ngFor let-item [ngForOf]="getSortedSupervisors()">
+                <option [ngValue]="item[0]">{{ item[1].name }}</option>
             </ng-template>
         </select>
     </div>
@@ -73,10 +69,10 @@
 <!-- Desired Pour Date -->
 <td (click)="setUpdate('wanted_pour_date')" [ngSwitch]="update['wanted_pour_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_wanted_pour_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.wanted_pour_date"
+        <input id="edit_wanted_pour_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.wanted_pour_date" (change)="patch('wanted_pour_date')"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.wanted_pour_date_notes" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.wanted_pour_date_notes" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.wanted_pour_date | date: 'EEE, d LLL'}}</div>
@@ -87,10 +83,10 @@
 <!-- Building Inspector Supplier -->
 <td (click)="setUpdate('building_inspector_supplier')" [ngSwitch]="update['building_inspector_supplier']">
     <div *ngSwitchCase="true">
-        <select class="form-control" [(ngModel)]="job.building_inspector_supplier" [compareWith]="numberEquals" (change)="patch('building_inspector_supplier')">
+        <select class="form-control input-min-width" [(ngModel)]="job.building_inspector_supplier" [compareWith]="numberEquals" (change)="patch('building_inspector_supplier')">
             <option>-- Choose One --</option>
-            <ng-template ngFor let-item [ngForOf]="suppliers | keyvalue">
-                <option [ngValue]="item.key">{{ item.value.description }}</option>
+            <ng-template ngFor let-item [ngForOf]="getBuildingInspectors()">
+                <option [ngValue]="item[0]">{{ item[1].description }}</option>
             </ng-template>
         </select>
     </div>
@@ -100,9 +96,9 @@
 </td>
 
 <!-- Piers -->
-<td (click)="setUpdate('piers')" [ngSwitch]="update['piers']" style="min-width: 70px;">
+<td (click)="setUpdate('piers')" [ngSwitch]="update['piers']" [ngClass]="{'cell-orange': job.piers}" style="min-width: 70px;">
     <div *ngSwitchCase="true">
-        <input id="edit_piers" type="number" class="form-control input-sm" placeholder="Piers" [(ngModel)]="job.piers" (change)="patch('piers')" />
+        <input id="edit_piers" type="number" class="form-control input-sm input-min-width" placeholder="Piers" [(ngModel)]="job.piers" (change)="patch('piers')" />
     </div>
     <div *ngSwitchDefault>
         {{ job.piers || "&ndash;" }}
@@ -112,10 +108,10 @@
 <!-- Piers Date -->
 <td (click)="setUpdate('piers_date')" [ngSwitch]="update['piers_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_piers_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.piers_date"
+        <input id="edit_piers_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.piers_date" (change)="patch('piers_date')"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.piers_date_notes" (change)="patch('piers_date')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.piers_date_notes" (change)="patch('piers_date')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.piers_date | date: 'EEE, d LLL'}}</div>
@@ -126,10 +122,10 @@
 <!-- Piers Inspection Date -->
 <td (click)="setUpdate('piers_inspection_date')" [ngSwitch]="update['piers_inspection_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_piers_inspection_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.piers_inspection_date"
+        <input id="edit_piers_inspection_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.piers_inspection_date" (change)="patch('piers_inspection_date')"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.piers_inspection_date_notes" (change)="patch('piers_inspection_date')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.piers_inspection_date_notes" (change)="patch('piers_inspection_date')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.piers_inspection_date | date: 'EEE, d LLL'}}</div>
@@ -140,8 +136,8 @@
 <!-- Piers Inspection Time -->
 <td (click)="setUpdate('piers_inspection_date')" [ngSwitch]="update['piers_inspection_date']">
     <div *ngSwitchCase="true">
-        <select class="form-control" [(ngModel)]="job.piers_inspection_time_of_day" [compareWith]="numberEquals" (change)="patch('piers_inspection_time_of_day')">
-            <option [ngValue]="0">-- Select an Option --</option>
+        <select class="form-control input-min-width" [(ngModel)]="job.piers_inspection_time_of_day" [compareWith]="numberEquals" (change)="patch('piers_inspection_time_of_day')">
+            <option [ngValue]="0">-- Select Time --</option>
             <option [ngValue]="1">Early AM</option>
             <option [ngValue]="2">Late AM</option>
             <option [ngValue]="3">Early PM</option>
@@ -149,6 +145,7 @@
         </select>
     </div>
     <div *ngSwitchDefault [ngSwitch]="job.piers_inspection_time_of_day">
+        <span *ngSwitchCase="0">-- Select Time --</span>
         <span *ngSwitchCase="1">Early AM</span>
         <span *ngSwitchCase="2">Late AM</span>
         <span *ngSwitchCase="3">Early PM</span>
@@ -165,10 +162,10 @@
 <!-- Pier Concrete -->
 <td (click)="setUpdate('pier_concrete')" [ngSwitch]="update['pier_concrete']">
     <div *ngSwitchCase="true">
-        <input id="edit_pier_concrete" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.pier_concrete"
+        <input id="edit_pier_concrete" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.pier_concrete" (change)="patch('pier_concrete')"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.pier_concrete_notes" (change)="patch('pier_concrete')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.pier_concrete_notes" (change)="patch('pier_concrete')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.pier_concrete | date: 'EEE, d LLL'}}</div>
@@ -179,10 +176,10 @@
 <!-- Rock Booked Date -->
 <td (click)="setUpdate('rock_booked_date')" [ngSwitch]="update['rock_booked_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_rock_booked_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.rock_booked_date"
+        <input id="edit_rock_booked_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.rock_booked_date" (change)="patch('rock_booked_date')"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.rock_booked_date_notes" (change)="patch('rock_booked_date')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.rock_booked_date_notes" (change)="patch('rock_booked_date')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.rock_booked_date | date: 'EEE, d LLL'}}</div>
@@ -193,10 +190,10 @@
 <!-- Part A Date -->
 <td (click)="setUpdate('part_a_date')" [ngSwitch]="update['part_a_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_part_a_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.part_a_date"
+        <input id="edit_part_a_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.part_a_date" (change)="patch('part_a_date')"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.part_a_date_notes" (change)="patch('part_a_date')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.part_a_date_notes" (change)="patch('part_a_date')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.part_a_date | date: 'EEE, d LLL'}}</div>
@@ -207,10 +204,10 @@
 <!-- Pod Delivery Date -->
 <td (click)="setUpdate('pod_delivery_date')" [ngSwitch]="update['pod_delivery_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_pod_delivery_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.pod_delivery_date"
+        <input id="edit_pod_delivery_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.pod_delivery_date" (change)="patch('pod_delivery_date')"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.pod_delivery_date_notes" (change)="patch('pod_delivery_date')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.pod_delivery_date_notes" (change)="patch('pod_delivery_date')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.pod_delivery_date | date: 'EEE, d LLL'}}</div>
@@ -221,10 +218,10 @@
 <!-- Steel Delivery Date -->
 <td (click)="setUpdate('steel_delivery_date')" [ngSwitch]="update['steel_delivery_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_steel_delivery_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.steel_delivery_date"
+        <input id="edit_steel_delivery_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.steel_delivery_date" (change)="patch('steel_delivery_date')"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.steel_delivery_date_notes" (change)="patch('steel_delivery_date')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.steel_delivery_date_notes" (change)="patch('steel_delivery_date')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.steel_delivery_date | date: 'EEE, d LLL'}}</div>
@@ -235,12 +232,23 @@
 <!-- Base Date -->
 <td (click)="setUpdate('base_date')" [ngSwitch]="update['base_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_base_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.base_date"
+        <select class="form-control input-min-width" [(ngModel)]="job.depot_type" (change)="patch('depot_type', true)" style="margin-bottom: 0.5em;">
+            <option [ngValue]="">-- Select Base --</option>
+            <option [ngValue]="1">Melbourne</option>
+            <option [ngValue]="2">Torquay</option>
+        </select>
+
+        <input id="edit_base_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.base_date" (change)="patch('base_date')"
+            [datepickerShowTime]="true"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.base_date_notes" (change)="patch('base_date')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.base_date_notes" (change)="patch('base_date')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
+        <div style="font-size: 85%;">
+            <label *ngIf="job.depot_type==1" class="label label-default" style="background: #47F;">MELBOURNE</label>
+            <label *ngIf="job.depot_type==2" class="label label-default" style="background: #4C4;">TORQUAY</label>
+        </div>
         <div>{{job.base_date | date: 'EEE, d LLL'}}</div>
         <div class="date-notes">{{job.base_date_notes}}</div>
     </div>
@@ -249,19 +257,21 @@
 <!-- Base Inspection Date -->
 <td (click)="setUpdate('base_inspection_date')" [ngSwitch]="update['base_inspection_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_base_inspection_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.base_inspection_date"
+        <input id="edit_base_inspection_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.base_inspection_date" (change)="patch('base_inspection_date')"
             appDatetimepicker />
-        <select class="form-control" [(ngModel)]="job.base_inspection_date_notes" [compareWith]="numberEquals" (change)="patch('base_inspection_date_notes')">
-            <option [ngValue]="">-- Select an Option --</option>
+        <select class="form-control input-min-width" [(ngModel)]="job.base_inspection_time_of_day" [compareWith]="numberEquals" (change)="patch('base_inspection_time_of_day')" style="margin-bottom: 0.5em;">
+            <option [ngValue]="">-- Select Time --</option>
             <option [ngValue]="'EARLY AM'">Early AM</option>
             <option [ngValue]="'LATE AM'">Late AM</option>
             <option [ngValue]="'EARLY PM'">Early PM</option>
             <option [ngValue]="'LATE PM'">Late PM</option>
         </select>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.base_inspection_date_notes" (change)="patch('base_inspection_date_notes')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.base_inspection_date | date: 'EEE, d LLL'}}</div>
+        <div>{{job.base_inspection_time_of_day}}</div>
         <div class="date-notes">{{job.base_inspection_date_notes}}</div>
     </div>
 </td>
@@ -274,20 +284,22 @@
 <!-- Steel Inspection Date -->
 <td (click)="setUpdate('steel_inspection_date')" [ngSwitch]="update['steel_inspection_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_steel_inspection_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
+        <input id="edit_steel_inspection_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
             [ngModel]="job.steel_inspection_date | date: 'd LLL yyyy'"
-            (ngModelChange)="job.steel_inspection_date = $event"
+            (ngModelChange)="job.steel_inspection_date = $event" (change)="patch('steel_inspection_date')"
             appDatetimepicker />
-        <select class="form-control" [(ngModel)]="job.steel_inspection_date_notes" [compareWith]="numberEquals" (change)="patch('steel_inspection_date_notes')">
-            <option [ngValue]="">-- Select an Option --</option>
+        <select class="form-control input-min-width" [(ngModel)]="job.steel_inspection_time_of_day" [compareWith]="numberEquals" (change)="patch('steel_inspection_time_of_day')">
+            <option [ngValue]="">-- Select Time --</option>
             <option [ngValue]="'EARLY AM'">Early AM</option>
             <option [ngValue]="'LATE AM'">Late AM</option>
             <option [ngValue]="'EARLY PM'">Early PM</option>
             <option [ngValue]="'LATE PM'">Late PM</option>
         </select>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.steel_inspection_date_notes" (change)="patch('steel_inspection_date_notes')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.steel_inspection_date | date: 'EEE, d LLL'}}</div>
+        <div class="date-notes">{{job.steel_inspection_time_of_day}}</div>
         <div class="date-notes">{{job.steel_inspection_date_notes}}</div>
     </div>
 </td>
@@ -300,7 +312,7 @@
 <!-- Subcontractor -->
 <td (click)="setUpdate('sub_contractor')" [ngSwitch]="update['sub_contractor']">
     <div *ngSwitchCase="true">
-        <select class="form-control" [(ngModel)]="job.sub_contractor" [compareWith]="numberEquals" (change)="patch('sub_contractor')">
+        <select class="form-control input-min-width" [(ngModel)]="job.sub_contractor" [compareWith]="numberEquals" (change)="patch('sub_contractor')">
             <option>-- Choose One --</option>
             <ng-template ngFor let-item [ngForOf]="getSubcontractors() | keyvalue">
                 <option [ngValue]="item.key">{{ item.value.name }}</option>
@@ -315,7 +327,7 @@
 <!-- Pump Inspector -->
 <td (click)="setUpdate('pump_inspector')" [ngSwitch]="update['pump_inspector']">
     <div *ngSwitchCase="true">
-        <select class="form-control" [(ngModel)]="job.pump_inspector" [compareWith]="numberEquals" (change)="patch('pump_inspector')">
+        <select class="form-control input-min-width" [(ngModel)]="job.pump_inspector" [compareWith]="numberEquals" (change)="patch('pump_inspector')">
             <option>-- Choose One --</option>
             <ng-template ngFor let-item [ngForOf]="getPumpInspectors() | keyvalue">
                 <option [ngValue]="item.key">{{ item.value.name }}</option>
@@ -330,10 +342,10 @@
 <!-- Concrete Date -->
 <td (click)="setUpdate('concrete_date')" [ngSwitch]="update['concrete_date']">
     <div *ngSwitchCase="true" style="position: relative;">
-        <input id="edit_concrete_date" type="text" class="form-control input-sm" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.concrete_date"
+        <input id="edit_concrete_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
+            [(ngModel)]="job.concrete_date" (change)="patch('concrete_date')"
             appDatetimepicker />
-        <textarea class="form-control input-sm" [(ngModel)]="job.concrete_date_notes" (change)="patch('concrete_date_notes')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.concrete_date_notes" (change)="patch('concrete_date_notes')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         <div>{{job.concrete_date | date: 'EEE, d LLL'}}</div>
@@ -344,7 +356,7 @@
 <!-- Notes -->
 <td (click)="setUpdate('slab_schedule_notes')" [ngSwitch]="update['slab_schedule_notes']" style="white-space: normal;">
     <div *ngSwitchCase="true">
-        <textarea class="form-control input-sm" [(ngModel)]="job.slab_schedule_notes" (change)="patch('slab_schedule_notes')" placeholder="Description"></textarea>
+        <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.slab_schedule_notes" (change)="patch('slab_schedule_notes')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
         {{ job.slab_schedule_notes }}

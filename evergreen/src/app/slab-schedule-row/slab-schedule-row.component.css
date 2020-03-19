@@ -5,3 +5,12 @@
     margin-top: 3px;
     white-space: normal;
 }
+
+.input-min-width {
+    min-width: 100px;
+}
+
+.cell-orange
+{
+    background: orange;
+}

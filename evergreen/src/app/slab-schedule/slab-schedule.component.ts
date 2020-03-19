@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from "../data.service";
 import { SlabScheduleRowComponent } from '../slab-schedule-row/slab-schedule-row.component';
+import { NONE_TYPE } from '@angular/compiler';
 
 /**
  * A component to show / edit the slab schedule.
@@ -259,7 +260,7 @@ export class SlabScheduleComponent implements OnInit {
      */
     reloadFieldChanged(event) {
         console.log("reloading due to field change...", event);
-        if (event == this.sort_column)
+        if (event == this.sort_column || event == "force_reload")
             this.downloadJobs();
     }
 }
