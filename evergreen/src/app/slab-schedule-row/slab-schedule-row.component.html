@@ -236,22 +236,26 @@
 <!-- Base Date -->
 <td (click)="setUpdate('base_date')" [ngSwitch]="update['base_date']">
     <div *ngSwitchCase="true" style="position: relative;">
+        <input id="edit_base_date" type="text" class="form-control input-sm" style="min-width: 200px; margin-bottom: 0.5em;"
+            [ngModel]="job.base_date | date: 'd LLL yyyy, hh:mm a'"
+            (ngModelChange)="job.base_date = formatDateTime($event)"
+            (change)="patch('base_date')"
+            [datepickerShowTime]="true"
+            datepickerFormat="D MMM YYYY, hh:mm A"
+            appDatetimepicker />
+
         <select class="form-control input-min-width" [(ngModel)]="job.base_inspector" (change)="patch('base_inspector', true)" style="margin-bottom: 0.5em;">
             <option [ngValue]="">-- Select Base --</option>
             <ng-template ngFor let-item [ngForOf]="getBaseInspectors()">
                 <option [ngValue]="item[0]">{{ item[1].name }}</option>
             </ng-template>
         </select>
-
-        <input id="edit_base_date" type="text" class="form-control input-sm input-min-width" style="margin-bottom: 0.5em;"
-            [(ngModel)]="job.base_date" (change)="patch('base_date')"
-            [datepickerShowTime]="true"
-            appDatetimepicker />
+        
         <textarea class="form-control input-sm input-min-width" [(ngModel)]="job.base_date_notes" (change)="patch('base_date')" placeholder="Description"></textarea>
     </div>
     <div *ngSwitchDefault>
+        <div>{{job.base_date | date: 'EEE, d LLL h:mm a'}}</div>
         <div>{{subcontractors[job.base_inspector]?.name}}</div>
-        <div>{{job.base_date | date: 'EEE, d LLL'}}</div>
         <div class="date-notes">{{job.base_date_notes}}</div>
     </div>
 </td>

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DataService } from "../data.service";
+import { formatDate } from '@angular/common';
+import * as moment from 'moment';
 
 /**
  * A class to display one line of the slab schedule.
@@ -147,5 +149,9 @@ export class SlabScheduleRowComponent implements OnInit {
      */
     numberEquals(n1, n2) {
         return n1 == n2
+    }
+
+    formatDateTime(datetime : string) : string {
+        return moment(datetime, "D MMM YYYY, hh:mm A").toISOString();
     }
 }

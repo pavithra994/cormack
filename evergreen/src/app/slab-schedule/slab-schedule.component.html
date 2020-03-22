@@ -218,7 +218,10 @@
         </table>
     </div>
 
-    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <div *ngIf="error" class="alert alert-danger">
+        <div style="font-weight: bold;">{{ error.name }}</div>
+        <div>{{ error.message }}</div>
+    </div>
     
     <div style="background: #f7f7f7; border-radius: 5px; padding: 10px; margin-bottom: 1em;">
         <div class="btn-group" style="float: right;">

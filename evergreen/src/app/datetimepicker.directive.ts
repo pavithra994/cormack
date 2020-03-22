@@ -15,6 +15,11 @@ export class DatetimepickerDirective {
     @Input() datepickerShowTime : boolean = false;
 
     /**
+     * The format to use.
+     */
+    @Input() datepickerFormat : string = null;
+
+    /**
      * The change event.
      */
     @Output() change : EventEmitter<any> = new EventEmitter();
@@ -25,9 +30,10 @@ export class DatetimepickerDirective {
     ) {}
 
     ngOnInit() {
-        console.log("Show time", this.datepickerShowTime);
         datetimepicker.call($(this.element.nativeElement), {
-            format: this.datepickerShowTime ? "YYYY-MM-DD[T]HH:mm:ss[Z]" : "YYYY-MM-DD"
+            format: this.datepickerFormat ?? (this.datepickerShowTime ? "YYYY-MM-DD[T]HH:mm:ss" : "YYYY-MM-DD"),
+            timeZone: "Australia/Melbourne",
+            stepping: 15
         });
         $(this.element.nativeElement).on("dp.change", (event : {date: Date, oldDate: Date}) => {
             console.log(`dp.change`, event.date, event.oldDate);
