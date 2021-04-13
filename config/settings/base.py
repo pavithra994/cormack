@@ -44,7 +44,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'w&2!6t$oz*j)16id^3ka1o*!hw5m#88mp_44*rkrn9#_#pdq(u'
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Set dev mode if the environment variable CORMACK_DEV_MODE is set.
 devmode = os.environ.get("CORMACK_DEV_MODE")
