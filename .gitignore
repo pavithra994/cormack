@@ -40,6 +40,8 @@ static-collect
 static
 media
 
-**/migrations
 **/__pycache__/
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
 
