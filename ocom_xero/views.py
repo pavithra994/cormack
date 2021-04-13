@@ -53,16 +53,18 @@ class ListItems(APIView):
         Return a list of all users.
         """
         try:
+            print("TRY LIST ITEMS")
             xero_items = cache.get("xero_items")
 
             if request.query_params.get("force", "false") == "true":
                 xero_items = None
 
             if xero_items is None:
+                print("XERO connectToXero")
                 xero = connectToXero()
 
                 xero_items = xero.items.all()
-
+                print("XERO xero_items")
                 for item in xero_items:
                     item['codeName'] = "%s %s" % (item['Code'], item.get('Name', item.get("Description", "")))
 

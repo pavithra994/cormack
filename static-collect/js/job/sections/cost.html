@@ -108,7 +108,7 @@
             <tr>
                 <td class="text-center">
                     <a class="btn btn-success" ng-if="!viewOnly('job_costs') && canGenerateInvoice() && !form.$invalid"
-                       ng-click="createInvoices()">Generate Invoice</a>
+                       ng-click="createInvoices()" ng-dblClick="generateInvoicesDoubleClick()">Generate Invoice</a>
                 </td>
                 <td class="text-right" colspan="3">
                     <p class="form-control-static">Grand Total:</p>

@@ -36,6 +36,11 @@ from ocom_xero.models import XeroEntity
 from ocom_xero.serializer import XeroEntitySerializer
 from ocom_xero.utils import connectToXero
 
+#NEWCODE
+from django.core.cache import caches
+from xero import Xero
+from xero.auth import OAuth2Credentials
+from xero.constants import XeroScopes
 
 def url_to_file_guid(url_id):
     """Return the guid from the URL id
@@ -254,10 +259,11 @@ class CreateJobInvoiceView(APIView):
 
     # noinspection PyUnusedLocal,PyShadowingBuiltins,PyMethodMayBeStatic
     def post(self, request, format=None):
+
         job = Job.objects.get(pk=request.data['id'])
-
+        
         invoice = createJobInvoice(job)
-
+        
         return Response(XeroEntitySerializer(invoice).data)
 
 
@@ -301,7 +307,7 @@ class CreateRepairPurchaseOrderView(APIView):
         po = createRepairPurchaseOrder(repair)
 
         return Response(XeroEntitySerializer(po).data)
-
+######################################################
 class XeroOAuth2CallbackView (View):
     """
     GET: /api/signin-redirect?code=XXX
@@ -309,64 +315,23 @@ class XeroOAuth2CallbackView (View):
     Once the user is authenticated with Xero, they will redirect back to this view with a code that we exchange for a
     connection token, which we then use to get a refresh token.
     """
-
+    
     def get(self, request):
-        """ Handle the get request. """
-
         try:
-            code = request.GET.get("code", None)
-            state = request.GET.get("state", None)
-            if code is None:
-                return HttpResponse("ERROR: The required GET parameter `code` was not found.")
-            
-            # TODO: Validate `state`.
-            #       Without validation, any website can make GET requests to this
-            #       url and change our Xero credentials.
-
-            # Exchange the code for a token from Xero.
-            result = requests.post("https://identity.xero.com/connect/token",
-                headers={
-                    'authorization': "Basic {}".format(
-                        base64.b64encode("{client_id}:{client_secret}".format(
-                            client_id=settings.XERO_OAUTH2_CLIENT_ID,
-                            client_secret=settings.XERO_OAUTH2_CLIENT_SECRET).encode("utf-8")).decode("utf-8")),
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                data="&".join([
-                    "grant_type=authorization_code",
-                    "code={}".format(urlencode(code)),
-                    "redirect_uri={}".format(urlencode(settings.XERO_OAUTH2_REDIRECT_URI))
-                ]))
-            print(str(result.request.headers))
-            
-            if result.status_code != 200:
-                return HttpResponse("ERROR: {code} was returned by the server.\n\nThe server says:\n{content}".format(
-                    code=result.status_code,
-                    content=result.content))
-            
-            # Extract the access token and refresh token from the response.
-            message = json.loads(result.content)
-            if "access_token" not in message:
-                return HttpResponse("ERROR: Required information `access_token` was not found in the server's response.")
-            if "refresh_token" not in message:
-                return HttpResponse("ERROR: Required information `refresh_token` was not found in the server's response.")
-            
-            access_token = message["access_token"]
-            refresh_token = message["refresh_token"]
-
-            # Save the tokens in the database.
-            if XeroOAuth2Information.objects.count() == 0:
-                info = XeroOAuth2Information.objects.create(access_token=access_token, refresh_token=refresh_token)
-            else:
-                info = XeroOAuth2Information.objects.first()
-                info.access_token = access_token
-                info.refresh_token = refresh_token
-            info.save()
-
-            return HttpResponse("Xero sign-in OK. <a href='/'>Click here</a> to return to the home page.")
+            """ Handle the get request. """
+            print("XeroOAuth2CallbackView - START")
+            cred_state = caches['default'].get('xero_creds')
+            print("XeroOAuth2CallbackView - cred_state")
+            credentials = OAuth2Credentials(**cred_state)
+            print("XeroOAuth2CallbackView - credentials")
+            auth_secret = request.get_raw_uri()
+            print("XeroOAuth2CallbackView - auth_secret")
+            auth_secret = auth_secret.replace("http:","https:")
+            credentials.verify(auth_secret)
+            credentials.set_default_tenant()
+            caches['default'].set('xero_creds', credentials.state)
+            #added after invoicing worked
+            return HttpResponseRedirect("/static/index.html#")
         except Exception as e:
-            print(str(e))
-            return HttpResponse(str(e))
-        except:
-            print("An unknown error occurred.")
-            return HttpResponse("An unknown error occurred.")
+            print(e)
+######################################################

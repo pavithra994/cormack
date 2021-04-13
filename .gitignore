@@ -1,5 +1,8 @@
 .idea
 .vagrant
+.circleci
+.vscode
+
 *.log
 /tests/html/
 /tests/screenshots/
@@ -32,10 +35,13 @@ logs/
 /.vagrant/
 /.vscode/
 evergreen/node_modules/
-*/migrations/
-**/migrations/**/__pycache__/
-**/__pycache__/
 
-/static-collect/
-/static/
-/media/
+static-collect
+static
+media
+
+**/__pycache__/
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+

@@ -20,15 +20,25 @@ import datetime
 import os
 import raven
 
-# Xero Accounting OAuth 2.0 Client ID
-XERO_OAUTH2_CLIENT_ID = "E71FA5F8AC824ED5936E2640D93BB279"
+##################################################################
+#cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/opt/services/cormack/src/media/django_cache',
+    }
+}
+##################################################################
 
 # Xero Accounting OAuth 2.0 Client ID
-XERO_OAUTH2_CLIENT_SECRET = "f5GGcGQUmqFS6xeJmU6BX_LI1Z_8q1S047aeQ2MHVYKNQe8h"
-
+#XERO_OAUTH2_CLIENT_ID = "E71FA5F8AC824ED5936E2640D93BB279"
+XERO_OAUTH2_CLIENT_ID = "3CE0862A9AA04C0DA542E1FDF0B7A9B7"
+# Xero Accounting OAuth 2.0 Client ID
+#XERO_OAUTH2_CLIENT_SECRET = "f5GGcGQUmqFS6xeJmU6BX_LI1Z_8q1S047aeQ2MHVYKNQe8h"
+XERO_OAUTH2_CLIENT_SECRET = "_l2blQT3ZtT9Hh1ayw_vPJsA46Q4L5b4NnAgfxqwiJYa8Hz3"
 # Xero Accounting OAuth 2.0 Callback URL
 # NOTE: Don't change this without changing the router as well.
-XERO_OAUTH2_REDIRECT_URI = "https://jms-app.cormackgroup.com.au/api/signin-redirect"
+XERO_OAUTH2_REDIRECT_URI = "https://jms.cormackgroup.com.au/api/signin-redirect"
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -174,6 +184,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_FILTER_BACKENDS': (

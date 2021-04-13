@@ -65,8 +65,8 @@ urlpatterns += [
 
     url(r'^download_invoice/(?P<id>[0-9]+)/$', views.DownloadInvoice.as_view()),
     url(r'^download_purchase_order/(?P<id>[0-9]+)/$', views.DownloadPurchaseOrder.as_view()),
-
+######################################################
     # OAuth 2.0 support.
-    url(r'^oauth2$', RedirectView.as_view(url="/", permanent=False)),
-    url(r'^signin-redirect$', views.XeroOAuth2CallbackView.as_view())
+    url(r'^signin-redirect$', views.XeroOAuth2CallbackView.as_view()),
+######################################################
 ]

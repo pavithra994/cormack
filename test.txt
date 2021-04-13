@@ -1,0 +1,4 @@
+static-collect/js/job/sections/cost.html:                       ng-click="createInvoices()">Generate Invoice</a>
+static-collect/js/repair/sections/cost.html:                        <a class="btn btn-success" ng-if="canGenerateInvoice() && !form.$invalid" ng-click="createInvoices()">Generate Invoice</a>
+static/js/job/sections/cost.html:                       sglclick="createInvoices()" ng-dblClick="return false" >gGenerate Invoice</a>
+static/js/repair/sections/cost.html:                        <a class="btn btn-success" ng-if="canGenerateInvoice() && !form.$invalid" ng-click="createInvoices()">Generate Invoice</a>

@@ -24,7 +24,8 @@ services:
       ports:
         - 8081:8002
       extra_hosts:
-        - "db:45.32.190.142"
+         - "db:45.76.114.43"
+#        - "db:45.32.190.142"
 
     nginx:
       restart: always

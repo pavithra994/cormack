@@ -23,6 +23,14 @@ import base64
 import uuid
 import re
 import boto
+########################################################################
+#NEWCODE
+from django.core.cache import caches
+from xero import Xero
+from xero.auth import OAuth2Credentials
+from xero.constants import XeroScopes
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
+########################################################################
 
 class RefreshJSONWebToken(OcomUserRoleMixin, jwt_views.RefreshJSONWebToken):
     """Inherited refresh_jwt_token class with custom POST method for re-adding session/auth based on a valid JWT"""
@@ -71,13 +79,26 @@ class Unauthenticate(OcomUserRoleMixin, APIView):
     def post(self, request, *args, **kwargs):
         self.clear_user(request)
         return drf_response.Response(status=status.HTTP_200_OK)
-
-
+########################################################################       
+class XeroConnect(View):
+    def get(self, request):
+        print ("XeroConnect")
+        #return render(request, 'feedback/screen_shot.html')
+                # Get client_id, client_secret from config file or settings then
+        credentials = OAuth2Credentials(
+            settings.XERO_OAUTH2_CLIENT_ID, settings.XERO_OAUTH2_CLIENT_SECRET, callback_uri=settings.XERO_OAUTH2_REDIRECT_URI, scope=[XeroScopes.OFFLINE_ACCESS,XeroScopes.ACCOUNTING_SETTINGS, XeroScopes.ACCOUNTING_CONTACTS,XeroScopes.ACCOUNTING_TRANSACTIONS]
+        )
+        authorization_url = credentials.generate_url()
+        
+        print ("setting up cache")
+        caches['default'].set('xero_creds', credentials.state)
+        print (authorization_url)       
+        return HttpResponseRedirect(authorization_url)
+########################################################################
 class ScreenShotView(View):
     # noinspection PyMethodMayBeStatic
     def get(self, request):
         return render(request, 'feedback/screen_shot.html')
-
     # noinspection PyMethodMayBeStatic
     def post(self, request):
         img_data = request.POST.get("image")

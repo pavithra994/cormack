@@ -9,23 +9,36 @@
 import json
 
 from django.core.serializers.json import DjangoJSONEncoder
+########################################################################
+#NEW CODE
+
+from django.core.cache import caches
 from xero import Xero
-from xero.auth import PrivateCredentials
+from xero.auth import OAuth2Credentials
+from xero.constants import XeroScopes
 
 from ocom_xero import models
 
 
 def connectToXero() -> Xero:
-    connection_info = models.XeroConnection.objects.filter(active=True).first()
+#NEW CODE
     try:
-        credentials = PrivateCredentials(connection_info.consumer_key, connection_info.rsa_key)
+        print("connectToXero")
+        cred_state = caches['default'].get('xero_creds')
+        print("connectToXero - cred_state")
+        credentials = OAuth2Credentials(**cred_state)
+        print("connectToXero - credentials")
+        if credentials.expired():
+            credentials.refresh()
+            caches['default'].set('xero_creds', credentials.state)
+        print("connectToXero - xero")
         xero = Xero(credentials)
+       
     except AttributeError:
         xero = None
-
+    
     return xero
-
-
+########################################################################
 def XeroCleanJSON(jsonData):
     return json.loads(json.dumps(jsonData, cls=DjangoJSONEncoder))
 
