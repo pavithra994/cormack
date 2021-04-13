@@ -28,3 +28,14 @@ config/ssl/live
 config/ssl/keys
 config/ssl/renewal
 logs/
+/.circleci/
+/.vagrant/
+/.vscode/
+evergreen/node_modules/
+*/migrations/
+**/migrations/**/__pycache__/
+**/__pycache__/
+
+/static-collect/
+/static/
+/media/

@@ -51,7 +51,8 @@
             date_received: new Date(),
             estimated_cost: '0.00'
         };
-
+	$scope.clicked = false;
+	$scope.cancelClick = false;
         $scope.token = function () {
             return  $localStorage.token;
         };
@@ -451,6 +452,22 @@
         };
 
         $scope.createInvoices = function() {
+		console.log("clicked",$scope.click);
+		console.log("cancelClicked",$cancelClicked);
+		var timeout1 = null;
+		if($scope.clicked) {
+			$scope.cancelClick = true;
+			return;
+		}
+		$scope.clicked = true;
+
+		timeout1 = setTimeout(function(){
+			if($scope.cancelClick){
+				$scope.cancelClick = false;
+				$scope.clicked = false;
+				return;
+			}
+
             dataAPIService.getDataApi("/api/", "job").updateItem($scope.item.id, $scope.item, function (success) {
                 dataAPIService.getDataApi("/api/", "create_job_invoice").action({'id': $scope.item.id}, function (response) {
                     alerts.success("Generated Invoice: " + response.xero_code + " In Xero", false);
@@ -461,7 +478,14 @@
                     $state.go($state.current, {}, {reload: true});
                 });
             });
+		$scope.cancelClick = false;
+		$scope.clicked = false;
+		},500);
         };
+	
+	$scope.generateInvoicesDoubleClick = function() {
+		return false;
+	}
 
         $scope.createPurchaseOrder = function() {
             if (!$scope.item.xero_purchase_order) {

@@ -11,7 +11,7 @@ pyexcel==0.5.3
 pyexcel-xlsx==0.4.1
 PyJWT
 PyPDF2==1.26.0
-python-dateutil==2.6.1
+python-dateutil==2.8.1
 pytz==2017.2
 raven==6.1.0
 requests==2.18.2

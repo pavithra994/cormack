@@ -19,7 +19,9 @@ from rest_framework_jwt.views import verify_jwt_token, refresh_jwt_token
 from ocom.resources.group_list import GroupListViewSet
 from ocom.resources.group_permissions import GroupPermissionsViewSet
 from ocom.resources.user_list import UserListViewSet
-from ocom.views import ScreenShotView, home
+########################################################################
+from ocom.views import ScreenShotView, home, XeroConnect
+########################################################################
 from .views import RefreshJSONWebToken, ObtainJSONWebToken, Unauthenticate
 
 admin.autodiscover()
@@ -64,6 +66,9 @@ urlpatterns = [
     url(r'^api-token-refresh/', RefreshJSONWebToken.as_view()),
     url(r'^api-token-expire/', Unauthenticate.as_view()),
     url(r'^screen_shot/', ScreenShotView.as_view()),
+########################################################################
+    url(r'^xero_connect/', XeroConnect.as_view()),
+########################################################################
     url(r'^release/', get_release),
     url(r'^index/$', home, name='home'),
     url(r'^api/', include(router.urls)),
